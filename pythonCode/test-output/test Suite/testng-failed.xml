@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite guice-stage="DEVELOPMENT" name="Failed suite [test Suite]">
+  <test thread-count="5" name="test(failed)">
+    <classes>
+      <class name="generated.GeneratedTests">
+        <methods>
+          <include name="method_BT241_path_100165_100179_181"/>
+          <include name="method_BT304_path_100165_100200"/>
+          <include name="method_BT314_path_100165_100179_100186_100210_218"/>
+          <include name="method_BT277_path_100165_100179_100186"/>
+          <include name="method_BT277_path_100165_100179_100186_100210"/>
+          <include name="method_BT277_path_100165_100179_100186_100251"/>
+          <include name="setUp"/>
+          <include name="method_BT304_path_100165_100200_252"/>
+          <include name="method_BT277_path_100165_100179_100186_100199_100200_208"/>
+          <include name="method_BT241_path_100165_100250"/>
+          <include name="method_BT211_path_144_148_100274"/>
+          <include name="method_BT314_path_100165_100179_100186_100210_219"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_dup0"/>
+          <include name="method_BT499_path_100165_100200_100254"/>
+          <include name="method_BT200_path_100266"/>
+          <include name="oneTimeTearDown"/>
+          <include name="method_BT314_path_100165_100179_100186_100210_220"/>
+          <include name="method_BT314_path_100165_100179_100186_100210_221"/>
+          <include name="oneTimeSetUp"/>
+          <include name="method_BT260_path_100165_100179"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226"/>
+          <include name="method_BT200_path_100265"/>
+          <include name="method_BT304_path_100165_100200_209"/>
+          <include name="method_BT200_path_100264"/>
+          <include name="method_BT277_path_100165_100179_100186_197"/>
+          <include name="method_BT425_path_100165_100179_100186_100210_100226_100241_245"/>
+          <include name="method_BT277_path_100165_100179_100186_195"/>
+          <include name="method_BT304_path_100165_100200_100263"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_234"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_100240"/>
+          <include name="method_BT260_path_100165_100179_183"/>
+          <include name="method_BT260_path_100165_100179_184"/>
+          <include name="method_BT277_path_100165_100179_100186_196"/>
+          <include name="method_BT314_path_100165_100179_100186_100210_100224_225"/>
+          <include name="method_BT260_path_100165_100179_185"/>
+          <include name="method_BT277_path_100165_100179_100186_194"/>
+          <include name="method_BT314_path_100165_100179_100186_100210_100222"/>
+          <include name="method_BT499_path_100165_100200_100254_258"/>
+          <include name="method_BT499_path_100165_100200_100254_259"/>
+          <include name="method_BT499_path_100165_100200_100254_257"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_235"/>
+          <include name="method_BT304_path_100165_100200_100262"/>
+          <include name="method_BT425_path_100165_100179_100186_100210_100226_100241_248"/>
+          <include name="method_BT205_path_144_dup0"/>
+          <include name="method_BT304_path_100165_100200_100254_256"/>
+          <include name="method_BT304_path_100165_100200_100261"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_236"/>
+          <include name="method_BT425_path_100165_100179_100186_100210_100226_100241_247"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_100241_243"/>
+          <include name="method_BT211_path_144_148"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_237"/>
+          <include name="method_BT260_path_100165_100179_100186"/>
+          <include name="method_BT277_path_100165_100179_100186_100249"/>
+          <include name="method_BT241_path_100165"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_100238"/>
+          <include name="method_BT363_path_100165_100179_100186_100210_100226_100239"/>
+          <include name="method_BT499_path_100165_100200_100254_260"/>
+          <include name="method_BT314_path_100165_100179_100186_100210_100226"/>
+          <include name="getStatusAndDuration"/>
+          <include name="method_BT314_path_100165_100179_100186_100210"/>
+          <include name="method_BT304_path_100165_100200_100253"/>
+          <include name="method_BT425_path_100165_100179_100186_100210_100226_100241_244"/>
+        </methods>
+      </class> <!-- generated.GeneratedTests -->
+    </classes>
+  </test> <!-- test(failed) -->
+</suite> <!-- Failed suite [test Suite] -->
