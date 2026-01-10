@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Crawl overview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="CrawlJax">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+<link href="../css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="../css/shCoreDefault.css" rel="stylesheet" type="text/css" />
+<style>
+.tooltip-inner {
+	max-width: 300px;
+	word-wrap: break-word;
+}
+
+body {
+	padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+</style>
+</head>
+<body>
+	<nav class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+							<a class="brand" href="../index.html#graph">Crawl overview</a>
+						<ul class="nav">
+									<li class="active"><a href="#">State inspector</a></li>
+							</ul>
+			<div class="nav pull-right">
+				<a href="#" class="btn graphBtn" id='pauseButton' data-toggle="tooltip" data-placement="bottom" title="Pause the graph movement"><i class="icon-pause"></i></a>
+				<a href="#" class="btn graphBtn" rel="popover" data-placement="bottom"  data-original-title="What to do"><i class='icon-question-sign'></i></a>
+				<a href="#" class="btn graphBtn" id="toggleND" data-placement="bottom"  data-original-title="Show or Hide Near Duplicates"><i class='icon-remove-sign'></i></a>
+				<a href="#" class="btn graphBtn" id="clusterBtn" data-placement="bottom"  data-original-title="Show clusters"><i class='icon-asterisk'></i></a>
+				<div style="display: none" id='popup-content'>
+					<p>You can double click a state to inspect it further.</p>
+					<p>Clicking an edge gives more details on the state transition.</p>
+					<p>Use your mouse to zoom in and out by scrolling, or drag the states and view around.</p>
+				</div>
+				<a href="result.json" class="btn" data-toggle="tooltip" data-placement="bottom" title="Download result as JSON"><i class='icon-download'></i></a>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+</nav>	<div class='container' >
+		<h1>Summary of state2</h1>
+		<table class="table table-bordered table-striped">
+			<colgroup>
+				<col class="span1">
+				<col class="span7">
+			</colgroup>
+			<tbody>
+				<tr>
+					<th>URL</th>
+					<td><a href='http://localhost:3000/index.html'>http://localhost:3000/index.html</a></td>
+				</tr>
+				<tr>
+					<th>Fan in</th>
+					<td>1</td>
+				</tr>
+				<tr>
+					<th>Fan out</th>
+					<td>2</td>
+				</tr>
+				<tr>
+					<th>Interaction elements</th>
+					<td>22</td>
+				</tr>
+				<tr>
+					<th>Nearest State</th>
+					<td>index</td>
+				</tr>
+				<tr>
+					<th>Distance to nearest State</th>
+					<td>2.0</td>
+				</tr>
+				<tr>
+					<th>Has Near Duplicate</th>
+					<td>false</td>
+				</tr>
+				<tr>
+					<th>Cluster</th>
+					<td>2</td>
+				</tr>
+				<tr>
+					<th>Failed events</th>
+					<td>-</td>
+			</tbody>
+		</table>
+		<ul id='tabs' class="nav nav-tabs">
+			<li class="active">
+				<a href="#screenshot">Screenshot</a>
+			</li>
+			<li>
+				<a href="#dom">Captured DOM</a>
+			</li>	
+			<li>
+				<a href="#interactions">Interactions</a>
+			</li>			
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" style="position: relative;" id='screenshot'>			
+				<img style='max-width: none;' border='0' src='../screenshots/state2.png' /> 
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]" class='hovers'
+				style="position: absolute; z-index: 20; left: 516px; top: 919px; width: 44px; height: 27px; border: 2px solid #00FFFF;  cursor: pointer;" onclick="location.href='index.html'"></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]" class='hovers'
+				style="position: absolute; z-index: 10; left: 575px; top: 919px; width: 76px; height: 27px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]" class='hovers'
+				style="position: absolute; z-index: 10; left: 667px; top: 919px; width: 47px; height: 27px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]" class='hovers'
+				style="position: absolute; z-index: 20; left: 730px; top: 919px; width: 45px; height: 27px; border: 2px solid green;  cursor: pointer;" onclick="location.href='state10.html'"></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/A[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 45px; top: 341px; width: 117px; height: 43px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/A[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 863px; top: 661px; width: 259px; height: 86px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: -3px; top: 885px; width: 2px; height: 2px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 1023px; top: 912px; width: 98px; height: 41px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 172px; top: 341px; width: 155px; height: 43px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[2]/DIV[2]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 618px; top: 361px; width: 483px; height: 40px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 45px; top: 661px; width: 259px; height: 86px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[2]" class='hovers'
+				style="position: absolute; z-index: 10; left: 317px; top: 661px; width: 259px; height: 86px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[3]" class='hovers'
+				style="position: absolute; z-index: 10; left: 590px; top: 661px; width: 259px; height: 86px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 65px; top: 805px; width: 89px; height: 33px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[2]" class='hovers'
+				style="position: absolute; z-index: 10; left: 163px; top: 805px; width: 84px; height: 33px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[3]" class='hovers'
+				style="position: absolute; z-index: 10; left: 257px; top: 805px; width: 63px; height: 33px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 81px; top: 968px; width: 126px; height: 41px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[2]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 81px; top: 1152px; width: 125px; height: 41px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[3]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 81px; top: 1337px; width: 139px; height: 41px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[3]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: -3px; top: 885px; width: 2px; height: 2px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[4]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: -3px; top: 885px; width: 2px; height: 2px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: -3px; top: 885px; width: 2px; height: 2px; border: 2px solid orange;  " ></div>
+							</div>
+			<div class="tab-pane" id='dom'>
+				<h2>Captured DOM</h2>
+				<pre class='brush: html'>&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;StateEye Demo - Rivergate Campus&lt;/title&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
+  &lt;script defer=&quot;&quot; src=&quot;app.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body class=&quot;page-home&quot;&gt;
+  &lt;header class=&quot;site-header&quot;&gt;
+    &lt;div class=&quot;brand&quot;&gt;
+      &lt;div class=&quot;brand-mark&quot;&gt;SE&lt;/div&gt;
+      &lt;div&gt;
+        &lt;div class=&quot;brand-title&quot;&gt;Rivergate Campus&lt;/div&gt;
+        &lt;div class=&quot;brand-subtitle&quot;&gt;StateEye Demo Site&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;nav class=&quot;site-nav&quot;&gt;
+      &lt;a href=&quot;index.html&quot; class=&quot;nav-link active&quot;&gt;Home&lt;/a&gt;
+      &lt;a href=&quot;academics.html&quot; class=&quot;nav-link&quot;&gt;Academics&lt;/a&gt;
+      &lt;a href=&quot;events.html&quot; class=&quot;nav-link&quot;&gt;Events&lt;/a&gt;
+      &lt;a href=&quot;about.html&quot; class=&quot;nav-link&quot;&gt;About&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;button class=&quot;ghost-btn&quot; id=&quot;open-spotlight&quot;&gt;Spotlight&lt;/button&gt;
+  &lt;/header&gt;
+
+  &lt;main class=&quot;page&quot;&gt;
+    &lt;section class=&quot;hero&quot;&gt;
+      &lt;div class=&quot;hero-copy&quot;&gt;
+        &lt;h1&gt;Explore the campus in fragments.&lt;/h1&gt;
+        &lt;p&gt;
+          A layered UI for crawler testing: multiple panels, live updates, and
+          navigable pages. Click around to discover new states.
+        &lt;/p&gt;
+        &lt;div class=&quot;hero-actions&quot;&gt;
+          &lt;a class=&quot;primary-btn&quot; href=&quot;academics.html&quot;&gt;Start a Tour&lt;/a&gt;
+          &lt;button class=&quot;secondary-btn&quot; id=&quot;toggle-dashboard&quot;&gt;Open Dashboard&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;hero-meta&quot;&gt;
+          &lt;div class=&quot;meta-item&quot;&gt;
+            &lt;div class=&quot;meta-title&quot;&gt;Admissions Window&lt;/div&gt;
+            &lt;div class=&quot;meta-value&quot;&gt;Open until 6 PM&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;meta-item&quot;&gt;
+            &lt;div class=&quot;meta-title&quot;&gt;Library Seats&lt;/div&gt;
+            &lt;div class=&quot;meta-value&quot; id=&quot;seat-count&quot;&gt;177 available&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;hero-panel&quot;&gt;
+        &lt;div class=&quot;panel-header&quot;&gt;
+          &lt;span&gt;Visitor Pass&lt;/span&gt;
+          &lt;span class=&quot;status-dot&quot;&gt;Live&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;panel-body&quot;&gt;
+          &lt;label class=&quot;field&quot;&gt;
+            Name
+            &lt;input type=&quot;text&quot; id=&quot;visitor-name&quot; placeholder=&quot;Amina Rahman&quot;&gt;
+          &lt;/label&gt;
+          &lt;label class=&quot;field&quot;&gt;
+            Email
+            &lt;input type=&quot;email&quot; id=&quot;visitor-email&quot; placeholder=&quot;amina@demo.edu&quot;&gt;
+          &lt;/label&gt;
+          &lt;div class=&quot;field-inline&quot;&gt;
+            &lt;label class=&quot;chip&quot;&gt;&lt;input type=&quot;checkbox&quot;&gt; Library&lt;/label&gt;
+            &lt;label class=&quot;chip&quot;&gt;&lt;input type=&quot;checkbox&quot;&gt; Labs&lt;/label&gt;
+            &lt;label class=&quot;chip&quot;&gt;&lt;input type=&quot;checkbox&quot;&gt; Gallery&lt;/label&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;primary-btn&quot; id=&quot;issue-pass&quot;&gt;Issue Pass&lt;/button&gt;
+          &lt;div class=&quot;hint&quot; id=&quot;pass-hint&quot;&gt;Pass queue empty.&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;grid-section&quot;&gt;
+      &lt;div class=&quot;section-title&quot;&gt;
+        &lt;h2&gt;Quick gates&lt;/h2&gt;
+        &lt;p&gt;Each card reveals a different panel.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;card-grid&quot;&gt;
+        &lt;button class=&quot;card&quot; data-panel=&quot;panel-orbit&quot;&gt;
+          &lt;div class=&quot;card-title&quot;&gt;Orbit Studio&lt;/div&gt;
+          &lt;div class=&quot;card-desc&quot;&gt;Prototype lab for UI experiments.&lt;/div&gt;
+        &lt;/button&gt;
+        &lt;button class=&quot;card&quot; data-panel=&quot;panel-archive&quot;&gt;
+          &lt;div class=&quot;card-title&quot;&gt;Archive Vault&lt;/div&gt;
+          &lt;div class=&quot;card-desc&quot;&gt;Collections and thesis shelves.&lt;/div&gt;
+        &lt;/button&gt;
+        &lt;button class=&quot;card&quot; data-panel=&quot;panel-forum&quot;&gt;
+          &lt;div class=&quot;card-title&quot;&gt;Forum Stage&lt;/div&gt;
+          &lt;div class=&quot;card-desc&quot;&gt;Upcoming sessions and talks.&lt;/div&gt;
+        &lt;/button&gt;
+        &lt;a class=&quot;card&quot; href=&quot;events.html&quot;&gt;
+          &lt;div class=&quot;card-title&quot;&gt;See events&lt;/div&gt;
+          &lt;div class=&quot;card-desc&quot;&gt;Navigate to the events board.&lt;/div&gt;
+        &lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;dashboard&quot; id=&quot;dashboard&quot;&gt;
+      &lt;div class=&quot;tabs&quot;&gt;
+        &lt;button class=&quot;tab active&quot; data-tab=&quot;tab-one&quot;&gt;Discovery&lt;/button&gt;
+        &lt;button class=&quot;tab&quot; data-tab=&quot;tab-two&quot;&gt;Checklist&lt;/button&gt;
+        &lt;button class=&quot;tab&quot; data-tab=&quot;tab-three&quot;&gt;Pulse&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;tab-panel active&quot; id=&quot;tab-one&quot;&gt;
+        &lt;div class=&quot;panel-card&quot; id=&quot;panel-orbit&quot;&gt;
+          &lt;h3&gt;Orbit Studio&lt;/h3&gt;
+          &lt;p&gt;Sketchboards, VR rigs, and quick feedback loops.&lt;/p&gt;
+          &lt;button class=&quot;secondary-btn&quot; id=&quot;reserve-orbit&quot;&gt;Reserve Slot&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;panel-card&quot; id=&quot;panel-archive&quot;&gt;
+          &lt;h3&gt;Archive Vault&lt;/h3&gt;
+          &lt;p&gt;Request any manuscript and log a reading session.&lt;/p&gt;
+          &lt;button class=&quot;secondary-btn&quot; id=&quot;request-archive&quot;&gt;Request File&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;panel-card&quot; id=&quot;panel-forum&quot;&gt;
+          &lt;h3&gt;Forum Stage&lt;/h3&gt;
+          &lt;p&gt;Tonight: &quot;State graphs for modern crawlers&quot;.&lt;/p&gt;
+          &lt;button class=&quot;secondary-btn&quot; id=&quot;add-forum&quot;&gt;Add to Agenda&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;tab-panel&quot; id=&quot;tab-two&quot;&gt;
+        &lt;ul class=&quot;checklist&quot;&gt;
+          &lt;li&gt;&lt;input type=&quot;checkbox&quot;&gt; Tour the innovation wing&lt;/li&gt;
+          &lt;li&gt;&lt;input type=&quot;checkbox&quot;&gt; Register for lab access&lt;/li&gt;
+          &lt;li&gt;&lt;input type=&quot;checkbox&quot;&gt; Submit campus feedback&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button class=&quot;primary-btn&quot; id=&quot;complete-checklist&quot;&gt;Confirm progress&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;tab-panel&quot; id=&quot;tab-three&quot;&gt;
+        &lt;div class=&quot;pulse-meter&quot;&gt;
+          &lt;div class=&quot;pulse-bar&quot; id=&quot;pulse-bar&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;button class=&quot;secondary-btn&quot; id=&quot;refresh-pulse&quot;&gt;Refresh pulse&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;div class=&quot;modal&quot; id=&quot;spotlight-modal&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;div class=&quot;modal-card&quot;&gt;
+      &lt;h3&gt;Spotlight&lt;/h3&gt;
+      &lt;p&gt;New labs are now open. Explore the Academics page for details.&lt;/p&gt;
+      &lt;div class=&quot;modal-actions&quot;&gt;
+        &lt;a class=&quot;primary-btn&quot; href=&quot;academics.html&quot;&gt;Go to Academics&lt;/a&gt;
+        &lt;button class=&quot;ghost-btn&quot; id=&quot;close-spotlight&quot;&gt;Close&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+
+&lt;div id=&quot;stateeye-toast&quot; style=&quot;position: fixed; right: 24px; bottom: 24px; background: rgb(16, 33, 43); color: rgb(255, 255, 255); padding: 10px 16px; border-radius: 999px; font-size: 0.9rem; box-shadow: rgba(16, 33, 43, 0.2) 0px 12px 24px; opacity: 0; transition: opacity 0.2s;&quot;&gt;Button clicked&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</pre>
+			</div>
+			<div class="tab-pane" id='interactions'>
+				<h2>Interactions</h2>
+				<table class="table table-bordered table-striped">
+					<tbody>
+						<tr>
+							<th>Xpath</th>
+							<th>Destination</tg>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]</td>
+							<td><a href="index.html">index</a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]</td>
+							<td><a href="state10.html">state10</a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/A[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/A[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[2]/DIV[2]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[2]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[3]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[2]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[3]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[2]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[3]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[3]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[4]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+											</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../lib/shCore.js"></script>
+	<script type="text/javascript" src="../lib/shBrushXml.js"></script>
+	<script type="text/javascript" src="../lib/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="../lib/bootstrap.min.js"></script>
+	<script type="text/javascript">
+    	$(document).ready(function() {
+			SyntaxHighlighter.all()
+
+			$('#tabs a').click(function (e) {
+		  		e.preventDefault();
+		  		$(this).tab('show');
+			})
+		});
+    	
+    	$('.hovers').tooltip({
+    	    placement: function(a, element) {
+    	        var position = $(element).position();
+    	        if (position.left > 515) {
+    	            return "left";
+    	        }
+    	        if (position.left < 515) {
+    	            return "right";
+    	        }
+    	        if (position.top < 110){
+    	            return "bottom";
+    	        }
+    	        return "top";
+    	    }
+    	});
+	</script>
+</body>
+</html>

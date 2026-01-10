@@ -1,0 +1,129 @@
+{
+  "url" : "http://localhost:3000/index.html",
+  "basicAuthUrl" : null,
+  "browserConfig" : {
+    "browserType" : "CHROME",
+    "numberOfBrowsers" : 1,
+    "browserBuilder" : { },
+    "remoteHubUrl" : null,
+    "browserOptions" : {
+      "headless" : false,
+      "pixelDensity" : -1
+    },
+    "defaultBuilder" : true,
+    "langOrNull" : null
+  },
+  "plugins" : [ "CrawlOverview", "TestSuiteGenerator" ],
+  "proxyConfiguration" : {
+    "port" : -1,
+    "hostname" : "none",
+    "type" : "NOTHING"
+  },
+  "crawlRules" : {
+    "crawlEvents" : [ "click" ],
+    "invariants" : [ ],
+    "oracleComparators" : [ {
+      "preConditions" : [ ],
+      "id" : "SimpleComparator",
+      "oracle" : { }
+    } ],
+    "ignoredFrameIdentifiers" : [ ],
+    "preCrawlConfig" : {
+      "waitConditions" : [ ],
+      "crawlConditions" : [ ],
+      "includedElements" : [ {
+        "tagName" : "A",
+        "id" : "id1795960102",
+        "eventType" : "click",
+        "eventableCondition" : null,
+        "withXpathExpression" : null
+      }, {
+        "tagName" : "BUTTON",
+        "id" : "id1678854096",
+        "eventType" : "click",
+        "eventableCondition" : null,
+        "withXpathExpression" : null
+      }, {
+        "tagName" : "INPUT",
+        "id" : "id1849201180",
+        "eventType" : "click",
+        "eventableCondition" : {
+          "id" : "id1849201180",
+          "conditions" : [ ],
+          "inXPath" : "//INPUT[@type='submit']",
+          "linkedInputFields" : [ ]
+        },
+        "withXpathExpression" : "//INPUT[@type='submit']"
+      }, {
+        "tagName" : "INPUT",
+        "id" : "id1691875296",
+        "eventType" : "click",
+        "eventableCondition" : {
+          "id" : "id1691875296",
+          "conditions" : [ ],
+          "inXPath" : "//INPUT[@type='button']",
+          "linkedInputFields" : [ ]
+        },
+        "withXpathExpression" : "//INPUT[@type='button']"
+      } ],
+      "excludedElements" : [ ],
+      "filterAttributeNames" : [ "closure_hashcode_(\\w)*", "jquery[0-9]+" ]
+    },
+    "formFillMode" : "RANDOM",
+    "inputSpecification" : {
+      "formInputs" : { },
+      "forms" : [ ],
+      "crawlElements" : [ ]
+    },
+    "testInvariantsWhileCrawling" : true,
+    "clickOnce" : true,
+    "randomizeCandidateElements" : false,
+    "crawlHiddenAnchors" : false,
+    "waitAfterReloadUrl" : 500,
+    "waitAfterEvent" : 500,
+    "crawlPriorityMode" : "NORMAL",
+    "crawlNearDuplicates" : true,
+    "delayNearDuplicateCrawling" : true,
+    "allCrawlElements" : [ {
+      "tagName" : "A",
+      "id" : "id1795960102",
+      "eventType" : "click",
+      "eventableCondition" : null,
+      "withXpathExpression" : null
+    }, {
+      "tagName" : "BUTTON",
+      "id" : "id1678854096",
+      "eventType" : "click",
+      "eventableCondition" : null,
+      "withXpathExpression" : null
+    }, {
+      "tagName" : "INPUT",
+      "id" : "id1849201180",
+      "eventType" : "click",
+      "eventableCondition" : {
+        "id" : "id1849201180",
+        "conditions" : [ ],
+        "inXPath" : "//INPUT[@type='submit']",
+        "linkedInputFields" : [ ]
+      },
+      "withXpathExpression" : "//INPUT[@type='submit']"
+    }, {
+      "tagName" : "INPUT",
+      "id" : "id1691875296",
+      "eventType" : "click",
+      "eventableCondition" : {
+        "id" : "id1691875296",
+        "conditions" : [ ],
+        "inXPath" : "//INPUT[@type='button']",
+        "linkedInputFields" : [ ]
+      },
+      "withXpathExpression" : "//INPUT[@type='button']"
+    } ]
+  },
+  "maximumStates" : 50,
+  "maximumRuntime" : 60000,
+  "maximumDepth" : 5,
+  "stateVertexFactory" : { },
+  "outputDir" : "C:\\Users\\sulta\\Documents\\StateEye_imp\\out\\gui_20260110-221057\\localhost\\crawl0",
+  "siteDir" : "C:\\Users\\sulta\\Documents\\StateEye_imp\\out\\gui_20260110-221057\\localhost"
+}

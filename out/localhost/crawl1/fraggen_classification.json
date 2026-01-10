@@ -1,0 +1,649 @@
+{
+  "summary": {
+    "total_pairs": 91,
+    "clone": 70,
+    "near_duplicates": 21,
+    "nd2": 21,
+    "nd3": 0,
+    "distinct": 0
+  },
+  "pairs": [
+    {
+      "state1": "frag_index",
+      "state2": "frag_state10",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.4953508396562901
+    },
+    {
+      "state1": "frag_index",
+      "state2": "frag_state14",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.9602514971829512
+    },
+    {
+      "state1": "frag_index",
+      "state2": "frag_state2",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0006008961105462806
+    },
+    {
+      "state1": "frag_index",
+      "state2": "frag_state4",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.4769806420491871
+    },
+    {
+      "state1": "frag_index",
+      "state2": "frag_state6",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.4977102535182184
+    },
+    {
+      "state1": "frag_index",
+      "state2": "frag_state7",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.49653852791760494
+    },
+    {
+      "state1": "frag_index",
+      "state2": "index",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_index",
+      "state2": "state10",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_index",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_index",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_index",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_index",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_index",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "frag_state14",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.8428955392270951
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "frag_state2",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.4945852104394588
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "frag_state4",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.3037733835053687
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "frag_state6",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.3532305747296244
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "frag_state7",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.35194247398468026
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "index",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "state10",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state10",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "frag_state2",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.9591015241705563
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "frag_state4",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.8546346997083636
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "frag_state6",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.8958515359493954
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "frag_state7",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.8968435562397349
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "index",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "state10",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state14",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "frag_state4",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.47834867253981644
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "frag_state6",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.49748957841772223
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "frag_state7",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.49638458902986726
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "index",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "state10",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state2",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "frag_state6",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.39390613074039965
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "frag_state7",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.3898057545502835
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "index",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "state10",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state4",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state6",
+      "state2": "frag_state7",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0016176094910955617
+    },
+    {
+      "state1": "frag_state6",
+      "state2": "index",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state6",
+      "state2": "state10",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state6",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state6",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state6",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state6",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state6",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state7",
+      "state2": "index",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state7",
+      "state2": "state10",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state7",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state7",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state7",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state7",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "frag_state7",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "index",
+      "state2": "state10",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "index",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "index",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "index",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "index",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "index",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state10",
+      "state2": "state14",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state10",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state10",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state10",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state10",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state14",
+      "state2": "state2",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state14",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state14",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state14",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state2",
+      "state2": "state4",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state2",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state2",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state4",
+      "state2": "state6",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state4",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    },
+    {
+      "state1": "state6",
+      "state2": "state7",
+      "class": "clone",
+      "dom_distance": 0.0,
+      "visual_distance": 0.0
+    }
+  ]
+}

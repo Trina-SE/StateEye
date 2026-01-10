@@ -1,0 +1,159 @@
+{
+  "summary": {
+    "total_pairs": 21,
+    "clone": 0,
+    "near_duplicates": 21,
+    "nd2": 21,
+    "nd3": 0,
+    "distinct": 0
+  },
+  "pairs": [
+    {
+      "state1": "index",
+      "state2": "state15",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.12372240470625737
+    },
+    {
+      "state1": "index",
+      "state2": "state19",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.13690223957382067
+    },
+    {
+      "state1": "index",
+      "state2": "state23",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.9930253565888337
+    },
+    {
+      "state1": "index",
+      "state2": "state3",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.12380203810900857
+    },
+    {
+      "state1": "index",
+      "state2": "state5",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.14172026082605368
+    },
+    {
+      "state1": "index",
+      "state2": "state8",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.1373292819907443
+    },
+    {
+      "state1": "state15",
+      "state2": "state19",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.05181856546632063
+    },
+    {
+      "state1": "state15",
+      "state2": "state23",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 1.0099486776639872
+    },
+    {
+      "state1": "state15",
+      "state2": "state3",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.009646847868764625
+    },
+    {
+      "state1": "state15",
+      "state2": "state5",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.07911469350515428
+    },
+    {
+      "state1": "state15",
+      "state2": "state8",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.05019020802975364
+    },
+    {
+      "state1": "state19",
+      "state2": "state23",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 1.0125828844872935
+    },
+    {
+      "state1": "state19",
+      "state2": "state3",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.05135686137946992
+    },
+    {
+      "state1": "state19",
+      "state2": "state5",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.07802396006078424
+    },
+    {
+      "state1": "state19",
+      "state2": "state8",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.003384412879591521
+    },
+    {
+      "state1": "state23",
+      "state2": "state3",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 1.0088408255987502
+    },
+    {
+      "state1": "state23",
+      "state2": "state5",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 1.1110474630707845
+    },
+    {
+      "state1": "state23",
+      "state2": "state8",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 1.0066585443194311
+    },
+    {
+      "state1": "state3",
+      "state2": "state5",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.07845996229396611
+    },
+    {
+      "state1": "state3",
+      "state2": "state8",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.04968011743368217
+    },
+    {
+      "state1": "state5",
+      "state2": "state8",
+      "class": "nd2",
+      "dom_distance": 0.0,
+      "visual_distance": 0.07889543554377505
+    }
+  ]
+}

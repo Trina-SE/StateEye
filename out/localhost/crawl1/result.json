@@ -1,0 +1,778 @@
+{
+  "states" : {
+    "state6" : {
+      "name" : "state6",
+      "url" : "http://localhost:3000/events.html",
+      "candidateElements" : [ {
+        "top" : 33,
+        "left" : 526,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+        "width" : 42,
+        "height" : 25
+      }, {
+        "top" : 33,
+        "left" : 586,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+        "width" : 74,
+        "height" : 25
+      }, {
+        "top" : 33,
+        "left" : 678,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+        "width" : 45,
+        "height" : 25
+      }, {
+        "top" : 33,
+        "left" : 741,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+        "width" : 43,
+        "height" : 25
+      }, {
+        "top" : 0,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 26,
+        "left" : 1041,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]",
+        "width" : 96,
+        "height" : 39
+      }, {
+        "top" : 424,
+        "left" : 64,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]",
+        "width" : 136,
+        "height" : 39
+      }, {
+        "top" : 424,
+        "left" : 433,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[2]/BUTTON[1]",
+        "width" : 127,
+        "height" : 39
+      }, {
+        "top" : 424,
+        "left" : 802,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[3]/BUTTON[1]",
+        "width" : 115,
+        "height" : 39
+      }, {
+        "top" : 0,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      } ],
+      "fanIn" : 4,
+      "fanOut" : 3,
+      "id" : 6,
+      "failedEvents" : [ "xpath /HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]" ],
+      "hasNearDuplicate" : false,
+      "distToNearestState" : 7.0,
+      "cluster" : 6,
+      "timeAdded" : 1768061285365,
+      "nearestState" : "state4"
+    },
+    "index" : {
+      "name" : "index",
+      "url" : "http://localhost:3000/index.html",
+      "candidateElements" : [ {
+        "top" : 33,
+        "left" : 519,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+        "width" : 42,
+        "height" : 25
+      }, {
+        "top" : 33,
+        "left" : 578,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+        "width" : 74,
+        "height" : 25
+      }, {
+        "top" : 33,
+        "left" : 670,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+        "width" : 45,
+        "height" : 25
+      }, {
+        "top" : 33,
+        "left" : 733,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+        "width" : 43,
+        "height" : 25
+      }, {
+        "top" : 344,
+        "left" : 48,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/A[1]",
+        "width" : 115,
+        "height" : 41
+      }, {
+        "top" : 664,
+        "left" : 866,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/A[1]",
+        "width" : 257,
+        "height" : 84
+      }, {
+        "top" : 0,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 26,
+        "left" : 1026,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]",
+        "width" : 96,
+        "height" : 39
+      }, {
+        "top" : 344,
+        "left" : 175,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/BUTTON[1]",
+        "width" : 153,
+        "height" : 41
+      }, {
+        "top" : 364,
+        "left" : 621,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[2]/DIV[2]/BUTTON[1]",
+        "width" : 481,
+        "height" : 38
+      }, {
+        "top" : 664,
+        "left" : 48,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[1]",
+        "width" : 257,
+        "height" : 84
+      }, {
+        "top" : 664,
+        "left" : 320,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[2]",
+        "width" : 257,
+        "height" : 84
+      }, {
+        "top" : 664,
+        "left" : 593,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[3]",
+        "width" : 257,
+        "height" : 84
+      }, {
+        "top" : 808,
+        "left" : 68,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[1]",
+        "width" : 87,
+        "height" : 31
+      }, {
+        "top" : 808,
+        "left" : 166,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[2]",
+        "width" : 82,
+        "height" : 31
+      }, {
+        "top" : 808,
+        "left" : 260,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[3]",
+        "width" : 61,
+        "height" : 31
+      }, {
+        "top" : 971,
+        "left" : 84,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[1]/BUTTON[1]",
+        "width" : 124,
+        "height" : 39
+      }, {
+        "top" : 1155,
+        "left" : 84,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[2]/BUTTON[1]",
+        "width" : 123,
+        "height" : 39
+      }, {
+        "top" : 1340,
+        "left" : 84,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[3]/BUTTON[1]",
+        "width" : 137,
+        "height" : 39
+      }, {
+        "top" : 0,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[3]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 0,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[4]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 0,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      } ],
+      "fanIn" : 4,
+      "fanOut" : 5,
+      "id" : 0,
+      "failedEvents" : [ ],
+      "hasNearDuplicate" : false,
+      "distToNearestState" : -1.0,
+      "cluster" : 0,
+      "timeAdded" : 1768061247478,
+      "nearestState" : "null"
+    },
+    "state7" : {
+      "name" : "state7",
+      "url" : "http://localhost:3000/events.html",
+      "candidateElements" : [ {
+        "top" : 423,
+        "left" : 64,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]",
+        "width" : 136,
+        "height" : 39
+      } ],
+      "fanIn" : 1,
+      "fanOut" : 0,
+      "id" : 7,
+      "failedEvents" : [ ],
+      "hasNearDuplicate" : false,
+      "distToNearestState" : 2.0,
+      "cluster" : 7,
+      "timeAdded" : 1768061290400,
+      "nearestState" : "state6"
+    },
+    "state10" : {
+      "name" : "state10",
+      "url" : "http://localhost:3000/about.html",
+      "candidateElements" : [ {
+        "top" : 53,
+        "left" : 519,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+        "width" : 42,
+        "height" : 25
+      }, {
+        "top" : 53,
+        "left" : 578,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+        "width" : 74,
+        "height" : 25
+      }, {
+        "top" : 53,
+        "left" : 670,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+        "width" : 45,
+        "height" : 25
+      }, {
+        "top" : 53,
+        "left" : 733,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+        "width" : 43,
+        "height" : 25
+      }, {
+        "top" : 262,
+        "left" : 68,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]",
+        "width" : 124,
+        "height" : 41
+      }, {
+        "top" : 19,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 45,
+        "left" : 1026,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]",
+        "width" : 96,
+        "height" : 39
+      }, {
+        "top" : 262,
+        "left" : 204,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[1]",
+        "width" : 139,
+        "height" : 41
+      }, {
+        "top" : 490,
+        "left" : 64,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]",
+        "width" : 105,
+        "height" : 39
+      }, {
+        "top" : 490,
+        "left" : 428,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[2]/BUTTON[1]",
+        "width" : 144,
+        "height" : 39
+      }, {
+        "top" : 469,
+        "left" : 791,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[3]/BUTTON[1]",
+        "width" : 114,
+        "height" : 39
+      }, {
+        "top" : 19,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      } ],
+      "fanIn" : 3,
+      "fanOut" : 3,
+      "id" : 10,
+      "failedEvents" : [ ],
+      "hasNearDuplicate" : false,
+      "distToNearestState" : 3.0,
+      "cluster" : 10,
+      "timeAdded" : 1768061298464,
+      "nearestState" : "state4"
+    },
+    "state2" : {
+      "name" : "state2",
+      "url" : "http://localhost:3000/index.html",
+      "candidateElements" : [ {
+        "top" : 922,
+        "left" : 519,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+        "width" : 42,
+        "height" : 25
+      }, {
+        "top" : 922,
+        "left" : 578,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+        "width" : 74,
+        "height" : 25
+      }, {
+        "top" : 922,
+        "left" : 670,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+        "width" : 45,
+        "height" : 25
+      }, {
+        "top" : 922,
+        "left" : 733,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+        "width" : 43,
+        "height" : 25
+      }, {
+        "top" : 344,
+        "left" : 48,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/A[1]",
+        "width" : 115,
+        "height" : 41
+      }, {
+        "top" : 664,
+        "left" : 866,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/A[1]",
+        "width" : 257,
+        "height" : 84
+      }, {
+        "top" : 888,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 915,
+        "left" : 1026,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]",
+        "width" : 96,
+        "height" : 39
+      }, {
+        "top" : 344,
+        "left" : 175,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/BUTTON[1]",
+        "width" : 153,
+        "height" : 41
+      }, {
+        "top" : 364,
+        "left" : 621,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[2]/DIV[2]/BUTTON[1]",
+        "width" : 481,
+        "height" : 38
+      }, {
+        "top" : 664,
+        "left" : 48,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[1]",
+        "width" : 257,
+        "height" : 84
+      }, {
+        "top" : 664,
+        "left" : 320,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[2]",
+        "width" : 257,
+        "height" : 84
+      }, {
+        "top" : 664,
+        "left" : 593,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[3]",
+        "width" : 257,
+        "height" : 84
+      }, {
+        "top" : 808,
+        "left" : 68,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[1]",
+        "width" : 87,
+        "height" : 31
+      }, {
+        "top" : 808,
+        "left" : 166,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[2]",
+        "width" : 82,
+        "height" : 31
+      }, {
+        "top" : 808,
+        "left" : 260,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[1]/BUTTON[3]",
+        "width" : 61,
+        "height" : 31
+      }, {
+        "top" : 971,
+        "left" : 84,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[1]/BUTTON[1]",
+        "width" : 124,
+        "height" : 39
+      }, {
+        "top" : 1155,
+        "left" : 84,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[2]/BUTTON[1]",
+        "width" : 123,
+        "height" : 39
+      }, {
+        "top" : 1340,
+        "left" : 84,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[3]/BUTTON[1]",
+        "width" : 137,
+        "height" : 39
+      }, {
+        "top" : 888,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[3]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 888,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[4]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 888,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      } ],
+      "fanIn" : 1,
+      "fanOut" : 2,
+      "id" : 2,
+      "failedEvents" : [ ],
+      "hasNearDuplicate" : false,
+      "distToNearestState" : 2.0,
+      "cluster" : 2,
+      "timeAdded" : 1768061270705,
+      "nearestState" : "index"
+    },
+    "state4" : {
+      "name" : "state4",
+      "url" : "http://localhost:3000/academics.html",
+      "candidateElements" : [ {
+        "top" : 54,
+        "left" : 519,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+        "width" : 42,
+        "height" : 25
+      }, {
+        "top" : 54,
+        "left" : 578,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+        "width" : 74,
+        "height" : 25
+      }, {
+        "top" : 54,
+        "left" : 670,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+        "width" : 45,
+        "height" : 25
+      }, {
+        "top" : 54,
+        "left" : 733,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+        "width" : 43,
+        "height" : 25
+      }, {
+        "top" : 262,
+        "left" : 346,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]",
+        "width" : 119,
+        "height" : 42
+      }, {
+        "top" : 20,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]",
+        "width" : 0,
+        "height" : 0
+      }, {
+        "top" : 47,
+        "left" : 1026,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]",
+        "width" : 96,
+        "height" : 39
+      }, {
+        "top" : 262,
+        "left" : 68,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[1]",
+        "width" : 113,
+        "height" : 42
+      }, {
+        "top" : 262,
+        "left" : 192,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[2]",
+        "width" : 141,
+        "height" : 42
+      }, {
+        "top" : 492,
+        "left" : 64,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]",
+        "width" : 151,
+        "height" : 39
+      }, {
+        "top" : 492,
+        "left" : 428,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[2]/BUTTON[1]",
+        "width" : 135,
+        "height" : 39
+      }, {
+        "top" : 492,
+        "left" : 791,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[3]/BUTTON[1]",
+        "width" : 142,
+        "height" : 39
+      }, {
+        "top" : 20,
+        "left" : 0,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]",
+        "width" : 0,
+        "height" : 0
+      } ],
+      "fanIn" : 3,
+      "fanOut" : 3,
+      "id" : 4,
+      "failedEvents" : [ ],
+      "hasNearDuplicate" : false,
+      "distToNearestState" : 94.0,
+      "cluster" : 4,
+      "timeAdded" : 1768061279079,
+      "nearestState" : "index"
+    },
+    "state14" : {
+      "name" : "state14",
+      "url" : "http://localhost:3000/about.html",
+      "candidateElements" : [ {
+        "top" : 262,
+        "left" : 68,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]",
+        "width" : 124,
+        "height" : 41
+      }, {
+        "top" : 356,
+        "left" : 399,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]",
+        "width" : 98,
+        "height" : 41
+      }, {
+        "top" : 44,
+        "left" : 1026,
+        "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]",
+        "width" : 96,
+        "height" : 39
+      }, {
+        "top" : 490,
+        "left" : 64,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]",
+        "width" : 105,
+        "height" : 39
+      }, {
+        "top" : 490,
+        "left" : 428,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[2]/BUTTON[1]",
+        "width" : 144,
+        "height" : 39
+      }, {
+        "top" : 469,
+        "left" : 791,
+        "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[3]/BUTTON[1]",
+        "width" : 114,
+        "height" : 39
+      }, {
+        "top" : 356,
+        "left" : 508,
+        "xpath" : "/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]",
+        "width" : 76,
+        "height" : 41
+      } ],
+      "fanIn" : 1,
+      "fanOut" : 1,
+      "id" : 14,
+      "failedEvents" : [ ],
+      "hasNearDuplicate" : false,
+      "distToNearestState" : 2.0,
+      "cluster" : 14,
+      "timeAdded" : 1768061307104,
+      "nearestState" : "state10"
+    }
+  },
+  "edges" : [ {
+    "from" : "index",
+    "to" : "state2",
+    "text" : "Request File",
+    "id" : "xpath /HTML[1]/BODY[1]/MAIN[1]/SECTION[3]/DIV[2]/DIV[2]/BUTTON[1]",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Request File, attributes={class=secondary-btn, id=request-archive}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state2",
+    "to" : "index",
+    "text" : "Home",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+    "element" : "Element{node=[A: null], tag=A, text=Home, attributes={class=nav-link active, href=index.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "index",
+    "to" : "state4",
+    "text" : "Academics",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+    "element" : "Element{node=[A: null], tag=A, text=Academics, attributes={class=nav-link, href=academics.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state4",
+    "to" : "index",
+    "text" : "Home",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+    "element" : "Element{node=[A: null], tag=A, text=Home, attributes={class=nav-link, href=index.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "index",
+    "to" : "state6",
+    "text" : "Events",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+    "element" : "Element{node=[A: null], tag=A, text=Events, attributes={class=nav-link, href=events.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state6",
+    "to" : "state7",
+    "text" : "Add to agenda",
+    "id" : "xpath /HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Add to agenda, attributes={class=secondary-btn}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state2",
+    "to" : "state10",
+    "text" : "About",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+    "element" : "Element{node=[A: null], tag=A, text=About, attributes={class=nav-link, href=about.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state10",
+    "to" : "state4",
+    "text" : "Academics",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+    "element" : "Element{node=[A: null], tag=A, text=Academics, attributes={class=nav-link, href=academics.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state4",
+    "to" : "state6",
+    "text" : "Events",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+    "element" : "Element{node=[A: null], tag=A, text=Events, attributes={class=nav-link, href=events.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state6",
+    "to" : "state10",
+    "text" : "About",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+    "element" : "Element{node=[A: null], tag=A, text=About, attributes={class=nav-link, href=about.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state10",
+    "to" : "state14",
+    "text" : "Spotlight",
+    "id" : "xpath /HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Spotlight, attributes={class=ghost-btn, id=open-spotlight}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state14",
+    "to" : "index",
+    "text" : "Return home",
+    "id" : "xpath /HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]",
+    "element" : "Element{node=[A: null], tag=A, text=Return home, attributes={class=primary-btn, href=index.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "index",
+    "to" : "state4",
+    "text" : "Start a Tour",
+    "id" : "xpath /HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/A[1]",
+    "element" : "Element{node=[A: null], tag=A, text=Start a Tour, attributes={class=primary-btn, href=academics.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state4",
+    "to" : "state6",
+    "text" : "View events",
+    "id" : "xpath /HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]",
+    "element" : "Element{node=[A: null], tag=A, text=View events, attributes={class=ghost-btn, href=events.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state6",
+    "to" : "state10",
+    "text" : "Meet them",
+    "id" : "xpath /HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]",
+    "element" : "Element{node=[A: null], tag=A, text=Meet them, attributes={class=primary-btn, href=about.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "state10",
+    "to" : "index",
+    "text" : "Return home",
+    "id" : "xpath /HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]",
+    "element" : "Element{node=[A: null], tag=A, text=Return home, attributes={class=primary-btn, href=index.html}}",
+    "eventType" : "click"
+  }, {
+    "from" : "index",
+    "to" : "state6",
+    "text" : "See eventsNavigate to the events board.",
+    "id" : "xpath /HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/A[1]",
+    "element" : "Element{node=[A: null], tag=A, text=See eventsNavigate to the events board., attributes={class=card, href=events.html}}",
+    "eventType" : "click"
+  } ],
+  "statistics" : {
+    "duration" : "1 minute 11 seconds",
+    "crawlPaths" : 2,
+    "averageDomSize" : "3.505 kB",
+    "edges" : 17,
+    "startDate" : "2026-01-10 22:07:23 GMT+06:00",
+    "stateStats" : {
+      "leastFanOut" : {
+        "id" : "state7",
+        "count" : 0
+      },
+      "leastFanIn" : {
+        "id" : "state7",
+        "count" : 1
+      },
+      "mostFanOut" : {
+        "id" : "index",
+        "count" : 5
+      },
+      "mostFanIn" : {
+        "id" : "state6",
+        "count" : 4
+      },
+      "totalNumberOfStates" : 7,
+      "urls" : {
+        "http://localhost:3000/events.html" : [ "state6", "state7" ],
+        "http://localhost:3000/index.html" : [ "index", "state2" ],
+        "http://localhost:3000/about.html" : [ "state10", "state14" ],
+        "http://localhost:3000/academics.html" : [ "state4" ]
+      }
+    },
+    "failedEvents" : 1
+  },
+  "exitStatus" : "MAX_TIME"
+}

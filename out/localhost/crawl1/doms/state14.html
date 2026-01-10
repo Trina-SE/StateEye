@@ -1,0 +1,67 @@
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <title>Rivergate Campus - About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <script defer="" src="app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand-mark">SE</div>
+      <div>
+        <div class="brand-title">Rivergate Campus</div>
+        <div class="brand-subtitle">About</div>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="academics.html" class="nav-link">Academics</a>
+      <a href="events.html" class="nav-link">Events</a>
+      <a href="about.html" class="nav-link active">About</a>
+    </nav>
+    <button class="ghost-btn" id="open-spotlight">Spotlight</button>
+  </header>
+
+  <main class="page">
+    <section class="page-subhero">
+      <h1>About the campus</h1>
+      <p>Rivergate is a fictional campus designed for crawler demos.</p>
+      <div class="hero-actions">
+        <a class="primary-btn" href="index.html">Return home</a>
+        <button class="secondary-btn">Download map</button>
+      </div>
+    </section>
+
+    <section class="feature-grid">
+      <article class="panel-card">
+        <h3>Atlas Hall</h3>
+        <p>Research hub for multi-state web exploration.</p>
+        <button class="secondary-btn">View wing</button>
+      </article>
+      <article class="panel-card">
+        <h3>North Gallery</h3>
+        <p>Visual regression showcases and experiments.</p>
+        <button class="secondary-btn">Browse exhibits</button>
+      </article>
+      <article class="panel-card">
+        <h3>Mariner Courtyard</h3>
+        <p>Outdoor study spaces with Wi-Fi nodes.</p>
+        <button class="secondary-btn">Check map</button>
+      </article>
+    </section>
+  </main>
+
+  <div class="modal active" id="spotlight-modal" aria-hidden="true">
+    <div class="modal-card">
+      <h3>Campus note</h3>
+      <p>Use the dashboard on Home to reveal hidden panels.</p>
+      <div class="modal-actions">
+        <a class="primary-btn" href="index.html">Go home</a>
+        <button class="ghost-btn" id="close-spotlight">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+<div id="stateeye-toast" style="position: fixed; right: 24px; bottom: 24px; background: rgb(16, 33, 43); color: rgb(255, 255, 255); padding: 10px 16px; border-radius: 999px; font-size: 0.9rem; box-shadow: rgba(16, 33, 43, 0.2) 0px 12px 24px; opacity: 0; transition: opacity 0.2s;">Button clicked</div></body></html>

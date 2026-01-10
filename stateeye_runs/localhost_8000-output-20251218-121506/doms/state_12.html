@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <title>StateEye Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; max-width: 800px; }
+    header { margin-bottom: 1.5rem; }
+    section { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; }
+    button { margin-right: 0.5rem; }
+    .card { background: #f9f9f9; padding: 1rem; border-radius: 6px; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>StateEye Demo Site</h1>
+    <p>Simple page with login-like form and buttons to let the crawler explore.</p>
+  </header>
+
+  <section id="login">
+    <h2>Login</h2>
+    <label>
+      User:
+      <input type="text" id="user" name="user" placeholder="user@example.com">
+    </label>
+    <label>
+      Password:
+      <input type="password" id="pass" name="pass" placeholder="••••••••">
+    </label>
+    <button id="login-btn">Login</button>
+  </section>
+
+  <section id="actions" style="display: block;">
+    <h2>Dashboard</h2>
+    <button class="action-btn" data-target="panel-a">Show Panel A</button>
+    <button class="action-btn" data-target="panel-b">Show Panel B</button>
+    <button class="action-btn" data-target="panel-c">Show Panel C</button>
+
+    <div id="panel-a" class="card" style="display: block;">Panel A content with a list:
+      <ul>
+        <li>Item A1</li>
+        <li>Item A2</li>
+        <li>Item A3</li>
+      </ul>
+    </div>
+    <div id="panel-b" class="card" style="display: none;">Panel B content with toggles:
+      <label><input type="checkbox"> Option B1</label><br>
+      <label><input type="checkbox"> Option B2</label>
+    </div>
+    <div id="panel-c" class="card" style="display:none;">Panel C content with a small form:
+      <input type="text" placeholder="Enter note">
+      <button id="save-note">Save</button>
+    </div>
+  </section>
+
+  <script>
+    const loginBtn = document.getElementById('login-btn');
+    const actionsSection = document.getElementById('actions');
+    loginBtn.addEventListener('click', () => {
+      actionsSection.style.display = 'block';
+    });
+
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+        const target = document.getElementById(btn.dataset.target);
+        if (target) target.style.display = 'block';
+      });
+    });
+  </script>
+
+
+</body></html>

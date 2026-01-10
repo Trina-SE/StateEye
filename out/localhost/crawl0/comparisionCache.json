@@ -1,0 +1,107 @@
+[
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state8",
+    "state2Name": "state6"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state10",
+    "state2Name": "state7"
+  },
+  {
+    "stateComparision": "NEARDUPLICATE2",
+    "state1Name": "state4",
+    "state2Name": "state3"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state6",
+    "state2Name": "state4"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state7",
+    "state2Name": "state3"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state10",
+    "state2Name": "state6"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state8",
+    "state2Name": "index"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state7",
+    "state2Name": "state6"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state3",
+    "state2Name": "index"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state7",
+    "state2Name": "state4"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state10",
+    "state2Name": "state4"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state8",
+    "state2Name": "state4"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state10",
+    "state2Name": "state3"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state6",
+    "state2Name": "state3"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state7",
+    "state2Name": "index"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state8",
+    "state2Name": "state3"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state10",
+    "state2Name": "index"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state6",
+    "state2Name": "index"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state8",
+    "state2Name": "state7"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state4",
+    "state2Name": "index"
+  },
+  {
+    "stateComparision": "DIFFERENT",
+    "state1Name": "state10",
+    "state2Name": "state8"
+  }
+]

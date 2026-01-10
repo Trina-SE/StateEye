@@ -1,0 +1,467 @@
+{
+  "nodes" : [ {
+    "name" : "state19",
+    "url" : "http://localhost:3000/about.html",
+    "candidateElements" : [ ],
+    "fanIn" : 1,
+    "fanOut" : 0,
+    "id" : 19,
+    "failedEvents" : [ ],
+    "hasNearDuplicate" : false,
+    "distToNearestState" : 0.024390243902439025,
+    "cluster" : -1,
+    "timeAdded" : 1768061496824,
+    "nearestState" : "state8"
+  }, {
+    "name" : "index",
+    "url" : "http://localhost:3000/index.html",
+    "candidateElements" : [ {
+      "top" : 33,
+      "left" : 519,
+      "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+      "width" : 42,
+      "height" : 25
+    }, {
+      "top" : 33,
+      "left" : 578,
+      "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+      "width" : 74,
+      "height" : 25
+    }, {
+      "top" : 33,
+      "left" : 670,
+      "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+      "width" : 45,
+      "height" : 25
+    }, {
+      "top" : 33,
+      "left" : 733,
+      "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+      "width" : 43,
+      "height" : 25
+    }, {
+      "top" : 344,
+      "left" : 48,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/DIV[1]/A[1]",
+      "width" : 115,
+      "height" : 41
+    }, {
+      "top" : 664,
+      "left" : 866,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/A[1]",
+      "width" : 257,
+      "height" : 84
+    }, {
+      "top" : 0,
+      "left" : 0,
+      "xpath" : "//DIV[@id = 'spotlight-modal']/DIV[1]/DIV[1]/A[1]",
+      "width" : 0,
+      "height" : 0
+    }, {
+      "top" : 26,
+      "left" : 1026,
+      "xpath" : "//BUTTON[@id = 'open-spotlight']",
+      "width" : 96,
+      "height" : 39
+    }, {
+      "top" : 344,
+      "left" : 175,
+      "xpath" : "//BUTTON[@id = 'toggle-dashboard']",
+      "width" : 153,
+      "height" : 41
+    }, {
+      "top" : 364,
+      "left" : 621,
+      "xpath" : "//BUTTON[@id = 'issue-pass']",
+      "width" : 481,
+      "height" : 38
+    }, {
+      "top" : 664,
+      "left" : 48,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[1]",
+      "width" : 257,
+      "height" : 84
+    }, {
+      "top" : 664,
+      "left" : 320,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[2]",
+      "width" : 257,
+      "height" : 84
+    }, {
+      "top" : 664,
+      "left" : 593,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/DIV[2]/BUTTON[3]",
+      "width" : 257,
+      "height" : 84
+    }, {
+      "top" : 808,
+      "left" : 68,
+      "xpath" : "//SECTION[@id = 'dashboard']/DIV[1]/BUTTON[1]",
+      "width" : 87,
+      "height" : 31
+    }, {
+      "top" : 808,
+      "left" : 166,
+      "xpath" : "//SECTION[@id = 'dashboard']/DIV[1]/BUTTON[2]",
+      "width" : 82,
+      "height" : 31
+    }, {
+      "top" : 808,
+      "left" : 260,
+      "xpath" : "//SECTION[@id = 'dashboard']/DIV[1]/BUTTON[3]",
+      "width" : 61,
+      "height" : 31
+    }, {
+      "top" : 971,
+      "left" : 84,
+      "xpath" : "//BUTTON[@id = 'reserve-orbit']",
+      "width" : 124,
+      "height" : 39
+    }, {
+      "top" : 1155,
+      "left" : 84,
+      "xpath" : "//BUTTON[@id = 'request-archive']",
+      "width" : 123,
+      "height" : 39
+    }, {
+      "top" : 1340,
+      "left" : 84,
+      "xpath" : "//BUTTON[@id = 'add-forum']",
+      "width" : 137,
+      "height" : 39
+    }, {
+      "top" : 0,
+      "left" : 0,
+      "xpath" : "//BUTTON[@id = 'complete-checklist']",
+      "width" : 0,
+      "height" : 0
+    }, {
+      "top" : 0,
+      "left" : 0,
+      "xpath" : "//BUTTON[@id = 'refresh-pulse']",
+      "width" : 0,
+      "height" : 0
+    }, {
+      "top" : 0,
+      "left" : 0,
+      "xpath" : "//BUTTON[@id = 'close-spotlight']",
+      "width" : 0,
+      "height" : 0
+    } ],
+    "fanIn" : 2,
+    "fanOut" : 17,
+    "id" : 0,
+    "failedEvents" : [ "xpath //DIV[@id = 'spotlight-modal']/DIV[1]/DIV[1]/A[1]", "xpath //BUTTON[@id = 'complete-checklist']", "xpath //BUTTON[@id = 'refresh-pulse']", "xpath //BUTTON[@id = 'close-spotlight']" ],
+    "hasNearDuplicate" : false,
+    "distToNearestState" : -1.0,
+    "cluster" : -1,
+    "timeAdded" : 1768061468820,
+    "nearestState" : "null"
+  }, {
+    "name" : "state5",
+    "url" : "http://localhost:3000/events.html",
+    "candidateElements" : [ {
+      "top" : 33,
+      "left" : 678,
+      "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]",
+      "width" : 45,
+      "height" : 25
+    }, {
+      "top" : 0,
+      "left" : 0,
+      "xpath" : "//DIV[@id = 'spotlight-modal']/DIV[1]/DIV[1]/A[1]",
+      "width" : 0,
+      "height" : 0
+    } ],
+    "fanIn" : 3,
+    "fanOut" : 0,
+    "id" : 5,
+    "failedEvents" : [ "xpath //DIV[@id = 'spotlight-modal']/DIV[1]/DIV[1]/A[1]" ],
+    "hasNearDuplicate" : false,
+    "distToNearestState" : 0.0975609756097561,
+    "cluster" : -1,
+    "timeAdded" : 1768061478585,
+    "nearestState" : "state3"
+  }, {
+    "name" : "state23",
+    "url" : "http://localhost:3000/index.html",
+    "candidateElements" : [ ],
+    "fanIn" : 12,
+    "fanOut" : 0,
+    "id" : 23,
+    "failedEvents" : [ ],
+    "hasNearDuplicate" : false,
+    "distToNearestState" : 0.00980392156862745,
+    "cluster" : -1,
+    "timeAdded" : 1768061503387,
+    "nearestState" : "index"
+  }, {
+    "name" : "state8",
+    "url" : "http://localhost:3000/about.html",
+    "candidateElements" : [ {
+      "top" : 53,
+      "left" : 733,
+      "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]",
+      "width" : 43,
+      "height" : 25
+    }, {
+      "top" : 262,
+      "left" : 68,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]",
+      "width" : 124,
+      "height" : 41
+    }, {
+      "top" : 262,
+      "left" : 204,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[1]",
+      "width" : 139,
+      "height" : 41
+    } ],
+    "fanIn" : 1,
+    "fanOut" : 2,
+    "id" : 8,
+    "failedEvents" : [ ],
+    "hasNearDuplicate" : false,
+    "distToNearestState" : 0.04878048780487805,
+    "cluster" : -1,
+    "timeAdded" : 1768061482119,
+    "nearestState" : "state3"
+  }, {
+    "name" : "state15",
+    "url" : "http://localhost:3000/academics.html",
+    "candidateElements" : [ ],
+    "fanIn" : 5,
+    "fanOut" : 0,
+    "id" : 15,
+    "failedEvents" : [ ],
+    "hasNearDuplicate" : false,
+    "distToNearestState" : 0.023809523809523808,
+    "cluster" : -1,
+    "timeAdded" : 1768061490779,
+    "nearestState" : "state3"
+  }, {
+    "name" : "state3",
+    "url" : "http://localhost:3000/academics.html",
+    "candidateElements" : [ {
+      "top" : 54,
+      "left" : 519,
+      "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]",
+      "width" : 42,
+      "height" : 25
+    }, {
+      "top" : 54,
+      "left" : 578,
+      "xpath" : "/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]",
+      "width" : 74,
+      "height" : 25
+    }, {
+      "top" : 262,
+      "left" : 346,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]",
+      "width" : 119,
+      "height" : 42
+    }, {
+      "top" : 20,
+      "left" : 0,
+      "xpath" : "//DIV[@id = 'spotlight-modal']/DIV[1]/DIV[1]/A[1]",
+      "width" : 0,
+      "height" : 0
+    }, {
+      "top" : 262,
+      "left" : 68,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[1]",
+      "width" : 113,
+      "height" : 42
+    }, {
+      "top" : 262,
+      "left" : 192,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[2]",
+      "width" : 141,
+      "height" : 42
+    }, {
+      "top" : 492,
+      "left" : 64,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]",
+      "width" : 151,
+      "height" : 39
+    }, {
+      "top" : 492,
+      "left" : 428,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[2]/BUTTON[1]",
+      "width" : 135,
+      "height" : 39
+    }, {
+      "top" : 492,
+      "left" : 791,
+      "xpath" : "/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[3]/BUTTON[1]",
+      "width" : 142,
+      "height" : 39
+    } ],
+    "fanIn" : 2,
+    "fanOut" : 7,
+    "id" : 3,
+    "failedEvents" : [ "xpath //DIV[@id = 'spotlight-modal']/DIV[1]/DIV[1]/A[1]" ],
+    "hasNearDuplicate" : false,
+    "distToNearestState" : 0.6336633663366337,
+    "cluster" : -1,
+    "timeAdded" : 1768061474730,
+    "nearestState" : "index"
+  } ],
+  "links" : [ {
+    "source" : 0,
+    "target" : 3,
+    "text" : "Academics",
+    "element" : "Element{node=[A: null], tag=A, text=Academics, attributes={class=nav-link, href=academics.html}}",
+    "eventType" : "click"
+  }, {
+    "source" : 3,
+    "target" : 0,
+    "text" : "Home",
+    "element" : "Element{node=[A: null], tag=A, text=Home, attributes={class=nav-link, href=index.html}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 5,
+    "text" : "Events",
+    "element" : "Element{node=[A: null], tag=A, text=Events, attributes={class=nav-link, href=events.html}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 8,
+    "text" : "About",
+    "element" : "Element{node=[A: null], tag=A, text=About, attributes={class=nav-link, href=about.html}}",
+    "eventType" : "click"
+  }, {
+    "source" : 8,
+    "target" : 0,
+    "text" : "Return home",
+    "element" : "Element{node=[A: null], tag=A, text=Return home, attributes={class=primary-btn, href=index.html}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 3,
+    "text" : "Start a Tour",
+    "element" : "Element{node=[A: null], tag=A, text=Start a Tour, attributes={class=primary-btn, href=academics.html}}",
+    "eventType" : "click"
+  }, {
+    "source" : 3,
+    "target" : 5,
+    "text" : "View events",
+    "element" : "Element{node=[A: null], tag=A, text=View events, attributes={class=ghost-btn, href=events.html}}",
+    "eventType" : "click"
+  }, {
+    "source" : 3,
+    "target" : 15,
+    "text" : "Design Lab",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Design Lab, attributes={class=primary-btn, data-panel=panel-orbit}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 5,
+    "text" : "See events          Navigate to the events board.",
+    "element" : "Element{node=[A: null], tag=A, text=See events          Navigate to the events board., attributes={class=card, href=events.html}}",
+    "eventType" : "click"
+  }, {
+    "source" : 8,
+    "target" : 19,
+    "text" : "Download map",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Download map, attributes={class=secondary-btn}}",
+    "eventType" : "click"
+  }, {
+    "source" : 3,
+    "target" : 15,
+    "text" : "Digital Archives",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Digital Archives, attributes={class=secondary-btn, data-panel=panel-archive}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Spotlight",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Spotlight, attributes={class=ghost-btn, id=open-spotlight}}",
+    "eventType" : "click"
+  }, {
+    "source" : 3,
+    "target" : 15,
+    "text" : "Preview syllabus",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Preview syllabus, attributes={class=secondary-btn}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Open Dashboard",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Open Dashboard, attributes={class=secondary-btn, id=toggle-dashboard}}",
+    "eventType" : "click"
+  }, {
+    "source" : 3,
+    "target" : 15,
+    "text" : "Join workshop",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Join workshop, attributes={class=secondary-btn}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Issue Pass",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Issue Pass, attributes={class=primary-btn, id=issue-pass}}",
+    "eventType" : "click"
+  }, {
+    "source" : 3,
+    "target" : 15,
+    "text" : "Request review",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Request review, attributes={class=secondary-btn}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Orbit Studio          Prototype lab for UI experiments.",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Orbit Studio          Prototype lab for UI experiments., attributes={class=card, data-panel=panel-orbit}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Archive Vault          Collections and thesis shelves.",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Archive Vault          Collections and thesis shelves., attributes={class=card, data-panel=panel-archive}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Forum Stage          Upcoming sessions and talks.",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Forum Stage          Upcoming sessions and talks., attributes={class=card, data-panel=panel-forum}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Discovery",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Discovery, attributes={class=tab active, data-tab=tab-one}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Checklist",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Checklist, attributes={class=tab, data-tab=tab-two}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Pulse",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Pulse, attributes={class=tab, data-tab=tab-three}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Reserve Slot",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Reserve Slot, attributes={class=secondary-btn, id=reserve-orbit}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Request File",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Request File, attributes={class=secondary-btn, id=request-archive}}",
+    "eventType" : "click"
+  }, {
+    "source" : 0,
+    "target" : 23,
+    "text" : "Add to Agenda",
+    "element" : "Element{node=[BUTTON: null], tag=BUTTON, text=Add to Agenda, attributes={class=secondary-btn, id=add-forum}}",
+    "eventType" : "click"
+  } ]
+}

@@ -1,0 +1,204 @@
+
+    <!doctype html>
+    <html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>StateEye Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 1.5rem; }
+            header { margin-bottom: 1rem; }
+            .counts span { margin-right: 1rem; }
+            .state { border: 1px solid #e2e2e2; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; }
+            .state.clone { border-color: #d9534f; background: #fff5f5; }
+            .state.near-duplicate { border-color: #f0ad4e; background: #fffaf2; }
+            .state.unique { border-color: #5cb85c; background: #f7fff7; }
+            .screenshot img { max-width: 100%; border: 1px solid #ccc; border-radius: 4px; }
+            .fragment { border: 1px dashed #ccc; padding: 0.5rem; margin: 0.5rem 0; }
+            .fragment img { max-width: 400px; display: block; }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>StateEye Report</h1>
+            <div class="counts">
+                <span>States: 19</span>
+                <span>Unique: 1</span>
+                <span>Near-duplicates: 2</span>
+                <span>Clones: 16</span>
+            </div>
+        </header>
+        
+            <section class="state unique">
+                <h3>State 1 (unique)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 0</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_1.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_1_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_1_frag_1.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state near-duplicate">
+                <h3>State 2 (near-duplicate)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 1</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_2.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_2_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_2_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_2_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state near-duplicate">
+                <h3>State 3 (near-duplicate)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 2</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_3.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_3_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_3_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_3_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 4 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 2</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_4.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_4_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_4_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_4_frag_5.png' alt='fragment'/></div><div class='fragment'><strong>ul</strong><div>Item A1 Item A2 Item A3</div><img src='screenshots\state_4_frag_9.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A1</div><img src='screenshots\state_4_frag_10.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A2</div><img src='screenshots\state_4_frag_11.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A3</div><img src='screenshots\state_4_frag_12.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 5 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 2</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_5.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_5_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_5_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_5_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 6 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 2</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_6.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_6_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_6_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_6_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 7 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_7.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_7_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_7_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_7_frag_5.png' alt='fragment'/></div><div class='fragment'><strong>ul</strong><div>Item A1 Item A2 Item A3</div><img src='screenshots\state_7_frag_9.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A1</div><img src='screenshots\state_7_frag_10.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A2</div><img src='screenshots\state_7_frag_11.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A3</div><img src='screenshots\state_7_frag_12.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 8 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_8.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_8_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_8_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_8_frag_5.png' alt='fragment'/></div><div class='fragment'><strong>ul</strong><div>Item A1 Item A2 Item A3</div><img src='screenshots\state_8_frag_9.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A1</div><img src='screenshots\state_8_frag_10.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A2</div><img src='screenshots\state_8_frag_11.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A3</div><img src='screenshots\state_8_frag_12.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 9 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_9.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_9_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_9_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_9_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 10 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_10.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_10_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_10_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_10_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 11 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_11.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_11_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_11_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_11_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 12 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_12.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_12_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_12_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_12_frag_5.png' alt='fragment'/></div><div class='fragment'><strong>ul</strong><div>Item A1 Item A2 Item A3</div><img src='screenshots\state_12_frag_9.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A1</div><img src='screenshots\state_12_frag_10.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A2</div><img src='screenshots\state_12_frag_11.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A3</div><img src='screenshots\state_12_frag_12.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 13 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_13.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_13_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_13_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_13_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 14 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_14.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_14_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_14_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_14_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 15 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_15.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_15_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_15_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_15_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 16 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_16.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_16_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_16_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_16_frag_5.png' alt='fragment'/></div><div class='fragment'><strong>ul</strong><div>Item A1 Item A2 Item A3</div><img src='screenshots\state_16_frag_9.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A1</div><img src='screenshots\state_16_frag_10.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A2</div><img src='screenshots\state_16_frag_11.png' alt='fragment'/></div><div class='fragment'><strong>li</strong><div>Item A3</div><img src='screenshots\state_16_frag_12.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 17 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_17.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_17_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_17_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_17_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 18 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_18.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_18_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_18_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_18_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+            <section class="state clone">
+                <h3>State 19 (clone)</h3>
+                <p><strong>URL:</strong> http://localhost:8000/</p>
+                <p><strong>Depth:</strong> 3</p>
+                <p><strong>Title:</strong> StateEye Demo</p>
+                <div class="screenshot"><img src="screenshots\state_19.png" alt="screenshot"/></div>
+                <div class='fragments'><div class='fragment'><strong>header</strong><div>StateEye Demo Site Simple page with login-like form and buttons to let the crawler explore.</div><img src='screenshots\state_19_frag_0.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Login User: Password: Login</div><img src='screenshots\state_19_frag_1.png' alt='fragment'/></div><div class='fragment'><strong>section</strong><div>Dashboard Show Panel A Show Panel B Show Panel C Panel A content with a list: Item A1 Item A2 Item A3 Panel B content with toggles: Option B1 Option B2 Panel C content with a small form: Save</div><img src='screenshots\state_19_frag_5.png' alt='fragment'/></div></div>
+            </section>
+            
+    </body>
+    </html>
+    

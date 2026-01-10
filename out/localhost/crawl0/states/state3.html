@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Crawl overview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="CrawlJax">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+<link href="../css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="../css/shCoreDefault.css" rel="stylesheet" type="text/css" />
+<style>
+.tooltip-inner {
+	max-width: 300px;
+	word-wrap: break-word;
+}
+
+body {
+	padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+</style>
+</head>
+<body>
+	<nav class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+							<a class="brand" href="../index.html#graph">Crawl overview</a>
+						<ul class="nav">
+									<li class="active"><a href="#">State inspector</a></li>
+							</ul>
+			<div class="nav pull-right">
+				<a href="#" class="btn graphBtn" id='pauseButton' data-toggle="tooltip" data-placement="bottom" title="Pause the graph movement"><i class="icon-pause"></i></a>
+				<a href="#" class="btn graphBtn" rel="popover" data-placement="bottom"  data-original-title="What to do"><i class='icon-question-sign'></i></a>
+				<a href="#" class="btn graphBtn" id="toggleND" data-placement="bottom"  data-original-title="Show or Hide Near Duplicates"><i class='icon-remove-sign'></i></a>
+				<a href="#" class="btn graphBtn" id="clusterBtn" data-placement="bottom"  data-original-title="Show clusters"><i class='icon-asterisk'></i></a>
+				<div style="display: none" id='popup-content'>
+					<p>You can double click a state to inspect it further.</p>
+					<p>Clicking an edge gives more details on the state transition.</p>
+					<p>Use your mouse to zoom in and out by scrolling, or drag the states and view around.</p>
+				</div>
+				<a href="result.json" class="btn" data-toggle="tooltip" data-placement="bottom" title="Download result as JSON"><i class='icon-download'></i></a>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+</nav>	<div class='container' >
+		<h1>Summary of state3</h1>
+		<table class="table table-bordered table-striped">
+			<colgroup>
+				<col class="span1">
+				<col class="span7">
+			</colgroup>
+			<tbody>
+				<tr>
+					<th>URL</th>
+					<td><a href='http://localhost:3000/academics.html'>http://localhost:3000/academics.html</a></td>
+				</tr>
+				<tr>
+					<th>Fan in</th>
+					<td>2</td>
+				</tr>
+				<tr>
+					<th>Fan out</th>
+					<td>2</td>
+				</tr>
+				<tr>
+					<th>Interaction elements</th>
+					<td>13</td>
+				</tr>
+				<tr>
+					<th>Nearest State</th>
+					<td>index</td>
+				</tr>
+				<tr>
+					<th>Distance to nearest State</th>
+					<td>94.0</td>
+				</tr>
+				<tr>
+					<th>Has Near Duplicate</th>
+					<td>true</td>
+				</tr>
+				<tr>
+					<th>Cluster</th>
+					<td>3</td>
+				</tr>
+				<tr>
+					<th>Failed events</th>
+					<td>-</td>
+			</tbody>
+		</table>
+		<ul id='tabs' class="nav nav-tabs">
+			<li class="active">
+				<a href="#screenshot">Screenshot</a>
+			</li>
+			<li>
+				<a href="#dom">Captured DOM</a>
+			</li>	
+			<li>
+				<a href="#interactions">Interactions</a>
+			</li>			
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" style="position: relative;" id='screenshot'>			
+				<img style='max-width: none;' border='0' src='../screenshots/state3.png' /> 
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 110px; top: 496px; width: 44px; height: 27px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]" class='hovers'
+				style="position: absolute; z-index: 10; left: 170px; top: 496px; width: 76px; height: 27px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]" class='hovers'
+				style="position: absolute; z-index: 10; left: 262px; top: 496px; width: 47px; height: 27px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]" class='hovers'
+				style="position: absolute; z-index: 10; left: 325px; top: 496px; width: 45px; height: 27px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]" class='hovers'
+				style="position: absolute; z-index: 20; left: 315px; top: 353px; width: 121px; height: 44px; border: 2px solid green;  cursor: pointer;" onclick="location.href='state6.html'"></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: -3px; top: 422px; width: 2px; height: 2px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 191px; top: 533px; width: 98px; height: 41px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 37px; top: 353px; width: 115px; height: 44px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[2]" class='hovers'
+				style="position: absolute; z-index: 10; left: 161px; top: 353px; width: 143px; height: 44px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 33px; top: 561px; width: 153px; height: 41px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[2]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 20; left: 33px; top: 749px; width: 137px; height: 41px; border: 2px solid green;  cursor: pointer;" onclick="location.href='state4.html'"></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[3]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: 33px; top: 937px; width: 144px; height: 41px; border: 2px solid orange;  " ></div>
+								<div rel="tooltip" data-original-title="/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]" class='hovers'
+				style="position: absolute; z-index: 10; left: -3px; top: 422px; width: 2px; height: 2px; border: 2px solid orange;  " ></div>
+							</div>
+			<div class="tab-pane" id='dom'>
+				<h2>Captured DOM</h2>
+				<pre class='brush: html'>&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;Rivergate Campus - Academics&lt;/title&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
+  &lt;script defer=&quot;&quot; src=&quot;app.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header class=&quot;site-header&quot;&gt;
+    &lt;div class=&quot;brand&quot;&gt;
+      &lt;div class=&quot;brand-mark&quot;&gt;SE&lt;/div&gt;
+      &lt;div&gt;
+        &lt;div class=&quot;brand-title&quot;&gt;Rivergate Campus&lt;/div&gt;
+        &lt;div class=&quot;brand-subtitle&quot;&gt;Academics&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;nav class=&quot;site-nav&quot;&gt;
+      &lt;a href=&quot;index.html&quot; class=&quot;nav-link&quot;&gt;Home&lt;/a&gt;
+      &lt;a href=&quot;academics.html&quot; class=&quot;nav-link active&quot;&gt;Academics&lt;/a&gt;
+      &lt;a href=&quot;events.html&quot; class=&quot;nav-link&quot;&gt;Events&lt;/a&gt;
+      &lt;a href=&quot;about.html&quot; class=&quot;nav-link&quot;&gt;About&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;button class=&quot;ghost-btn&quot; id=&quot;open-spotlight&quot;&gt;Spotlight&lt;/button&gt;
+  &lt;/header&gt;
+
+  &lt;main class=&quot;page&quot;&gt;
+    &lt;section class=&quot;page-subhero&quot;&gt;
+      &lt;h1&gt;Academic clusters&lt;/h1&gt;
+      &lt;p&gt;Choose a school to reveal the next set of modules and labs.&lt;/p&gt;
+      &lt;div class=&quot;hero-actions&quot;&gt;
+        &lt;button class=&quot;primary-btn&quot; data-panel=&quot;panel-orbit&quot;&gt;Design Lab&lt;/button&gt;
+        &lt;button class=&quot;secondary-btn&quot; data-panel=&quot;panel-archive&quot;&gt;Digital Archives&lt;/button&gt;
+        &lt;a class=&quot;ghost-btn&quot; href=&quot;events.html&quot;&gt;View events&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;feature-grid&quot;&gt;
+      &lt;article class=&quot;panel-card&quot;&gt;
+        &lt;h3&gt;Computing Studio&lt;/h3&gt;
+        &lt;p&gt;Hands-on modules in testing, visualization, and crawling.&lt;/p&gt;
+        &lt;button class=&quot;secondary-btn&quot;&gt;Preview syllabus&lt;/button&gt;
+      &lt;/article&gt;
+      &lt;article class=&quot;panel-card&quot;&gt;
+        &lt;h3&gt;Public Policy Lab&lt;/h3&gt;
+        &lt;p&gt;Scenario labs for civic systems and accessible tooling.&lt;/p&gt;
+        &lt;button class=&quot;secondary-btn&quot;&gt;Join workshop&lt;/button&gt;
+      &lt;/article&gt;
+      &lt;article class=&quot;panel-card&quot;&gt;
+        &lt;h3&gt;Data Atelier&lt;/h3&gt;
+        &lt;p&gt;Story-focused analytics with guided studio sessions.&lt;/p&gt;
+        &lt;button class=&quot;secondary-btn&quot;&gt;Request review&lt;/button&gt;
+      &lt;/article&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;div class=&quot;modal&quot; id=&quot;spotlight-modal&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;div class=&quot;modal-card&quot;&gt;
+      &lt;h3&gt;Academics update&lt;/h3&gt;
+      &lt;p&gt;New project tracks are open for the fall cohort.&lt;/p&gt;
+      &lt;div class=&quot;modal-actions&quot;&gt;
+        &lt;a class=&quot;primary-btn&quot; href=&quot;index.html&quot;&gt;Back home&lt;/a&gt;
+        &lt;button class=&quot;ghost-btn&quot; id=&quot;close-spotlight&quot;&gt;Close&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+
+&lt;/body&gt;&lt;/html&gt;</pre>
+			</div>
+			<div class="tab-pane" id='interactions'>
+				<h2>Interactions</h2>
+				<table class="table table-bordered table-striped">
+					<tbody>
+						<tr>
+							<th>Xpath</th>
+							<th>Destination</tg>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[2]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[3]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/NAV[1]/A[4]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/A[1]</td>
+							<td><a href="state6.html">state6</a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/A[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/HEADER[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[1]/DIV[1]/BUTTON[2]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[2]/BUTTON[1]</td>
+							<td><a href="state4.html">state4</a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/MAIN[1]/SECTION[2]/ARTICLE[3]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+												<tr>
+							<td>/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/BUTTON[1]</td>
+							<td><a href=".html"></a></td>
+						</tr>
+											</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../lib/shCore.js"></script>
+	<script type="text/javascript" src="../lib/shBrushXml.js"></script>
+	<script type="text/javascript" src="../lib/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="../lib/bootstrap.min.js"></script>
+	<script type="text/javascript">
+    	$(document).ready(function() {
+			SyntaxHighlighter.all()
+
+			$('#tabs a').click(function (e) {
+		  		e.preventDefault();
+		  		$(this).tab('show');
+			})
+		});
+    	
+    	$('.hovers').tooltip({
+    	    placement: function(a, element) {
+    	        var position = $(element).position();
+    	        if (position.left > 515) {
+    	            return "left";
+    	        }
+    	        if (position.left < 515) {
+    	            return "right";
+    	        }
+    	        if (position.top < 110){
+    	            return "bottom";
+    	        }
+    	        return "top";
+    	    }
+    	});
+	</script>
+</body>
+</html>

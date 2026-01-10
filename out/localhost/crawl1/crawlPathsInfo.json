@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "backtrackTarget": 0,
+    "backtrackSuccess": true,
+    "reachedNearDup": -1,
+    "pathString": "BT-state0:-1index_1_state2state2_2_indexindex_3_state4state4_4_indexindex_5_state6state6_6_state7"
+  },
+  {
+    "id": 2,
+    "backtrackTarget": 2,
+    "backtrackSuccess": true,
+    "reachedNearDup": -1,
+    "pathString": "BT-state2:-1index_1_state2state2_7_state10state10_8_state4state4_9_state6state6_10_state10state10_11_state14state14_12_indexindex_13_state4state4_14_state6state6_15_state10state10_16_indexindex_17_state6"
+  }
+]

@@ -1,0 +1,5 @@
+[
+  {"selector": "input[name='user']", "action_type": "fill", "value": "admin"},
+  {"selector": "input[name='pass']", "action_type": "fill", "value": "secret"},
+  {"selector": "input[type='submit']", "action_type": "click"}
+]

@@ -1,0 +1,158 @@
+{
+  "url": "http://127.0.0.1:53698/index.html",
+  "tested_actions": [
+    "button#issue-pass[text=Issue Pass]",
+    "button#toggle-dashboard[text=Open Dashboard]",
+    "a[href=academics.html][text=Start a Tour]",
+    "a[href=events.html][text=Events]",
+    "button[text=Add to agenda]",
+    "button[text=Reserve seat]",
+    "a[href=about.html][text=About]",
+    "a[href=index.html][text=Home]",
+    "button#open-spotlight[text=Spotlight]",
+    "a[href=academics.html][text=Go to Academics]",
+    "a[href=events.html][text=View events]",
+    "button[text=Join waitlist]",
+    "button[text=Checklist]",
+    "button[text=Pulse]",
+    "button#refresh-pulse[text=Refresh pulse]",
+    "a[href=academics.html][text=Academics]"
+  ],
+  "edges": [
+    {
+      "from": "state0",
+      "action": "button#issue-pass[text=Issue Pass]",
+      "to": "state1"
+    },
+    {
+      "from": "state1",
+      "action": "button#toggle-dashboard[text=Open Dashboard]",
+      "to": "state2"
+    },
+    {
+      "from": "state2",
+      "action": "a[href=academics.html][text=Start a Tour]",
+      "to": "state3"
+    },
+    {
+      "from": "state3",
+      "action": "a[href=events.html][text=Events]",
+      "to": "state4"
+    },
+    {
+      "from": "state4",
+      "action": "button[text=Add to agenda]",
+      "to": "state5"
+    },
+    {
+      "from": "state5",
+      "action": "button[text=Reserve seat]",
+      "to": "state6"
+    },
+    {
+      "from": "state6",
+      "action": "a[href=about.html][text=About]",
+      "to": "state7"
+    },
+    {
+      "from": "state7",
+      "action": "a[href=index.html][text=Home]",
+      "to": "state8"
+    },
+    {
+      "from": "state8",
+      "action": "button#open-spotlight[text=Spotlight]",
+      "to": "state9"
+    },
+    {
+      "from": "state9",
+      "action": "a[href=academics.html][text=Go to Academics]",
+      "to": "state10"
+    },
+    {
+      "from": "state10",
+      "action": "a[href=events.html][text=View events]",
+      "to": "state11"
+    },
+    {
+      "from": "state10",
+      "action": "button[text=Reserve seat]",
+      "to": "state11"
+    },
+    {
+      "from": "state10",
+      "action": "a[href=index.html][text=Home]",
+      "to": "state11"
+    },
+    {
+      "from": "state10",
+      "action": "a[href=academics.html][text=Start a Tour]",
+      "to": "state11"
+    },
+    {
+      "from": "state10",
+      "action": "a[href=events.html][text=View events]",
+      "to": "state11"
+    },
+    {
+      "from": "state10",
+      "action": "button[text=Add to agenda]",
+      "to": "state11"
+    },
+    {
+      "from": "state10",
+      "action": "button[text=Reserve seat]",
+      "to": "state11"
+    },
+    {
+      "from": "state11",
+      "action": "button[text=Join waitlist]",
+      "to": "state12"
+    },
+    {
+      "from": "state11",
+      "action": "button[text=Reserve seat]",
+      "to": "state12"
+    },
+    {
+      "from": "state11",
+      "action": "a[href=index.html][text=Home]",
+      "to": "state12"
+    },
+    {
+      "from": "state11",
+      "action": "button#toggle-dashboard[text=Open Dashboard]",
+      "to": "state12"
+    },
+    {
+      "from": "state12",
+      "action": "button[text=Checklist]",
+      "to": "state13"
+    },
+    {
+      "from": "state13",
+      "action": "button[text=Pulse]",
+      "to": "state14"
+    },
+    {
+      "from": "state14",
+      "action": "button#refresh-pulse[text=Refresh pulse]",
+      "to": "state15"
+    },
+    {
+      "from": "state14",
+      "action": "a[href=events.html][text=Events]",
+      "to": "state15"
+    },
+    {
+      "from": "state15",
+      "action": "a[href=academics.html][text=Academics]",
+      "to": "state16"
+    },
+    {
+      "from": "state15",
+      "action": "a[href=about.html][text=About]",
+      "to": "state16"
+    }
+  ]
+}
