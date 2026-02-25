@@ -1,13 +1,3 @@
-"""
-Crawling and state extraction powered by Playwright.
-
-Uses a single persistent browser page so that login credentials are
-entered only once and session cookies are preserved throughout the crawl.
-
-Strategy: click-based BFS — clicks links like a real tester, but tracks
-all discovered URLs so it never clicks the same link twice.
-"""
-
 from __future__ import annotations
 
 import datetime

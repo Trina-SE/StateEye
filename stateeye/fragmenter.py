@@ -1,11 +1,3 @@
-"""
-Fragment extraction helpers.
-
-Extracts major UI states (nav, sections, forms, etc.) from a page,
-crops their screenshots, captures their DOM content, and computes hashes
-for fragment-level classification.
-"""
-
 from __future__ import annotations
 
 from pathlib import Path
