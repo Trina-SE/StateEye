@@ -1,7 +1,7 @@
 """
 Fragment extraction helpers.
 
-Extracts major UI components (nav, sections, forms, etc.) from a page,
+Extracts major UI states (nav, sections, forms, etc.) from a page,
 crops their screenshots, captures their DOM content, and computes hashes
 for fragment-level classification.
 """
@@ -19,7 +19,7 @@ from .similarity import dom_hash as compute_dom_hash, perceptual_hash
 from .storage import FragmentRecord
 
 
-# Target major structural components — these are the "states" (UI components).
+# Target major structural elements — these are the "states".
 FRAGMENT_SELECTOR = (
     "header, nav, main, section, article, form, aside, footer, "
     "[role='navigation'], [role='main'], [role='banner'], [role='contentinfo']"
@@ -60,14 +60,46 @@ def _xpath_for_handle(handle) -> str:
         return ""
 
 
+def _decompose_large_containers(page: Page, handles, vp_area: float):
+    """Replace large containers (main, section, article) with their children."""
+    CONTAINERS = ("main", "section", "article")
+    result = []
+    for handle in handles:
+        try:
+            box = handle.bounding_box()
+            tag = handle.evaluate("(el) => el.tagName.toLowerCase()")
+        except Exception:
+            continue
+        if not box:
+            continue
+        area = box["width"] * box["height"]
+        # If it's a large container, break it into its direct children
+        if tag in CONTAINERS and area > vp_area * 0.3:
+            children = handle.query_selector_all(":scope > *")
+            if children:
+                result.extend(children)
+            else:
+                result.append(handle)
+        else:
+            result.append(handle)
+    return result
+
+
 def extract_fragments(
     page: Page,
     screenshot_path: Path,
-    min_area: int = 8000,
+    min_area: int = 3000,
     limit: int = 50,
     state_id: int = -1,
 ) -> List[FragmentRecord]:
     handles = page.query_selector_all(FRAGMENT_SELECTOR)
+    if not handles:
+        return []
+
+    # Break large containers (main, section, article) into children
+    vp = page.viewport_size or {"width": 1280, "height": 720}
+    vp_area = vp["width"] * vp["height"]
+    handles = _decompose_large_containers(page, handles, vp_area)
     if not handles:
         return []
 

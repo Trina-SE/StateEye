@@ -68,7 +68,7 @@ def main():
         # Generate report and tests
         report_path = out_dir / "report.html"
         build_report(db, run_id, summary, report_path, ReportConfig())
-        generate_tests(db, run_id, summary, out_dir / "generated_tests.py")
+        generate_tests(db, run_id, out_dir / "generated_tests.py")
 
         for s in db.fetch_states(run_id):
             states_data[str(s["id"])] = {

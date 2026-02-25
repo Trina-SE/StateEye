@@ -51,36 +51,48 @@ class ElementExtractor(HTMLParser):
 	def __init__(self):
 		super().__init__()
 		self.elements = []
-		self._button_attrs = None
-		self._button_text = []
+		self._collect_tag = None
+		self._collect_attrs = None
+		self._collect_text = []
 
 	def handle_starttag(self, tag, attrs):
 		attr_map = dict(attrs)
 		if tag == "a" and attr_map.get("href"):
-			label = self._build_label("a", attr_map, href=attr_map.get("href"))
-			self.elements.append(label)
+			self._collect_tag = "a"
+			self._collect_attrs = attr_map
+			self._collect_text = []
 		elif tag == "button":
-			self._button_attrs = attr_map
-			self._button_text = []
+			self._collect_tag = "button"
+			self._collect_attrs = attr_map
+			self._collect_text = []
 		elif tag == "input":
-			input_type = attr_map.get("type", "").lower()
-			if input_type in ("button", "submit"):
-				label = self._build_label("input", attr_map, input_type=input_type)
-				self.elements.append(label)
+			input_type = attr_map.get("type", "text").lower()
+			label = self._build_label("input", attr_map, input_type=input_type)
+			self.elements.append(label)
+		elif tag == "select":
+			label = self._build_label("select", attr_map)
+			self.elements.append(label)
+		elif tag == "textarea":
+			label = self._build_label("textarea", attr_map)
+			self.elements.append(label)
 
 	def handle_data(self, data):
-		if self._button_attrs is not None:
+		if self._collect_tag is not None:
 			text = data.strip()
 			if text:
-				self._button_text.append(text)
+				self._collect_text.append(text)
 
 	def handle_endtag(self, tag):
-		if tag == "button" and self._button_attrs is not None:
-			text = " ".join(self._button_text).strip()
-			label = self._build_label("button", self._button_attrs, text=text)
+		if tag == self._collect_tag and self._collect_attrs is not None:
+			text = " ".join(self._collect_text).strip()
+			if self._collect_tag == "a":
+				label = self._build_label("a", self._collect_attrs, href=self._collect_attrs.get("href", ""), text=text)
+			else:
+				label = self._build_label(self._collect_tag, self._collect_attrs, text=text)
 			self.elements.append(label)
-			self._button_attrs = None
-			self._button_text = []
+			self._collect_tag = None
+			self._collect_attrs = None
+			self._collect_text = []
 
 	def _build_label(self, tag, attrs, text="", href="", input_type=""):
 		parts = [tag]
@@ -106,9 +118,10 @@ class ManualSession:
 
 
 class DemoServer:
-	def __init__(self, directory, click_callback):
+	def __init__(self, directory, click_callback, elements_callback=None):
 		self.directory = directory
 		self.click_callback = click_callback
+		self.elements_callback = elements_callback
 		self.httpd = None
 		self.port = None
 		self.thread = None
@@ -130,6 +143,7 @@ class DemoServer:
 
 	def _build_handler(self):
 		click_callback = self.click_callback
+		elements_callback = self.elements_callback
 		directory = self.directory
 
 		class InjectingHandler(http.server.SimpleHTTPRequestHandler):
@@ -137,7 +151,7 @@ class DemoServer:
 				super().__init__(*args, directory=directory, **kwargs)
 
 			def do_POST(self):
-				if self.path != "/stateeye_click":
+				if self.path not in ("/stateeye_click", "/stateeye_elements"):
 					self.send_response(404)
 					self.end_headers()
 					return
@@ -147,9 +161,15 @@ class DemoServer:
 					data = json.loads(body.decode("utf-8"))
 				except Exception:
 					data = {}
-				label = data.get("label")
-				if label:
-					click_callback(label)
+				if self.path == "/stateeye_click":
+					label = data.get("label")
+					if label:
+						click_callback(label)
+				elif self.path == "/stateeye_elements" and elements_callback:
+					labels = data.get("labels", [])
+					url = data.get("url", "")
+					if labels:
+						elements_callback(url, labels)
 				self.send_response(204)
 				self.end_headers()
 
@@ -193,7 +213,7 @@ class DemoServer:
 					"var name=el.getAttribute('name');"
 					"var href=el.getAttribute('href');"
 					"var type=el.getAttribute('type');"
-					"var text=(el.innerText||'').trim().replace(/\\s+/g,' ');"
+					"var text=(el.innerText||'').trim().replace(/\\s+/g,' ').substring(0,60);"
 					"var parts=[tag];"
 					"if(type){parts.push('['+type+']');}"
 					"if(id){parts.push(id);}else if(name){parts.push('[name='+name+']');}"
@@ -203,11 +223,9 @@ class DemoServer:
 					"function findClickable(el){"
 					"if(!el) return null;"
 					"var tag=el.tagName?el.tagName.toLowerCase():'';"
-					"if(tag==='a'||tag==='button') return el;"
-					"if(tag==='input'){"
-					"var type=(el.getAttribute('type')||'').toLowerCase();"
-					"if(type==='button'||type==='submit') return el;}"
-					"return el.closest('a,button,input[type=button],input[type=submit]');}"
+					"if(tag==='a'||tag==='button'||tag==='select'||tag==='textarea') return el;"
+					"if(tag==='input') return el;"
+					"return el.closest('a,button,input,select,textarea,[role=button]');}"
 					"document.addEventListener('click',function(e){"
 					"var el=findClickable(e.target);"
 					"if(!el) return;"
@@ -215,6 +233,13 @@ class DemoServer:
 					"fetch('/stateeye_click',{method:'POST',headers:{'Content-Type':'application/json'},"
 					"body:JSON.stringify({label:label})});"
 					"},true);"
+					"window.addEventListener('load',function(){"
+					"var els=document.querySelectorAll('a[href],button,input,select,textarea,[role=button]');"
+					"var labels=[];"
+					"els.forEach(function(el){labels.push(buildLabel(el));});"
+					"fetch('/stateeye_elements',{method:'POST',headers:{'Content-Type':'application/json'},"
+					"body:JSON.stringify({labels:labels,url:location.href})});"
+					"});"
 					"})();"
 				)
 
@@ -337,6 +362,10 @@ class StateEyeGUI:
 		self.summary_text = None
 		self.last_exit_status = None
 		self.hard_timeout_grace_secs = 30
+		# Manual mode: page-level tracking for testing/tested logic
+		self._page_elements = {}   # url -> set of labels
+		self._element_page = {}    # label -> url
+		self._clicked = set()      # labels clicked (testing state)
 
 		# Stats
 		self.states_found = 0
@@ -479,38 +508,38 @@ class StateEyeGUI:
 		right_panel = _styled_frame(content)
 		right_panel.pack(side="left", fill="both", expand=False)
 
-		# Summary
+		# Summary (compact)
 		sum_card = _card_frame(right_panel)
-		sum_card.pack(fill="x", pady=(0, 8))
-		_label(sum_card, "SUMMARY", color=ACCENT_ORANGE, size=9, bold=True).pack(anchor="w", pady=(0, 4))
+		sum_card.pack(fill="x", pady=(0, 4))
+		_label(sum_card, "SUMMARY", color=ACCENT_ORANGE, size=9, bold=True).pack(anchor="w", pady=(0, 2))
 		self.summary_text = Text(
-			sum_card, height=7, width=36, wrap="word",
+			sum_card, height=3, width=36, wrap="word",
 			bg="#1a1a2a", fg=FG_MAIN, font=("Consolas", 9),
 			relief="flat", borderwidth=0,
 			highlightbackground=BORDER_COLOR, highlightthickness=1,
 		)
 		self.summary_text.pack(fill="x")
 
-		# Untested
+		# Untested (red)
 		untested_card = _card_frame(right_panel)
-		untested_card.pack(fill="both", expand=True, pady=(0, 8))
-		_label(untested_card, "UNTESTED ELEMENTS", color=ACCENT_RED, size=9, bold=True).pack(anchor="w", pady=(0, 4))
+		untested_card.pack(fill="both", expand=True, pady=(0, 4))
+		_label(untested_card, "UNTESTED ELEMENTS", color=ACCENT_RED, size=9, bold=True).pack(anchor="w", pady=(0, 2))
 		self.untested_list = Listbox(
-			untested_card, height=5, bg="#1a1a2a", fg=ACCENT_ORANGE,
+			untested_card, height=6, bg="#1a1a2a", fg=ACCENT_RED,
 			font=("Consolas", 9), relief="flat", borderwidth=0,
 			selectbackground=ACCENT_BLUE, selectforeground="#ffffff",
 			highlightbackground=BORDER_COLOR, highlightthickness=1,
 		)
 		self.untested_list.pack(fill="both", expand=True)
 		self.untested_list.bind("<Double-Button-1>", lambda _e: self.mark_tested())
-		_btn(untested_card, "Mark Tested", self.mark_tested, color=ACCENT_GREEN).pack(pady=(6, 0))
+		_btn(untested_card, "Mark Tested", self.mark_tested, color=ACCENT_GREEN).pack(pady=(4, 0))
 
-		# Tested
+		# Tested (green)
 		tested_card = _card_frame(right_panel)
 		tested_card.pack(fill="both", expand=True)
-		_label(tested_card, "TESTED ELEMENTS", color=ACCENT_GREEN, size=9, bold=True).pack(anchor="w", pady=(0, 4))
+		_label(tested_card, "TESTED ELEMENTS", color=ACCENT_GREEN, size=9, bold=True).pack(anchor="w", pady=(0, 2))
 		self.tested_list = Listbox(
-			tested_card, height=5, bg="#1a1a2a", fg=ACCENT_GREEN,
+			tested_card, height=6, bg="#1a1a2a", fg=ACCENT_GREEN,
 			font=("Consolas", 9), relief="flat", borderwidth=0,
 			selectbackground=ACCENT_BLUE, selectforeground="#ffffff",
 			highlightbackground=BORDER_COLOR, highlightthickness=1,
@@ -540,10 +569,10 @@ class StateEyeGUI:
 			self.log(line, "classify")
 			return
 
-		# [state] lines: page captured with component count
-		# Format: [state] [0m 04s] Page #1: 6 components at depth 0: URL
+		# [state] lines: page captured with state count
+		# Format: [state] [0m 04s] Page #1: 6 states at depth 0: URL
 		if line.startswith("[state]"):
-			m_comp = re.search(r'(\d+)\s+components', line)
+			m_comp = re.search(r'(\d+)\s+states', line)
 			if m_comp:
 				self.states_found += int(m_comp.group(1))
 			else:
@@ -575,14 +604,14 @@ class StateEyeGUI:
 			return
 
 		# [crawl] lines: start/finish and config
-		# Finish format: [crawl] [...] Finished. 3 pages, 16 components | unique=10 ...
+		# Finish format: [crawl] [...] Finished. 3 pages, 16 states | unique=10 ...
 		if line.startswith("[crawl]"):
 			if "Finished" in line:
 				m = re.search(r'unique=(\d+)\s+clones=(\d+)\s+near-dup=(\d+)', line)
 				if m:
 					u, c, nd = m.group(1), m.group(2), m.group(3)
 					self.stat_status.set_value(f"Clones: {c} | Near-Dup: {nd} | Unique: {u}")
-				m_comp = re.search(r'(\d+)\s+components', line)
+				m_comp = re.search(r'(\d+)\s+states', line)
 				if m_comp:
 					self.stat_states.set_value(int(m_comp.group(1)))
 			self.log(line, "info")
@@ -717,7 +746,7 @@ class StateEyeGUI:
 			if not path.exists():
 				messagebox.showerror("StateEye", f"Missing HTML file: {path}")
 				return
-			self.server = DemoServer(str(path.parent), self.on_manual_click)
+			self.server = DemoServer(str(path.parent), self.on_manual_click, self.on_page_elements)
 			self.server.start()
 			url = f"http://127.0.0.1:{self.server.port}/{path.name}"
 
@@ -725,11 +754,17 @@ class StateEyeGUI:
 		self.manual_session.untested = self.extract_elements(target, url)
 		self.manual_session.tested = []
 		self.manual_session.edges = []
+		self._page_elements = {}
+		self._element_page = {}
+		self._clicked = set()
+		self._page_elements[url] = set(self.manual_session.untested)
+		for label in self.manual_session.untested:
+			self._element_page[label] = url
 		self.refresh_lists()
-		self.summary_text.delete("1.0", END)
-		self.summary_text.insert(END, "Manual mode active.\nClick elements in the browser.\n")
+		self._update_manual_summary()
 		webbrowser.open(url)
 		self.log(f"Opened {url}", "info")
+		self.log(f"Found {len(self.manual_session.untested)} states to test", "info")
 
 	def extract_elements(self, target, url):
 		try:
@@ -750,7 +785,7 @@ class StateEyeGUI:
 				seen.add(item)
 				deduped.append(item)
 		if not deduped:
-			self.log("No actionable elements detected.", "warn")
+			self.log("No actionable states detected.", "warn")
 		return deduped
 
 	def refresh_lists(self):
@@ -763,11 +798,31 @@ class StateEyeGUI:
 
 	def on_manual_click(self, label):
 		def update():
-			if label in self.manual_session.untested:
-				self.manual_session.untested.remove(label)
-				self.manual_session.tested.append(label)
-			elif label not in self.manual_session.tested:
-				self.manual_session.tested.append(label)
+			if label in self._clicked:
+				return
+			self._clicked.add(label)
+
+			# If unknown element, register it as untested on an unknown page
+			if label not in self.manual_session.untested and label not in self.manual_session.tested:
+				self.manual_session.untested.append(label)
+				self._element_page[label] = "unknown"
+				self._page_elements.setdefault("unknown", set()).add(label)
+
+			self.log(f"[testing] {label}", "warn")
+
+			# Check if ALL states on this element's page are now clicked
+			page_url = self._element_page.get(label, "")
+			if page_url and page_url in self._page_elements:
+				page_labels = self._page_elements[page_url]
+				if page_labels and page_labels.issubset(self._clicked):
+					# All states on this page explored -> move them to tested
+					for pl in list(page_labels):
+						if pl in self.manual_session.untested:
+							self.manual_session.untested.remove(pl)
+						if pl not in self.manual_session.tested:
+							self.manual_session.tested.append(pl)
+					self.log(f"[tested] All states on page explored!", "success")
+
 			self.manual_session.edges.append(
 				{
 					"from": f"state{max(len(self.manual_session.tested)-1,0)}",
@@ -776,13 +831,40 @@ class StateEyeGUI:
 				}
 			)
 			self.refresh_lists()
-			self.summary_text.delete("1.0", END)
-			self.summary_text.insert(
-				END,
-				f"Manual summary:\nTested: {len(self.manual_session.tested)}\n"
-				f"Untested: {len(self.manual_session.untested)}\n",
-			)
+			self._update_manual_summary()
 		self.root.after(0, update)
+
+	def on_page_elements(self, url, labels):
+		def update():
+			all_known = set(self.manual_session.untested) | set(self.manual_session.tested)
+			new_count = 0
+			if url not in self._page_elements:
+				self._page_elements[url] = set()
+			for label in labels:
+				if label not in all_known:
+					self.manual_session.untested.append(label)
+					all_known.add(label)
+					self._page_elements[url].add(label)
+					self._element_page[label] = url
+					new_count += 1
+			if new_count > 0:
+				self.refresh_lists()
+				self._update_manual_summary()
+				self.log(f"[page] {url} — {new_count} new states found", "info")
+		self.root.after(0, update)
+
+	def _update_manual_summary(self):
+		tested = len(self.manual_session.tested)
+		untested = len(self.manual_session.untested)
+		total = tested + untested
+		self.summary_text.delete("1.0", END)
+		self.summary_text.insert(
+			END,
+			f"Manual Testing\n\n"
+			f"Tested:   {tested}  (green)\n"
+			f"Untested: {untested}  (red)\n"
+			f"Total:    {total}\n",
+		)
 
 	def mark_tested(self):
 		selection = self.untested_list.curselection()
@@ -791,6 +873,7 @@ class StateEyeGUI:
 		idx = selection[0]
 		item = self.manual_session.untested.pop(idx)
 		self.manual_session.tested.append(item)
+		self._clicked.add(item)
 		if self.manual_session.tested:
 			self.manual_session.edges.append(
 				{
@@ -799,14 +882,16 @@ class StateEyeGUI:
 					"to": f"state{len(self.manual_session.tested)}",
 				}
 			)
+		self.log(f"[tested] {item}", "success")
 		self.refresh_lists()
+		self._update_manual_summary()
 
 	# ── Generate tests ───────────────────────────────────────────────
 	def generate_tests(self):
-		run_label = time.strftime("%Y%m%d-%H%M%S")
-		out_dir = Path(__file__).resolve().parents[1] / "out" / f"gui_manual_{run_label}"
-		out_dir.mkdir(parents=True, exist_ok=True)
 		if self.mode.get() == "manual":
+			run_label = time.strftime("%Y%m%d-%H%M%S")
+			out_dir = Path(__file__).resolve().parents[1] / "out" / f"gui_manual_{run_label}"
+			out_dir.mkdir(parents=True, exist_ok=True)
 			data = {
 				"url": self.manual_session.url,
 				"tested_actions": self.manual_session.tested,
@@ -822,9 +907,97 @@ class StateEyeGUI:
 				f"Untested: {len(self.manual_session.untested)}\n"
 				f"Plan: {out_file}",
 			)
+			messagebox.showinfo("StateEye", f"Output saved under {out_dir}")
+			return
+
+		# Auto mode: show test cases, then run them
+		if not self.run_dir:
+			messagebox.showerror("StateEye", "No crawl output found. Run a crawl first.")
+			return
+		test_file = next(Path(self.run_dir).rglob("generated_tests.py"), None)
+		if not test_file:
+			messagebox.showerror("StateEye", "No generated_tests.py found in the last crawl output.")
+			return
+
+		# Parse TEST_STATES from the generated file
+		try:
+			content = test_file.read_text(encoding="utf-8")
+			match = re.search(r"TEST_STATES\s*=\s*(\[.*?\n\])", content, re.DOTALL)
+			if not match:
+				messagebox.showerror("StateEye", "Could not parse test data from generated_tests.py.")
+				return
+			raw = match.group(1).replace(': True', ': true').replace(': False', ': false').replace(': None', ': null')
+			test_states = json.loads(raw)
+		except Exception as e:
+			messagebox.showerror("StateEye", f"Error reading test file: {e}")
+			return
+
+		# Count stats
+		total = len(test_states)
+		skipped = sum(1 for t in test_states if t.get("skip"))
+		to_run = total - skipped
+
+		# Phase 1: Display test cases
+		self.log("=" * 55, "info")
+		self.log("  Generated Regression Test Cases", "info")
+		self.log(f"  {total} states | {to_run} to test | {skipped} clones skipped", "info")
+		self.log("=" * 55, "info")
+		self.log("", "dim")
+
+		for idx, test in enumerate(test_states):
+			tag = test.get("tag", "?")
+			xpath = test.get("xpath", "")
+			snippet = test.get("snippet", "")
+			url = test.get("url", "")
+			classification = test.get("classification", "unique")
+			is_skip = test.get("skip", False)
+			rep = test.get("representative_of")
+			label = snippet.strip() if snippet.strip() else xpath
+
+			if is_skip:
+				self.log(f"Test {idx + 1}: <{tag}> {label}  [SKIP clone of #{rep}]", "dim")
+			else:
+				self.log(f"Test {idx + 1}: <{tag}> {label}  [{classification}]", "state")
+				self.log(f"  URL:   {url}", "dim")
+
+		self.log("", "dim")
+		self.log("=" * 55, "info")
+		self.log(f"  Test file: {test_file}", "dim")
+		self.status_badge.set("Tests Generated", ACCENT_GREEN)
+
+	def _stream_test_output(self, proc):
+		"""Read test subprocess output and push to the log."""
+		try:
+			for line in proc.stdout:
+				line = line.rstrip("\n\r")
+				if line:
+					self.root.after(0, lambda l=line: self._parse_test_line(l))
+		except Exception:
+			pass
+
+	def _parse_test_line(self, line):
+		"""Color-code test output lines."""
+		if "PASS" in line:
+			self.log(line, "success")
+		elif "FAIL" in line:
+			self.log(line, "error")
+		elif line.startswith("[test]"):
+			self.log(line, "state")
+		elif line.startswith("Results:") or line.startswith("="):
+			self.log(line, "info")
 		else:
-			self.log("Automated mode: tests are in the crawl output directory.", "info")
-		messagebox.showinfo("StateEye", f"Output saved under {out_dir}")
+			self.log(line, "dim")
+
+	def _wait_test_completion(self, proc):
+		exit_code = proc.wait()
+		def _update():
+			if exit_code == 0:
+				self.log("All tests passed!", "success")
+				self.status_badge.set("Tests Passed", ACCENT_GREEN)
+			else:
+				self.log("Some tests failed.", "error")
+				self.status_badge.set("Tests Failed", ACCENT_RED)
+		self.root.after(0, _update)
 
 	# ── Auto completion handling ─────────────────────────────────────
 	def wait_for_auto_completion(self, proc, out_dir):
@@ -914,9 +1087,9 @@ class StateEyeGUI:
 		lines.append(f"Exit: {exit_status}")
 		lines.append(f"Pages: {total_pages}")
 
-		# Show component count from live data, fallback to page count
+		# Show state count from live data, fallback to page count
 		if self.states_found > 0:
-			lines.append(f"Components: {self.states_found}")
+			lines.append(f"States: {self.states_found}")
 		else:
 			self.stat_states.set_value(total_pages)
 

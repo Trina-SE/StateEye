@@ -222,7 +222,7 @@ class StateEyeCrawler:
                 )
                 state_id = db.insert_state(run_id, state)
 
-                # Extract fragments (components) — each is a "state"
+                # Extract fragments (states) — each is a "state"
                 fragments = extract_fragments(
                     page,
                     screenshot_path=screenshot_file,
@@ -230,17 +230,13 @@ class StateEyeCrawler:
                     limit=self.cfg.fragment_limit,
                     state_id=state_id,
                 )
-                db.insert_fragments(fragments)
-
-                print(
-                    f"[state] [{self._elapsed()}] Page #{page_counter}: "
-                    f"{len(fragments)} components at depth {depth}: {page.url}",
-                    flush=True,
-                )
 
                 # Classify each fragment against all previous fragments
                 for frag in fragments:
                     if not frag.dom_content and not frag.hash:
+                        frag.classification = "unique"
+                        fragment_counter += 1
+                        class_counts["unique"] += 1
                         continue
                     fragment_counter += 1
 
@@ -248,6 +244,9 @@ class StateEyeCrawler:
                         frag.dom_content, frag.hash, frag.dom_hash,
                         captured_fragments, self.sim_cfg,
                     )
+                    frag.classification = classification
+                    frag.best_dom_score = best_dom
+                    frag.best_vis_dist = best_vis
                     captured_fragments.append({
                         "dom_hash": frag.dom_hash,
                         "screenshot_hash": frag.hash,
@@ -262,6 +261,14 @@ class StateEyeCrawler:
                         f"near-dup={class_counts['near-duplicate']}",
                         flush=True,
                     )
+
+                db.insert_fragments(fragments)
+
+                print(
+                    f"[state] [{self._elapsed()}] Page #{page_counter}: "
+                    f"{len(fragments)} states at depth {depth}: {page.url}",
+                    flush=True,
+                )
 
                 # Explore page by clicking links & buttons
                 if depth < self.cfg.max_depth:
@@ -278,7 +285,7 @@ class StateEyeCrawler:
             browser.close()
 
         print(
-            f"[crawl] [{self._elapsed()}] Finished. {page_counter} pages, {fragment_counter} components | "
+            f"[crawl] [{self._elapsed()}] Finished. {page_counter} pages, {fragment_counter} states | "
             f"unique={class_counts['unique']} "
             f"clones={class_counts['clone']} "
             f"near-dup={class_counts['near-duplicate']}",

@@ -45,6 +45,9 @@ class FragmentRecord:
     hash: str
     dom_content: str = ""
     dom_hash: str = ""
+    classification: str = ""
+    best_dom_score: float = 0.0
+    best_vis_dist: int = 999
 
 
 @dataclass
@@ -108,6 +111,9 @@ class StateEyeDB:
                 hash TEXT,
                 dom_content TEXT DEFAULT '',
                 dom_hash TEXT DEFAULT '',
+                classification TEXT DEFAULT '',
+                best_dom_score REAL DEFAULT 0.0,
+                best_vis_dist INTEGER DEFAULT 999,
                 FOREIGN KEY(state_id) REFERENCES states(id)
             );
             CREATE TABLE IF NOT EXISTS comparisons(
@@ -174,18 +180,40 @@ class StateEyeDB:
                 f.hash,
                 f.dom_content,
                 f.dom_hash,
+                f.classification,
+                f.best_dom_score,
+                f.best_vis_dist,
             )
             for f in fragments
         ]
         cur.executemany(
             """
             INSERT INTO fragments(state_id, xpath, tag, snippet, screenshot_path, bbox_json, hash,
-                                  dom_content, dom_hash)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                  dom_content, dom_hash, classification, best_dom_score, best_vis_dist)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             rows,
         )
         self.conn.commit()
+
+    def update_fragment_classification(self, fragment_id: int, classification: str,
+                                        best_dom_score: float, best_vis_dist: int) -> None:
+        cur = self.conn.cursor()
+        cur.execute(
+            "UPDATE fragments SET classification=?, best_dom_score=?, best_vis_dist=? WHERE id=?",
+            (classification, best_dom_score, best_vis_dist, fragment_id),
+        )
+        self.conn.commit()
+
+    def fetch_all_fragments(self, run_id: int) -> List[sqlite3.Row]:
+        cur = self.conn.cursor()
+        cur.execute(
+            """SELECT f.*, s.url, s.title, s.depth, s.screenshot_path as page_screenshot
+               FROM fragments f JOIN states s ON f.state_id = s.id
+               WHERE s.run_id = ? ORDER BY f.id ASC""",
+            (run_id,),
+        )
+        return cur.fetchall()
 
     def insert_comparison(self, run_id: int, comp: ComparisonRecord) -> None:
         cur = self.conn.cursor()

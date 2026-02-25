@@ -29,7 +29,7 @@ class CrawlConfig:
     action_timeout_ms: int = 10000
     viewport_width: int = 1400
     viewport_height: int = 900
-    fragment_min_area: int = 8000
+    fragment_min_area: int = 3000
     fragment_limit: int = 50
     allowed_actions: List[str] = field(default_factory=lambda: ["click", "fill", "submit"])
     disallowed_domains: List[str] = field(default_factory=list)

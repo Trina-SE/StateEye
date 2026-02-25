@@ -57,7 +57,7 @@ def handle_crawl(args: argparse.Namespace) -> None:
     summary = analyze_run(db, run_id, sim_cfg)
     report_path = cfg.run_folder() / "report.html"
     build_report(db, run_id, summary, report_path, ReportConfig())
-    generate_tests(db, run_id, summary, report_path.parent / "generated_tests.py")
+    generate_tests(db, run_id, report_path.parent / "generated_tests.py")
     db.close()
     print(f"Run stored in: {cfg.run_folder()}")
     print(f"Report: {report_path}")
@@ -76,7 +76,7 @@ def handle_analyze(args: argparse.Namespace) -> None:
     report_path = run_dir / "report.html"
     build_report(db, run_id, summary, report_path, ReportConfig())
     if args.generate_tests:
-        generate_tests(db, run_id, summary, run_dir / "generated_tests.py")
+        generate_tests(db, run_id, run_dir / "generated_tests.py")
     db.close()
     print(f"Report written to {report_path}")
 
