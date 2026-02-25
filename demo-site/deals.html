@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>TechShop - Deals</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#333}
+    nav{background:#1a1a2e;padding:1rem 2rem;display:flex;align-items:center;gap:2rem}
+    nav .brand{font-size:1.4rem;font-weight:bold;color:#e94560;text-decoration:none;margin-right:auto}
+    nav a{color:#a8b2d1;text-decoration:none;font-weight:500;font-size:.95rem}
+    nav a:hover{color:#e94560}
+    main{max-width:960px;margin:2rem auto;padding:0 1.5rem}
+    h1{color:#1a1a2e;font-size:2rem;margin-bottom:.5rem}
+    .sub{color:#666;font-size:1.1rem;margin-bottom:2rem}
+    .btn{display:inline-block;padding:.7rem 1.5rem;background:#e94560;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;border:none;cursor:pointer;font-size:.95rem}
+    .btn:hover{background:#c73650}
+    .dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:1rem}
+    .dcard{background:#fff;border-radius:12px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .dcard h3{color:#1a1a2e;margin-bottom:.5rem;font-size:1.2rem}
+    .dcard .original{color:#999;text-decoration:line-through;font-size:.95rem}
+    .dcard .sale{color:#e94560;font-size:1.4rem;font-weight:bold;margin:.3rem 0}
+    .dcard .badge{display:inline-block;background:#e94560;color:#fff;padding:.2rem .6rem;border-radius:4px;font-size:.8rem;font-weight:600;margin-bottom:.8rem}
+    .dcard p{color:#666;line-height:1.5;margin-bottom:1rem}
+    .banner{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:2rem;border-radius:12px;text-align:center;margin-bottom:2rem}
+    .banner h2{font-size:1.6rem;margin-bottom:.5rem}
+    .banner p{color:#a8b2d1;font-size:1rem}
+    footer{text-align:center;padding:2rem;color:#999;font-size:.85rem;border-top:1px solid #ddd;margin-top:2rem}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="brand">TechShop</a>
+    <a href="products.html">Products</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="events.html">Events</a>
+    <a href="support.html">Support</a>
+  </nav>
+  <main>
+    <div class="banner">
+      <h2>Limited Time Offers</h2>
+      <p>Grab these exclusive deals before they expire!</p>
+    </div>
+    <h1>Current Deals</h1>
+    <p class="sub">Save big on our most popular products</p>
+    <div class="dgrid">
+      <div class="dcard">
+        <span class="badge">30% OFF</span>
+        <h3>Laptop Pro 15</h3>
+        <div class="original">$1,299</div>
+        <div class="sale">$909</div>
+        <p>High-performance laptop with Retina display. Perfect for professionals and creatives.</p>
+        <a href="product-laptop.html" class="btn">Shop Now</a>
+      </div>
+      <div class="dcard">
+        <span class="badge">20% OFF</span>
+        <h3>SmartPhone X</h3>
+        <div class="original">$899</div>
+        <div class="sale">$719</div>
+        <p>AI-powered camera and 5G connectivity. The smartest phone you will ever own.</p>
+        <a href="product-phone.html" class="btn">Shop Now</a>
+      </div>
+      <div class="dcard">
+        <span class="badge">15% OFF</span>
+        <h3>Tablet Ultra</h3>
+        <div class="original">$649</div>
+        <div class="sale">$552</div>
+        <p>Work and play on the go with pencil support and split-screen multitasking.</p>
+        <a href="product-tablet.html" class="btn">Shop Now</a>
+      </div>
+      <div class="dcard">
+        <span class="badge">FREE SHIPPING</span>
+        <h3>Accessories Bundle</h3>
+        <div class="original">$199</div>
+        <div class="sale">$149</div>
+        <p>Case, charger, and earbuds combo pack. Essential accessories for any device.</p>
+        <a href="products.html" class="btn">Shop Now</a>
+      </div>
+    </div>
+  </main>
+  <footer>&copy; 2024 TechShop. All rights reserved.</footer>
+</body>
+</html>

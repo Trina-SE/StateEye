@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>TechShop - Offers</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#333}
+    nav{background:#1a1a2e;padding:1rem 2rem;display:flex;align-items:center;gap:2rem}
+    nav .brand{font-size:1.4rem;font-weight:bold;color:#e94560;text-decoration:none;margin-right:auto}
+    nav a{color:#a8b2d1;text-decoration:none;font-weight:500;font-size:.95rem}
+    nav a:hover{color:#e94560}
+    main{max-width:960px;margin:2rem auto;padding:0 1.5rem}
+    h1{color:#1a1a2e;font-size:2rem;margin-bottom:.5rem}
+    .sub{color:#666;font-size:1.1rem;margin-bottom:2rem}
+    .btn{display:inline-block;padding:.7rem 1.5rem;background:#e94560;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;border:none;cursor:pointer;font-size:.95rem}
+    .btn:hover{background:#c73650}
+    .dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:1rem}
+    .dcard{background:#fff;border-radius:12px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .dcard h3{color:#1a1a2e;margin-bottom:.5rem;font-size:1.2rem}
+    .dcard .original{color:#999;text-decoration:line-through;font-size:.95rem}
+    .dcard .sale{color:#e94560;font-size:1.4rem;font-weight:bold;margin:.3rem 0}
+    .dcard .badge{display:inline-block;background:#e94560;color:#fff;padding:.2rem .6rem;border-radius:4px;font-size:.8rem;font-weight:600;margin-bottom:.8rem}
+    .dcard p{color:#666;line-height:1.5;margin-bottom:1rem}
+    .banner{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:2rem;border-radius:12px;text-align:center;margin-bottom:2rem}
+    .banner h2{font-size:1.6rem;margin-bottom:.5rem}
+    .banner p{color:#a8b2d1;font-size:1rem}
+    footer{text-align:center;padding:2rem;color:#999;font-size:.85rem;border-top:1px solid #ddd;margin-top:2rem}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="brand">TechShop</a>
+    <a href="products.html">Products</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="events.html">Events</a>
+    <a href="support.html">Support</a>
+  </nav>
+  <main>
+    <div class="banner">
+      <h2>Weekend Special Offers</h2>
+      <p>Exclusive weekend-only prices on premium accessories!</p>
+    </div>
+    <h1>Special Offers</h1>
+    <p class="sub">Hand-picked deals on our top-rated accessories</p>
+    <div class="dgrid">
+      <div class="dcard">
+        <span class="badge">40% OFF</span>
+        <h3>Wireless Earbuds Pro</h3>
+        <div class="original">$249</div>
+        <div class="sale">$149</div>
+        <p>Noise-cancelling earbuds with 30-hour battery life and crystal-clear audio quality.</p>
+        <a href="products.html" class="btn">Shop Now</a>
+      </div>
+      <div class="dcard">
+        <span class="badge">25% OFF</span>
+        <h3>4K Webcam Studio</h3>
+        <div class="original">$179</div>
+        <div class="sale">$134</div>
+        <p>Professional-grade webcam with auto-focus and built-in ring light for video calls.</p>
+        <a href="products.html" class="btn">Shop Now</a>
+      </div>
+      <div class="dcard">
+        <span class="badge">35% OFF</span>
+        <h3>Mechanical Keyboard</h3>
+        <div class="original">$159</div>
+        <div class="sale">$103</div>
+        <p>RGB backlit mechanical keyboard with hot-swappable switches and ergonomic design.</p>
+        <a href="products.html" class="btn">Shop Now</a>
+      </div>
+      <div class="dcard">
+        <span class="badge">BOGO 50% OFF</span>
+        <h3>USB-C Charging Hub</h3>
+        <div class="original">$89</div>
+        <div class="sale">$59</div>
+        <p>7-in-1 hub with HDMI, USB-A, SD card reader, and 100W power delivery passthrough.</p>
+        <a href="products.html" class="btn">Shop Now</a>
+      </div>
+    </div>
+  </main>
+  <footer>&copy; 2024 TechShop. All rights reserved.</footer>
+</body>
+</html>

@@ -495,7 +495,8 @@ class StateEyeGUI:
 		self._clicked = set()      # labels clicked (testing state)
 
 		# Stats
-		self.states_found = 0
+		self.pages_found = 0
+		self.fragments_found = 0
 		self.actions_done = 0
 		self.crawl_start_time = None
 		# Live classification tracking (from [classify] lines)
@@ -589,10 +590,10 @@ class StateEyeGUI:
 		stats_row = _styled_frame(self.root)
 		stats_row.pack(fill="x", padx=16, pady=(0, 8))
 
-		self.stat_states = StatCard(stats_row, "States Found", "0", ACCENT_BLUE)
-		self.stat_states.pack(side="left", fill="x", expand=True, padx=(0, 6))
-		self.stat_actions = StatCard(stats_row, "Actions Performed", "0", ACCENT_GREEN)
-		self.stat_actions.pack(side="left", fill="x", expand=True, padx=(0, 6))
+		self.stat_pages = StatCard(stats_row, "States", "0", ACCENT_CYAN)
+		self.stat_pages.pack(side="left", fill="x", expand=True, padx=(0, 6))
+		self.stat_fragments = StatCard(stats_row, "Fragments", "0", ACCENT_BLUE)
+		self.stat_fragments.pack(side="left", fill="x", expand=True, padx=(0, 6))
 		self.stat_elapsed = StatCard(stats_row, "Elapsed", "0s", ACCENT_ORANGE)
 		self.stat_elapsed.pack(side="left", fill="x", expand=True, padx=(0, 6))
 		self.stat_status = StatCard(stats_row, "Classification", "--", ACCENT_PURPLE, font_size=12)
@@ -696,22 +697,23 @@ class StateEyeGUI:
 			self.log(line, "classify")
 			return
 
-		# [state] lines: page captured with state count
+		# [state] lines: page captured with fragment count
 		# Format: [state] [0m 04s] Page #1: 6 states at depth 0: URL
 		if line.startswith("[state]"):
+			self.pages_found += 1
+			self.stat_pages.set_value(self.pages_found)
 			m_comp = re.search(r'(\d+)\s+states', line)
 			if m_comp:
-				self.states_found += int(m_comp.group(1))
+				self.fragments_found += int(m_comp.group(1))
 			else:
-				self.states_found += 1
-			self.stat_states.set_value(self.states_found)
+				self.fragments_found += 1
+			self.stat_fragments.set_value(self.fragments_found)
 			self.log(line, "state")
 			return
 
 		# [click] lines: action performed during replay
 		if line.startswith("[click]"):
 			self.actions_done += 1
-			self.stat_actions.set_value(self.actions_done)
 			self.log(line, "success")
 			return
 
@@ -738,9 +740,12 @@ class StateEyeGUI:
 				if m:
 					u, c, nd = m.group(1), m.group(2), m.group(3)
 					self.stat_status.set_value(f"Clones: {c} | Near-Dup: {nd} | Unique: {u}")
+				m_pages = re.search(r'(\d+)\s+pages', line)
+				if m_pages:
+					self.stat_pages.set_value(int(m_pages.group(1)))
 				m_comp = re.search(r'(\d+)\s+states', line)
 				if m_comp:
-					self.stat_states.set_value(int(m_comp.group(1)))
+					self.stat_fragments.set_value(int(m_comp.group(1)))
 			self.log(line, "info")
 			return
 
@@ -796,14 +801,15 @@ class StateEyeGUI:
 	# ── Automated crawl ──────────────────────────────────────────────
 	def start_automated(self, target):
 		self.status_badge.set("Crawling...", ACCENT_GREEN)
-		self.states_found = 0
+		self.pages_found = 0
+		self.fragments_found = 0
 		self.actions_done = 0
 		self._live_clones = 0
 		self._live_near_dup = 0
 		self._live_unique = 0
 		self._has_live_classify = False
-		self.stat_states.set_value(0)
-		self.stat_actions.set_value(0)
+		self.stat_pages.set_value(0)
+		self.stat_fragments.set_value(0)
 		self.stat_elapsed.set_value("0s")
 		self.stat_status.set_value("--")
 		self.crawl_start_time = time.time()
@@ -1080,24 +1086,22 @@ class StateEyeGUI:
 		# Phase 1: Display test cases
 		self.log("=" * 55, "info")
 		self.log("  Generated Regression Test Cases", "info")
-		self.log(f"  {total} states | {to_run} to test | {skipped} clones skipped", "info")
+		self.log(f"  {total} states | {to_run} to test | {skipped} skipped (clone/nd2)", "info")
 		self.log("=" * 55, "info")
 		self.log("", "dim")
 
 		for idx, test in enumerate(test_states):
-			tag = test.get("tag", "?")
-			xpath = test.get("xpath", "")
-			snippet = test.get("snippet", "")
 			url = test.get("url", "")
-			classification = test.get("classification", "unique")
+			title = test.get("title", "")
+			classification = test.get("classification", "distinct")
 			is_skip = test.get("skip", False)
 			rep = test.get("representative_of")
-			label = snippet.strip() if snippet.strip() else xpath
+			label = title.strip() if title.strip() else url
 
 			if is_skip:
-				self.log(f"Test {idx + 1}: <{tag}> {label}  [SKIP clone of #{rep}]", "dim")
+				self.log(f"Test {idx + 1}: {label}  [SKIP duplicate of #{rep}]", "dim")
 			else:
-				self.log(f"Test {idx + 1}: <{tag}> {label}  [{classification}]", "state")
+				self.log(f"Test {idx + 1}: {label}  [{classification}]", "state")
 				self.log(f"  URL:   {url}", "dim")
 
 		self.log("", "dim")
@@ -1170,6 +1174,96 @@ class StateEyeGUI:
 	def resolve_auto_mode(self):
 		return "hybrid"
 
+	# ── State-level classification ───────────────────────────────────
+	def classify_states(self, out_dir):
+		"""
+		Simplified state-level classification after crawl.
+		Compares pages pairwise using DOM similarity and fragment overlap.
+
+		Clone:      same DOM hash + same screenshot hash
+		Nd2-data:   same template/structure, different data (DOM similarity > 0.8)
+		Nd3-struct: different DOM but >50% fragments overlap
+		Distinct:   completely different pages
+		"""
+		import sqlite3
+		from difflib import SequenceMatcher
+		db_path = next(Path(out_dir).rglob("stateeye.db"), None)
+		if not db_path:
+			return None
+
+		conn = sqlite3.connect(str(db_path))
+		conn.row_factory = sqlite3.Row
+
+		states = conn.execute(
+			"SELECT id, url, dom_hash, screenshot_hash, dom_path FROM states ORDER BY id"
+		).fetchall()
+
+		# Get fragment dom_hashes per state
+		frag_hashes = {}
+		for s in states:
+			rows = conn.execute(
+				"SELECT dom_hash FROM fragments WHERE state_id = ?", (s["id"],)
+			).fetchall()
+			frag_hashes[s["id"]] = set(r["dom_hash"] for r in rows if r["dom_hash"])
+
+		# Read and normalize DOM content for similarity comparison
+		dom_contents = {}
+		for s in states:
+			dom_file = Path(s["dom_path"]) if s["dom_path"] else None
+			if dom_file and dom_file.exists():
+				try:
+					raw = dom_file.read_text(encoding="utf-8", errors="replace")
+					# Strip tags to get structural skeleton (remove text data)
+					structural = re.sub(r">([^<]+)<", "><", raw)
+					structural = re.sub(r"\s+", " ", structural).strip()
+					dom_contents[s["id"]] = structural
+				except Exception:
+					dom_contents[s["id"]] = ""
+			else:
+				dom_contents[s["id"]] = ""
+
+		conn.close()
+
+		if len(states) < 2:
+			return {"clone": 0, "nd2-data": 0, "nd3-struct": 0, "distinct": len(states)}
+
+		# Classify each state by comparing with all previous states
+		classifications = {}  # state_id -> classification
+		ND2_THRESHOLD = 0.9  # Very similar structure (same template, different data)
+		ND3_THRESHOLD = 0.5  # Moderate structural similarity (shared components)
+
+		for i, state in enumerate(states):
+			best_cls = None
+			best_sim = 0.0
+			for j in range(0, i):
+				other = states[j]
+				# Exact DOM hash + screenshot hash → Clone
+				if state["dom_hash"] and state["dom_hash"] == other["dom_hash"]:
+					if state["screenshot_hash"] and state["screenshot_hash"] == other["screenshot_hash"]:
+						best_cls = "clone"
+						break
+					else:
+						best_cls = "nd2-data"
+						continue
+
+				# Compare DOM structure (tags only, text stripped)
+				struct_a = dom_contents.get(state["id"], "")
+				struct_b = dom_contents.get(other["id"], "")
+				if struct_a and struct_b:
+					sim = SequenceMatcher(None, struct_a, struct_b).ratio()
+					if sim >= ND2_THRESHOLD and best_cls not in ("clone",):
+						best_cls = "nd2-data"
+					elif sim >= ND3_THRESHOLD and best_cls not in ("clone", "nd2-data"):
+						best_cls = "nd3-struct"
+
+			classifications[state["id"]] = best_cls or "distinct"
+
+		counts = {"clone": 0, "nd2-data": 0, "nd3-struct": 0, "distinct": 0}
+		for cls in classifications.values():
+			counts[cls] += 1
+
+		return counts
+
 	def on_auto_complete(self, exit_code, out_dir):
 		if exit_code == 0:
 			self.log("Crawl completed successfully!", "success")
@@ -1184,6 +1278,18 @@ class StateEyeGUI:
 			mins, secs = divmod(elapsed, 60)
 			self.stat_elapsed.set_value(f"{mins}m {secs}s" if mins else f"{secs}s")
 		self.crawl_start_time = None
+
+		# Run state-level classification
+		state_cls = self.classify_states(out_dir)
+		if state_cls:
+			cls_text = (
+				f"Clone: {state_cls['clone']} | "
+				f"Nd2: {state_cls['nd2-data']} | "
+				f"Nd3: {state_cls['nd3-struct']} | "
+				f"Distinct: {state_cls['distinct']}"
+			)
+			self.stat_status.set_value(cls_text)
+			self.log(f"[classify] States — {cls_text}", "classify")
 
 		summary = self.build_summary(out_dir)
 		self.summary_text.delete("1.0", END)
@@ -1225,48 +1331,27 @@ class StateEyeGUI:
 		exit_status = data.get("exitStatus", "unknown")
 		self.last_exit_status = exit_status
 		lines.append(f"Exit: {exit_status}")
-		lines.append(f"Pages: {total_pages}")
+		lines.append(f"States: {total_pages}")
 
-		# Show state count from live data, fallback to page count
-		if self.states_found > 0:
-			lines.append(f"States: {self.states_found}")
+		# Show fragment count from live data, fallback to page count
+		if self.fragments_found > 0:
+			lines.append(f"Fragments: {self.fragments_found}")
 		else:
-			self.stat_states.set_value(total_pages)
+			self.stat_pages.set_value(total_pages)
 
-		# Use live classification from the crawler (consistent with stat card)
+		# State-level classification (already computed in on_auto_complete)
+		state_cls = self.classify_states(out_dir)
+		if state_cls:
+			lines.append(f"Clone: {state_cls['clone']}")
+			lines.append(f"Nd2-data: {state_cls['nd2-data']}")
+			lines.append(f"Nd3-struct: {state_cls['nd3-struct']}")
+			lines.append(f"Distinct: {state_cls['distinct']}")
+
+		# Fragment-level classification from live crawl data
 		if self._has_live_classify:
-			lines.append(f"Clones: {self._live_clones}")
-			lines.append(f"Near-dups: {self._live_near_dup}")
-			lines.append(f"Unique: {self._live_unique}")
-		else:
-			# Fallback: run post-crawl analysis
-			fraggen_report = result_path.parent / "fraggen_classification.json"
-			if not fraggen_report.exists():
-				try:
-					script = Path(__file__).resolve().parent / "fraggen_analysis.py"
-					subprocess.run(
-						["python", str(script), "--crawl-dir", str(result_path.parent)],
-						check=True,
-						capture_output=True,
-						text=True,
-					)
-				except Exception as exc:
-					lines.append(f"Analysis failed: {exc}")
-			if fraggen_report.exists():
-				try:
-					report = json.loads(
-						fraggen_report.read_text(encoding="utf-8", errors="ignore")
-					)
-					frag_summary = report.get("summary", {})
-					clones = frag_summary.get("clone", 0)
-					nds = frag_summary.get("near_duplicates", 0)
-					distinct = frag_summary.get("distinct", 0)
-					lines.append(f"Clones: {clones}")
-					lines.append(f"Near-dups: {nds}")
-					lines.append(f"Unique: {distinct}")
-					self.stat_status.set_value(f"Clones: {clones} | Near-Dup: {nds} | Unique: {distinct}")
-				except Exception as exc:
-					lines.append(f"Summary error: {exc}")
+			lines.append(f"Frag Clones: {self._live_clones}")
+			lines.append(f"Frag Near-dup: {self._live_near_dup}")
+			lines.append(f"Frag Unique: {self._live_unique}")
 
 		if test_path is None:
 			lines.append("Tests: not found")

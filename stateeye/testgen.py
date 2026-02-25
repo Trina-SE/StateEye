@@ -1,20 +1,22 @@
 """
-Generate real Playwright regression tests from crawled states.
+Generate real Playwright regression tests from crawled states (pages).
 
-Each state (fragment) gets its own test case:
-  1. Navigate to the page containing this state
-  2. Verify the state element exists at its xpath
-  3. Compare the state's screenshot against the baseline
+Each state (page) gets its own test case:
+  1. Navigate to the page URL
+  2. Take a full-page screenshot
+  3. Compare the screenshot against the baseline
   4. Report PASS / FAIL
 
-Clone optimization: if states A and B are clones, only ONE is tested
-(the representative). The other is skipped. This reduces the total
-number of tests a tester needs to run.
+Clone optimization: if states A and B are clones (same DOM hash +
+same screenshot hash), only ONE is tested (the representative).
+The other is skipped.
 """
 
 from __future__ import annotations
 
 import json
+import re
+from difflib import SequenceMatcher
 from pathlib import Path
 from typing import List
 
@@ -31,71 +33,113 @@ def _str(val) -> str:
     return str(val).encode("utf-8", errors="replace").decode("utf-8")
 
 
-def _safe_float(val, default=0.0) -> float:
-    try:
-        if val is None or isinstance(val, bytes):
-            return default
-        return round(float(val), 2)
-    except (ValueError, TypeError):
-        return default
+def _classify_states(states, dom_contents):
+    """Classify each state relative to previous states.
 
+    Clone:      same DOM hash + same screenshot hash
+    Nd2-data:   same DOM hash (diff screenshot) OR structural similarity >= 0.9
+    Nd3-struct: structural similarity >= 0.5
+    Distinct:   no match
+    """
+    ND2_THRESHOLD = 0.9
+    ND3_THRESHOLD = 0.5
+    classifications = {}
 
-def _safe_int(val, default=0) -> int:
-    try:
-        if val is None or isinstance(val, bytes):
-            return default
-        return int(val)
-    except (ValueError, TypeError):
-        return default
+    for i, state in enumerate(states):
+        best_cls = None
+        for j in range(0, i):
+            other = states[j]
+            if state["dom_hash"] and state["dom_hash"] == other["dom_hash"]:
+                if state["screenshot_hash"] and state["screenshot_hash"] == other["screenshot_hash"]:
+                    best_cls = "clone"
+                    break
+                else:
+                    best_cls = "nd2-data"
+                    continue
+
+            struct_a = dom_contents.get(state["id"], "")
+            struct_b = dom_contents.get(other["id"], "")
+            if struct_a and struct_b:
+                sim = SequenceMatcher(None, struct_a, struct_b).ratio()
+                if sim >= ND2_THRESHOLD and best_cls not in ("clone",):
+                    best_cls = "nd2-data"
+                elif sim >= ND3_THRESHOLD and best_cls not in ("clone", "nd2-data"):
+                    best_cls = "nd3-struct"
+
+        classifications[state["id"]] = best_cls or "distinct"
+
+    return classifications
 
 
 def generate_tests(db: StateEyeDB, run_id: int, dst: Path) -> Path:
     run = db.fetch_run(run_id)
     base_url = run["url"]
     cfg = json.loads(run["config_json"])
-    headless = cfg.get("headless", True)
 
-    # Fetch all fragments with their page info and classification
-    all_frags = db.fetch_all_fragments(run_id)
+    # Fetch all states (pages) for this run
+    states = db.fetch_states(run_id)
 
     dst = Path(dst)
     dst.parent.mkdir(parents=True, exist_ok=True)
     artifacts_dir = dst.parent / "artifacts"
     artifacts_dir.mkdir(parents=True, exist_ok=True)
 
-    # Build test data per state (fragment)
-    # Clone skipping: group by dom_hash, keep first of each clone group
-    seen_dom_hashes = {}  # dom_hash -> first fragment id
+    # Read DOM content for structural comparison
+    dom_contents = {}
+    for s in states:
+        dom_file = Path(s["dom_path"]) if s["dom_path"] else None
+        if dom_file and dom_file.exists():
+            try:
+                raw = dom_file.read_text(encoding="utf-8", errors="replace")
+                structural = re.sub(r">([^<]+)<", "><", raw)
+                structural = re.sub(r"\s+", " ", structural).strip()
+                dom_contents[s["id"]] = structural
+            except Exception:
+                dom_contents[s["id"]] = ""
+        else:
+            dom_contents[s["id"]] = ""
+
+    # Classify states
+    classifications = _classify_states(states, dom_contents)
+
+    # Build test data per state (page)
+    # Skip duplicates: clone and nd2-data states share the same template,
+    # so only the first representative needs testing.
+    seen_clone_sigs = {}   # (dom_hash, screenshot_hash) -> first state id
+    seen_nd2_structs = {}  # structural_key -> first state id
     test_states = []
 
-    for frag in all_frags:
-        dom_hash = frag["dom_hash"] or ""
-        classification = frag["classification"] or "unique"
-        frag_id = frag["id"]
+    for s in states:
+        state_id = s["id"]
+        dom_hash = s["dom_hash"] or ""
+        scr_hash = s["screenshot_hash"] or ""
+        classification = classifications.get(state_id, "distinct")
+        sig = (dom_hash, scr_hash)
+        struct = dom_contents.get(state_id, "")
 
-        # Clone skipping: if this fragment's dom_hash was already seen
-        # and it's a clone, mark it as skipped (will test the representative only)
         skip = False
         representative_of = None
-        if classification == "clone" and dom_hash and dom_hash in seen_dom_hashes:
-            skip = True
-            representative_of = seen_dom_hashes[dom_hash]
 
-        if dom_hash and dom_hash not in seen_dom_hashes:
-            seen_dom_hashes[dom_hash] = frag_id
+        if classification == "clone" and dom_hash and sig in seen_clone_sigs:
+            skip = True
+            representative_of = seen_clone_sigs[sig]
+        elif classification == "nd2-data" and struct and struct in seen_nd2_structs:
+            skip = True
+            representative_of = seen_nd2_structs[struct]
+
+        if dom_hash and sig not in seen_clone_sigs:
+            seen_clone_sigs[sig] = state_id
+        if classification == "nd2-data" and struct and struct not in seen_nd2_structs:
+            seen_nd2_structs[struct] = state_id
 
         test_states.append({
-            "id": frag_id,
-            "tag": _str(frag["tag"]),
-            "xpath": _str(frag["xpath"]),
-            "snippet": _str(frag["snippet"])[:80],
-            "baseline_screenshot": _str(frag["screenshot_path"]),
-            "url": _str(frag["url"]),
-            "title": _str(frag["title"]),
-            "depth": int(frag["depth"]) if frag["depth"] else 0,
+            "id": state_id,
+            "url": _str(s["url"]),
+            "title": _str(s["title"]),
+            "depth": int(s["depth"]) if s["depth"] else 0,
+            "baseline_screenshot": _str(s["screenshot_path"]),
+            "dom_hash": dom_hash,
             "classification": classification,
-            "best_dom_score": _safe_float(frag["best_dom_score"]),
-            "best_vis_dist": _safe_int(frag["best_vis_dist"], 999),
             "skip": skip,
             "representative_of": representative_of,
         })
@@ -105,13 +149,13 @@ Auto-generated regression tests by StateEye.
 
 Run with:  python {Path(dst).name}
 
-Each state (UI fragment) gets its own test.
-Clone states are skipped — only the representative is tested.
-If a clone changes, it will be detected when re-crawled.
+Each state (page) gets its own test.
+Clone and Nd2-data states are skipped — only the representative is tested.
 """
 
 import sys
 import os
+import json
 from pathlib import Path
 
 # Fix encoding for Windows console
@@ -142,6 +186,16 @@ def phash_distance(img_path_a: str, img_path_b: str) -> int:
         return 999
 
 
+def grayscale_phash_distance(img_path_a: str, img_path_b: str) -> int:
+    """Compare structure only by converting to grayscale first (ignores color)."""
+    try:
+        with Image.open(img_path_a) as a, Image.open(img_path_b) as b:
+            return imagehash.phash(a.convert("L")) - imagehash.phash(b.convert("L"))
+    except Exception as e:
+        print(f"    [warn] Could not compare grayscale images: {{e}}")
+        return 999
+
+
 def run_tests():
     results = []
     passed = 0
@@ -152,7 +206,7 @@ def run_tests():
     artifacts.mkdir(exist_ok=True)
 
     print("=" * 60)
-    print("StateEye Regression Tests")
+    print("StateEye Regression Tests (State-Level)")
     print("=" * 60)
     print()
 
@@ -161,24 +215,18 @@ def run_tests():
         context = browser.new_context(viewport={{"width": 1400, "height": 900}})
         page = context.new_page()
 
-        loaded_url = None  # track current page to avoid re-navigation
-
         for idx, test in enumerate(TEST_STATES):
             test_name = f"test_state_{{idx+1}}"
-            tag = test["tag"]
-            xpath = test["xpath"]
             url = test["url"]
             title = test["title"]
             baseline = test["baseline_screenshot"]
             classification = test["classification"]
-            snippet = test["snippet"]
             is_skip = test["skip"]
             errors = []
 
-            label = snippet.strip() if snippet.strip() else xpath
-            # Sanitize label to remove surrogate characters that break Windows console
-            label = label.encode("utf-8", errors="replace").decode("utf-8")
-            print(f"[test] {{test_name}}: <{{tag}}> {{label}}")
+            # Sanitize title for console output
+            safe_title = title.encode("utf-8", errors="replace").decode("utf-8")
+            print(f"[test] {{test_name}}: {{safe_title}}")
             print(f"       URL: {{url}} | {{classification}}")
 
             # Skip clone duplicates
@@ -190,46 +238,26 @@ def run_tests():
                 print()
                 continue
 
-            # Step 1: Navigate (only if URL changed)
-            if loaded_url != url:
+            # Step 1: Navigate to the page
+            try:
+                page.goto(url, wait_until="domcontentloaded", timeout=15000)
                 try:
-                    page.goto(url, wait_until="domcontentloaded", timeout=15000)
-                    try:
-                        page.wait_for_load_state("networkidle", timeout=5000)
-                    except Exception:
-                        pass
-                    loaded_url = url
-                except Exception as e:
-                    errors.append(f"Navigation failed: {{e}}")
-                    failed += 1
-                    results.append({{"name": test_name, "status": "FAIL", "errors": errors}})
-                    print(f"       FAIL: {{errors[0]}}")
-                    print()
-                    continue
-
-            # Step 2: Check state element exists
-            if xpath:
-                try:
-                    el = page.query_selector(f"xpath={{xpath}}")
-                    if el and el.is_visible():
-                        print(f"       Element: found and visible")
-                    else:
-                        errors.append(f"State missing: <{{tag}}> at {{xpath}}")
+                    page.wait_for_load_state("networkidle", timeout=5000)
                 except Exception:
-                    errors.append(f"State error: <{{tag}}> at {{xpath}}")
+                    pass
+            except Exception as e:
+                errors.append(f"Navigation failed: {{e}}")
+                failed += 1
+                results.append({{"name": test_name, "status": "FAIL", "errors": errors}})
+                print(f"       FAIL: {{errors[0]}}")
+                print()
+                continue
 
-            # Step 3: Screenshot comparison
+            # Step 2: Full-page screenshot comparison
             if baseline and os.path.exists(baseline):
                 new_screenshot = str(artifacts / f"{{test_name}}.png")
                 try:
-                    if xpath:
-                        el = page.query_selector(f"xpath={{xpath}}")
-                        if el:
-                            el.screenshot(path=new_screenshot)
-                        else:
-                            page.screenshot(path=new_screenshot, full_page=True)
-                    else:
-                        page.screenshot(path=new_screenshot, full_page=True)
+                    page.screenshot(path=new_screenshot, full_page=True)
                 except Exception as e:
                     errors.append(f"Screenshot failed: {{e}}")
                     new_screenshot = None
@@ -238,7 +266,12 @@ def run_tests():
                     distance = phash_distance(baseline, new_screenshot)
                     print(f"       Visual distance: {{distance}}")
                     if distance > VISUAL_THRESHOLD:
-                        errors.append(f"Visual regression: distance={{distance}}")
+                        gray_dist = grayscale_phash_distance(baseline, new_screenshot)
+                        print(f"       Grayscale distance: {{gray_dist}}")
+                        if gray_dist <= VISUAL_THRESHOLD:
+                            print(f"       Color-only change detected (structure intact) — PASS")
+                        else:
+                            errors.append(f"Visual regression: distance={{distance}}")
             else:
                 print(f"       Visual: baseline not found, skipping")
 
@@ -273,8 +306,6 @@ def run_tests():
 
     return failed == 0
 
-
-import json
 
 if __name__ == "__main__":
     success = run_tests()
