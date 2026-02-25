@@ -91,6 +91,8 @@ def extract_fragments(
     min_area: int = 3000,
     limit: int = 50,
     state_id: int = -1,
+    fragments_dir: Path | None = None,
+    doms_dir: Path | None = None,
 ) -> List[FragmentRecord]:
     handles = page.query_selector_all(FRAGMENT_SELECTOR)
     if not handles:
@@ -130,7 +132,16 @@ def extract_fragments(
             snippet = _safe_text(outer_html)
             frag_dom_hash = compute_dom_hash(outer_html) if outer_html else ""
 
-            frag_img_path = screenshot_path.parent / f"{base}_frag_{idx}.png"
+            # Save state HTML file
+            if doms_dir and outer_html:
+                dom_file = doms_dir / f"{base}_state_{idx}.html"
+                try:
+                    dom_file.write_text(outer_html, encoding="utf-8")
+                except Exception:
+                    pass
+
+            frag_dir = fragments_dir if fragments_dir else screenshot_path.parent
+            frag_img_path = frag_dir / f"{base}_frag_{idx}.png"
             left = int(box["x"])
             top = int(box["y"])
             right = int(box["x"] + box["width"])

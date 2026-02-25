@@ -11,6 +11,7 @@ all discovered URLs so it never clicks the same link twice.
 from __future__ import annotations
 
 import datetime
+import json
 import time
 from dataclasses import asdict
 from pathlib import Path
@@ -46,6 +47,8 @@ class StateEyeCrawler:
         self._is_local: bool = False
         self._visited_urls: set = set()   # URLs we actually navigated to
         self._known_urls: set = set()     # ALL URLs we know about (visited + queued)
+        self._url_to_page: Dict[str, int] = {}   # normalized_url -> node index (0-based)
+        self._graph_edges: List[dict] = []        # click transitions
         parsed = urlparse(self.cfg.url)
         self._base_domain = parsed.netloc or ""
         for d in [self.run_dir, self.screenshots_dir, self.doms_dir, self.fragments_dir]:
@@ -195,6 +198,9 @@ class StateEyeCrawler:
 
                 # Capture page-level screenshot and DOM (for report)
                 page_counter += 1
+                node_idx = page_counter - 1  # 0-based for graph
+                self._url_to_page[url_norm] = node_idx
+                self._url_to_page[actual_url] = node_idx
                 dom_file = self.doms_dir / f"page_{page_counter}.html"
                 screenshot_file = self.screenshots_dir / f"page_{page_counter}.png"
 
@@ -229,6 +235,8 @@ class StateEyeCrawler:
                     min_area=self.cfg.fragment_min_area,
                     limit=self.cfg.fragment_limit,
                     state_id=state_id,
+                    fragments_dir=self.fragments_dir,
+                    doms_dir=self.doms_dir,
                 )
 
                 # Classify each fragment against all previous fragments
@@ -291,6 +299,7 @@ class StateEyeCrawler:
             f"near-dup={class_counts['near-duplicate']}",
             flush=True,
         )
+        self._write_alchemy_graph(db, run_id)
         return run_id, db
 
     # ── Page capture ─────────────────────────────────────────────────
@@ -299,6 +308,79 @@ class StateEyeCrawler:
         dom_content = page.content()
         dom_file.write_text(dom_content, encoding="utf-8")
         page.screenshot(path=str(screenshot_file), full_page=True)
+
+    # ── Graph generation ─────────────────────────────────────────────
+
+    def _write_alchemy_graph(self, db: StateEyeDB, run_id: int) -> None:
+        """Write alchemyGraph.json with nodes (states) and links (edges)."""
+        states = db.fetch_states(run_id)
+        fragments_map = db.fetch_fragments([s["id"] for s in states])
+
+        nodes = []
+        for i, state in enumerate(states):
+            url_norm = state["url"].rstrip("/")
+            node_id = self._url_to_page.get(url_norm, i)
+
+            # Build candidateElements from fragments
+            frags = fragments_map.get(state["id"], [])
+            candidate_elements = []
+            for f in frags:
+                try:
+                    bbox = json.loads(f["bbox_json"]) if f["bbox_json"] else {}
+                except Exception:
+                    bbox = {}
+                candidate_elements.append({
+                    "top": int(bbox.get("y", 0)),
+                    "left": int(bbox.get("x", 0)),
+                    "xpath": f["xpath"] or "",
+                    "width": int(bbox.get("width", 0)),
+                    "height": int(bbox.get("height", 0)),
+                })
+
+            nodes.append({
+                "name": f"state{node_id}",
+                "url": state["url"],
+                "candidateElements": candidate_elements,
+                "fanIn": 0,
+                "fanOut": 0,
+                "id": node_id,
+                "failedEvents": [],
+                "hasNearDuplicate": False,
+                "distToNearestState": -1.0,
+                "cluster": -1,
+                "timeAdded": int(time.time() * 1000),
+                "nearestState": "",
+            })
+
+        # Resolve edges to node IDs
+        links = []
+        for edge in self._graph_edges:
+            source_id = self._url_to_page.get(edge["source_url"])
+            target_id = self._url_to_page.get(edge["target_url"])
+            if source_id is not None and target_id is not None:
+                links.append({
+                    "source": source_id,
+                    "target": target_id,
+                    "text": edge["text"],
+                    "element": edge["element"],
+                    "eventType": edge["eventType"],
+                })
+
+        # Compute fanIn / fanOut
+        node_map = {n["id"]: n for n in nodes}
+        for link in links:
+            if link["source"] in node_map:
+                node_map[link["source"]]["fanOut"] += 1
+            if link["target"] in node_map:
+                node_map[link["target"]]["fanIn"] += 1
+
+        graph = {"nodes": nodes, "links": links}
+        graph_file = self.run_dir / "alchemyGraph.json"
+        graph_file.write_text(json.dumps(graph, indent=2), encoding="utf-8")
+        print(
+            f"[crawl] [{self._elapsed()}] Graph: {len(nodes)} nodes, {len(links)} edges -> {graph_file.name}",
+            flush=True,
+        )
 
     # ── Click-based exploration (like a real tester) ────────────────
 
@@ -376,6 +458,13 @@ class StateEyeCrawler:
                     after_norm = after_url.rstrip("/")
                     if after_norm not in self._known_urls:
                         discovered.append(after_url)
+                    self._graph_edges.append({
+                        "source_url": current_url.rstrip("/"),
+                        "target_url": after_norm,
+                        "text": info["text"],
+                        "element": f"A[href={info['href']}][text={info['text']}]",
+                        "eventType": "click",
+                    })
                     # Go back to continue exploring this page
                     self._safe_goto(page, current_url)
             except Exception:
@@ -435,6 +524,13 @@ class StateEyeCrawler:
                         after_norm = after_url.rstrip("/")
                         if after_norm not in self._known_urls:
                             discovered.append(after_url)
+                        self._graph_edges.append({
+                            "source_url": current_url.rstrip("/"),
+                            "target_url": after_norm,
+                            "text": btn_key,
+                            "element": f"BUTTON[text={btn_key}]",
+                            "eventType": "click",
+                        })
                         self._safe_goto(page, current_url)
                     break  # re-query buttons (handles stale after click)
                 except Exception:
