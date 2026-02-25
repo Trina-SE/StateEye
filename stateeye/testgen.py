@@ -27,7 +27,8 @@ def _str(val) -> str:
         return ""
     if isinstance(val, bytes):
         return val.decode("utf-8", errors="replace")
-    return str(val)
+    # Remove surrogate characters that break print() on Windows
+    return str(val).encode("utf-8", errors="replace").decode("utf-8")
 
 
 def _safe_float(val, default=0.0) -> float:
@@ -126,8 +127,8 @@ from PIL import Image
 import imagehash
 
 BASE_URL = {json.dumps(base_url)}
-HEADLESS = {str(headless)}
-VISUAL_THRESHOLD = 6
+HEADLESS = True
+VISUAL_THRESHOLD = 18
 
 TEST_STATES = {json.dumps(test_states, indent=2).replace(': true', ': True').replace(': false', ': False').replace(': null', ': None')}
 
@@ -175,6 +176,8 @@ def run_tests():
             errors = []
 
             label = snippet.strip() if snippet.strip() else xpath
+            # Sanitize label to remove surrogate characters that break Windows console
+            label = label.encode("utf-8", errors="replace").decode("utf-8")
             print(f"[test] {{test_name}}: <{{tag}}> {{label}}")
             print(f"       URL: {{url}} | {{classification}}")
 

@@ -246,6 +246,132 @@ class DemoServer:
 		return InjectingHandler
 
 
+class PlaywrightManualSession:
+	"""Manages a visible Playwright browser for manual mode on remote URLs."""
+
+	TRACKING_JS = """(function(){
+function buildLabel(el){
+	var tag=el.tagName.toLowerCase();
+	var id=el.id?('#'+el.id):'';
+	var name=el.getAttribute('name');
+	var href=el.getAttribute('href');
+	var type=el.getAttribute('type');
+	var text=(el.innerText||'').trim().replace(/\\s+/g,' ').substring(0,60);
+	var parts=[tag];
+	if(type){parts.push('['+type+']');}
+	if(id){parts.push(id);}else if(name){parts.push('[name='+name+']');}
+	else if(href){parts.push('[href='+href+']');}
+	if(text){parts.push('[text='+text+']');}
+	return parts.join('');
+}
+function findClickable(el){
+	if(!el) return null;
+	var tag=el.tagName?el.tagName.toLowerCase():'';
+	if(tag==='a'||tag==='button'||tag==='select'||tag==='textarea') return el;
+	if(tag==='input') return el;
+	return el.closest('a,button,input,select,textarea,[role=button]');
+}
+document.addEventListener('click',function(e){
+	var el=findClickable(e.target);
+	if(!el) return;
+	var label=buildLabel(el);
+	window.__stateeye_click(label);
+},true);
+window.addEventListener('load',function(){
+	var els=document.querySelectorAll('a[href],button,input,select,textarea,[role=button]');
+	var labels=[];
+	els.forEach(function(el){labels.push(buildLabel(el));});
+	window.__stateeye_elements(JSON.stringify({labels:labels,url:location.href}));
+});
+document.addEventListener('DOMContentLoaded',function(){
+	var els=document.querySelectorAll('a[href],button,input,select,textarea,[role=button]');
+	var labels=[];
+	els.forEach(function(el){labels.push(buildLabel(el));});
+	window.__stateeye_elements(JSON.stringify({labels:labels,url:location.href}));
+});
+})();"""
+
+	def __init__(self):
+		self.playwright = None
+		self.browser = None
+		self.context = None
+		self.page = None
+		self._thread = None
+		self._running = False
+
+	def start(self, url, click_callback, elements_callback):
+		self._click_cb = click_callback
+		self._elements_cb = elements_callback
+		self._url = url
+		self._running = True
+		self._thread = threading.Thread(target=self._run, daemon=True)
+		self._thread.start()
+
+	def _run(self):
+		from playwright.sync_api import sync_playwright
+		self.playwright = sync_playwright().start()
+		self.browser = self.playwright.chromium.launch(headless=False)
+		self.context = self.browser.new_context(viewport={"width": 1400, "height": 900})
+		self.context.add_init_script(self.TRACKING_JS)
+		self.page = self.context.new_page()
+		self.page.expose_function("__stateeye_click", self._on_click)
+		self.page.expose_function("__stateeye_elements", self._on_elements)
+		self.page.on("popup", self._handle_new_page)
+		try:
+			self.page.goto(self._url, wait_until="domcontentloaded", timeout=30000)
+		except Exception:
+			pass
+		# Keep the browser open until stopped
+		while self._running and self.browser.is_connected():
+			try:
+				self.page.wait_for_timeout(500)
+			except Exception:
+				break
+
+	def _handle_new_page(self, new_page):
+		"""Inject tracking into popup/new-tab pages."""
+		try:
+			new_page.expose_function("__stateeye_click", self._on_click)
+			new_page.expose_function("__stateeye_elements", self._on_elements)
+		except Exception:
+			pass
+
+	def _on_click(self, label):
+		self._click_cb(label)
+
+	def _on_elements(self, data_json):
+		try:
+			data = json.loads(data_json)
+			labels = data.get("labels", [])
+			url = data.get("url", "")
+			if labels:
+				self._elements_cb(url, labels)
+		except Exception:
+			pass
+
+	def stop(self):
+		self._running = False
+		try:
+			if self.context:
+				self.context.close()
+		except Exception:
+			pass
+		try:
+			if self.browser:
+				self.browser.close()
+		except Exception:
+			pass
+		try:
+			if self.playwright:
+				self.playwright.stop()
+		except Exception:
+			pass
+		self.playwright = None
+		self.browser = None
+		self.context = None
+		self.page = None
+
+
 # ── Helper: rounded rectangle on Canvas ───────────────────────────────
 def _round_rect(canvas, x1, y1, x2, y2, radius=12, **kwargs):
 	points = [
@@ -357,6 +483,7 @@ class StateEyeGUI:
 		self.tested_list = None
 		self.manual_session = ManualSession()
 		self.server = None
+		self.pw_session = None
 		self.auto_proc = None
 		self.run_dir = None
 		self.summary_text = None
@@ -661,6 +788,10 @@ class StateEyeGUI:
 		if self.server:
 			self.server.stop()
 			self.server = None
+		if self.pw_session:
+			self.pw_session.stop()
+			self.pw_session = None
+			self.log("Playwright browser closed.", "info")
 
 	# ── Automated crawl ──────────────────────────────────────────────
 	def start_automated(self, target):
@@ -739,7 +870,10 @@ class StateEyeGUI:
 		self.manual_session = ManualSession()
 
 		url = target
-		if os.path.exists(target):
+		is_url = target.startswith(("http://", "https://"))
+
+		if not is_url and os.path.exists(target):
+			# Local HTML file — use DemoServer
 			path = Path(target).resolve()
 			if path.is_dir():
 				path = path / "index.html"
@@ -749,6 +883,11 @@ class StateEyeGUI:
 			self.server = DemoServer(str(path.parent), self.on_manual_click, self.on_page_elements)
 			self.server.start()
 			url = f"http://127.0.0.1:{self.server.port}/{path.name}"
+		elif is_url:
+			# Remote URL — use Playwright with injected tracking JS
+			self.pw_session = PlaywrightManualSession()
+			self.pw_session.start(url, self.on_manual_click, self.on_page_elements)
+			self.log("Playwright browser launching with tracking JS...", "info")
 
 		self.manual_session.url = url
 		self.manual_session.untested = self.extract_elements(target, url)
@@ -762,7 +901,8 @@ class StateEyeGUI:
 			self._element_page[label] = url
 		self.refresh_lists()
 		self._update_manual_summary()
-		webbrowser.open(url)
+		if not is_url:
+			webbrowser.open(url)
 		self.log(f"Opened {url}", "info")
 		self.log(f"Found {len(self.manual_session.untested)} states to test", "info")
 

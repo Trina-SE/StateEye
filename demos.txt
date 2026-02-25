@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>TechShop - Home</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#333}
+    nav{background:#1a1a2e;padding:1rem 2rem;display:flex;align-items:center;gap:2rem}
+    nav .brand{font-size:1.4rem;font-weight:bold;color:#e94560;text-decoration:none;margin-right:auto}
+    nav a{color:#a8b2d1;text-decoration:none;font-weight:500;font-size:.95rem}
+    nav a:hover{color:#e94560}
+    main{max-width:960px;margin:2rem auto;padding:0 1.5rem}
+    h1{color:#1a1a2e;font-size:2rem;margin-bottom:.5rem}
+    .sub{color:#666;font-size:1.1rem;margin-bottom:2rem}
+    .card{background:#fff;border-radius:10px;padding:1.5rem;margin-bottom:1.2rem;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .hero{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:2.5rem;text-align:center}
+    .hero h2{font-size:1.8rem;margin-bottom:.8rem}
+    .hero p{color:#a8b2d1;margin-bottom:1.5rem;font-size:1.05rem}
+    .btn{display:inline-block;padding:.7rem 1.5rem;background:#e94560;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;border:none;cursor:pointer;font-size:.95rem}
+    .btn:hover{background:#c73650}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.5rem}
+    .grid3 .card h3{color:#e94560;margin-bottom:.5rem}
+    .grid3 .card p{color:#555;line-height:1.5}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2rem 0}
+    .sbox{background:#fff;border-radius:10px;padding:1.5rem;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .sbox .num{font-size:2rem;font-weight:bold;color:#e94560}
+    .sbox .lbl{color:#888;font-size:.85rem;margin-top:.3rem}
+    footer{text-align:center;padding:2rem;color:#999;font-size:.85rem;border-top:1px solid #ddd;margin-top:2rem}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="brand">TechShop</a>
+    <a href="products.html">Products</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="events.html">Events</a>
+    <a href="support.html">Support</a>
+  </nav>
+  <main>
+    <div class="hero card">
+      <h2>Welcome to TechShop</h2>
+      <p>Your one-stop destination for premium tech gear. Discover our curated collection of laptops, phones, and tablets.</p>
+      <a href="products.html" class="btn">Browse Products</a>
+    </div>
+    <div class="stats">
+      <div class="sbox"><div class="num">500+</div><div class="lbl">Products</div></div>
+      <div class="sbox"><div class="num">50K</div><div class="lbl">Customers</div></div>
+      <div class="sbox"><div class="num">4.8</div><div class="lbl">Rating</div></div>
+      <div class="sbox"><div class="num">24/7</div><div class="lbl">Support</div></div>
+    </div>
+    <h1>Why TechShop?</h1>
+    <p class="sub">We bring you the best technology at unbeatable prices</p>
+    <div class="grid3">
+      <div class="card">
+        <h3>Fast Shipping</h3>
+        <p>Free delivery on all orders over $50. Get your gear within 2 business days anywhere in the country.</p>
+      </div>
+      <div class="card">
+        <h3>Expert Support</h3>
+        <p>Our dedicated team of tech experts is always ready to help with any questions or technical issues.</p>
+      </div>
+      <div class="card">
+        <h3>Easy Returns</h3>
+        <p>30-day hassle-free return policy on all products. No questions asked, full refund guaranteed.</p>
+      </div>
+      <div class="card">
+        <h3>Secure Payment</h3>
+        <p>All transactions are encrypted with 256-bit SSL. Your payment information is always safe with us.</p>
+      </div>
+    </div>
+  </main>
+  <footer>&copy; 2024 TechShop. All rights reserved.</footer>
+</body>
+</html>
