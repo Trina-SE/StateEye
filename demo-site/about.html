@@ -1,68 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Rivergate Campus - About</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="app.js"></script>
+  <title>TechShop - About Us</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#333}
+    nav{background:#1a1a2e;padding:1rem 2rem;display:flex;align-items:center;gap:2rem}
+    nav .brand{font-size:1.4rem;font-weight:bold;color:#e94560;text-decoration:none;margin-right:auto}
+    nav a{color:#a8b2d1;text-decoration:none;font-weight:500;font-size:.95rem}
+    nav a:hover{color:#e94560}
+    main{max-width:960px;margin:2rem auto;padding:0 1.5rem}
+    .page-title{color:#1a1a2e;font-size:2rem;margin-bottom:1.5rem}
+    .card{background:#fff;border-radius:12px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.08);margin-bottom:1.5rem}
+    .card h2{color:#1a1a2e;margin-bottom:1rem;font-size:1.4rem}
+    .card p{color:#555;line-height:1.7;margin-bottom:1rem}
+    .team{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.5rem}
+    .member{background:#fff;border-radius:12px;padding:1.5rem;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .member .avatar{font-size:3rem;margin-bottom:.5rem}
+    .member h3{color:#1a1a2e;margin-bottom:.3rem}
+    .member .role{color:#e94560;font-size:.9rem;margin-bottom:.5rem}
+    .member p{color:#888;font-size:.85rem;line-height:1.5}
+    .values{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:1.5rem}
+    .val-item{background:#fff;border-radius:10px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .val-item h3{color:#e94560;margin-bottom:.5rem;font-size:1.1rem}
+    .val-item p{color:#555;line-height:1.5;font-size:.95rem}
+    .btn{display:inline-block;padding:.7rem 1.5rem;background:#e94560;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;border:none;cursor:pointer;font-size:.95rem}
+    .btn:hover{background:#c73650}
+    footer{text-align:center;padding:2rem;color:#999;font-size:.85rem;border-top:1px solid #ddd;margin-top:2rem}
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <div class="brand-mark">SE</div>
-      <div>
-        <div class="brand-title">Rivergate Campus</div>
-        <div class="brand-subtitle">About</div>
+  <nav>
+    <a href="index.html" class="brand">TechShop</a>
+    <a href="products.html">Products</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="events.html">Events</a>
+    <a href="support.html">Support</a>
+  </nav>
+  <main>
+    <h1 class="page-title">About TechShop</h1>
+    <div class="card">
+      <h2>Our Story</h2>
+      <p>Founded in 2018, TechShop started with a simple mission: make premium technology accessible to everyone. What began as a small online store has grown into one of the most trusted names in consumer electronics retail.</p>
+      <p>We believe that great technology should enhance your life, not complicate it. That's why we carefully curate every product in our catalog, ensuring it meets our high standards for quality, performance, and value.</p>
+    </div>
+    <h2 class="page-title" style="font-size:1.5rem;margin-top:1rem">Our Team</h2>
+    <div class="team">
+      <div class="member">
+        <div class="avatar">&#128104;&#8205;&#128188;</div>
+        <h3>Alex Chen</h3>
+        <div class="role">CEO &amp; Founder</div>
+        <p>15 years in tech industry. Passionate about making technology accessible to all.</p>
+      </div>
+      <div class="member">
+        <div class="avatar">&#128105;&#8205;&#128187;</div>
+        <h3>Sarah Kim</h3>
+        <div class="role">Head of Engineering</div>
+        <p>Former senior engineer at leading tech companies. Drives our platform innovation.</p>
+      </div>
+      <div class="member">
+        <div class="avatar">&#128104;&#8205;&#127891;</div>
+        <h3>James Rivera</h3>
+        <div class="role">Customer Success Lead</div>
+        <p>Dedicated to creating the best shopping experience for every customer.</p>
       </div>
     </div>
-    <nav class="site-nav">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="academics.html" class="nav-link">Academics</a>
-      <a href="events.html" class="nav-link">Events</a>
-      <a href="about.html" class="nav-link active">About</a>
-    </nav>
-    <button class="ghost-btn" id="open-spotlight">Spotlight</button>
-  </header>
-
-  <main class="page">
-    <section class="page-subhero">
-      <h1>About the campus</h1>
-      <p>Rivergate is a fictional campus designed for crawler demos.</p>
-      <div class="hero-actions">
-        <a class="primary-btn" href="index.html">Return home</a>
-        <button class="secondary-btn">Download map</button>
+    <h2 class="page-title" style="font-size:1.5rem;margin-top:2rem">Our Values</h2>
+    <div class="values">
+      <div class="val-item">
+        <h3>Quality First</h3>
+        <p>Every product passes our rigorous quality testing before it reaches your hands.</p>
       </div>
-    </section>
-
-    <section class="feature-grid">
-      <article class="panel-card">
-        <h3>Atlas Hall</h3>
-        <p>Research hub for multi-state web exploration.</p>
-        <button class="secondary-btn">View wing</button>
-      </article>
-      <article class="panel-card">
-        <h3>North Gallery</h3>
-        <p>Visual regression showcases and experiments.</p>
-        <button class="secondary-btn">Browse exhibits</button>
-      </article>
-      <article class="panel-card">
-        <h3>Mariner Courtyard</h3>
-        <p>Outdoor study spaces with Wi-Fi nodes.</p>
-        <button class="secondary-btn">Check map</button>
-      </article>
-    </section>
+      <div class="val-item">
+        <h3>Customer Focus</h3>
+        <p>Your satisfaction drives every decision we make, from product selection to support.</p>
+      </div>
+      <div class="val-item">
+        <h3>Innovation</h3>
+        <p>We constantly explore new technologies and trends to bring you the latest and greatest.</p>
+      </div>
+      <div class="val-item">
+        <h3>Transparency</h3>
+        <p>Honest pricing, clear policies, and genuine reviews. No hidden fees, no surprises.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.5rem;text-align:center">
+      <p>Want to join our team or partner with us?</p>
+      <a href="contact.html" class="btn" style="margin-top:.5rem">Get in Touch</a>
+    </div>
   </main>
-
-  <div class="modal" id="spotlight-modal" aria-hidden="true">
-    <div class="modal-card">
-      <h3>Campus note</h3>
-      <p>Use the dashboard on Home to reveal hidden panels.</p>
-      <div class="modal-actions">
-        <a class="primary-btn" href="index.html">Go home</a>
-        <button class="ghost-btn" id="close-spotlight">Close</button>
-      </div>
-    </div>
-  </div>
+  <footer>&copy; 2024 TechShop. All rights reserved.</footer>
 </body>
 </html>

@@ -43,6 +43,8 @@ class FragmentRecord:
     screenshot_path: Optional[str]
     bbox: Dict
     hash: str
+    dom_content: str = ""
+    dom_hash: str = ""
 
 
 @dataclass
@@ -104,6 +106,8 @@ class StateEyeDB:
                 screenshot_path TEXT,
                 bbox_json TEXT,
                 hash TEXT,
+                dom_content TEXT DEFAULT '',
+                dom_hash TEXT DEFAULT '',
                 FOREIGN KEY(state_id) REFERENCES states(id)
             );
             CREATE TABLE IF NOT EXISTS comparisons(
@@ -168,13 +172,16 @@ class StateEyeDB:
                 f.screenshot_path,
                 json.dumps(f.bbox),
                 f.hash,
+                f.dom_content,
+                f.dom_hash,
             )
             for f in fragments
         ]
         cur.executemany(
             """
-            INSERT INTO fragments(state_id, xpath, tag, snippet, screenshot_path, bbox_json, hash)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO fragments(state_id, xpath, tag, snippet, screenshot_path, bbox_json, hash,
+                                  dom_content, dom_hash)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             rows,
         )

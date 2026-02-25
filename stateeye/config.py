@@ -24,18 +24,21 @@ class CrawlConfig:
     max_depth: int = 3
     max_states: int = 40
     headless: bool = True
-    wait_after_action_ms: int = 800
-    wait_on_load_ms: int = 1200
-    action_timeout_ms: int = 4000
+    wait_after_action_ms: int = 500
+    wait_on_load_ms: int = 800
+    action_timeout_ms: int = 10000
     viewport_width: int = 1400
     viewport_height: int = 900
-    fragment_min_area: int = 4000
-    fragment_limit: int = 32
+    fragment_min_area: int = 8000
+    fragment_limit: int = 50
     allowed_actions: List[str] = field(default_factory=lambda: ["click", "fill", "submit"])
     disallowed_domains: List[str] = field(default_factory=list)
     run_name: Optional[str] = None
     pre_actions: List[dict] = field(default_factory=list)
     auto_fill_forms: bool = True
+    mode: str = "hybrid"
+    credentials_file: Optional[str] = None
+    max_runtime_s: int = 120  # max crawl time in seconds (0 = unlimited)
 
     def run_folder(self) -> Path:
         if self.run_name:
@@ -70,3 +73,19 @@ class ReportConfig:
     include_fragments: bool = True
     include_actions: bool = True
     title: str = "StateEye Report"
+
+
+def load_credentials(path: str) -> dict:
+    """Parse a credentials.txt file (key = value, # comments) into a dict."""
+    creds = {}
+    try:
+        for line in Path(path).read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" in line:
+                key, _, value = line.partition("=")
+                creds[key.strip().lower()] = value.strip()
+    except Exception:
+        pass
+    return creds

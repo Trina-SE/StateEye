@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from .config import SimilarityConfig
 from .similarity import (
@@ -24,6 +24,45 @@ class AnalysisSummary:
     clones: List[int]
     near_duplicates: List[int]
     unique_states: List[int]
+
+
+def classify_state_incremental(
+    dom_content: str,
+    screenshot_hash: str,
+    dom_hash: str,
+    existing_states: List[dict],
+    sim_cfg: SimilarityConfig,
+) -> Tuple[str, float, int]:
+    """Classify a new state against all existing states incrementally.
+
+    Returns (classification, best_dom_score, best_vis_dist).
+    """
+    best_dom = 0.0
+    best_vis = 999
+    result = "unique"
+
+    for prev in existing_states:
+        # Fast path: identical DOM hash means clone
+        if dom_hash == prev["dom_hash"]:
+            return ("clone", 1.0, 0)
+
+        dom_score = dom_similarity(dom_content, prev["dom_content"])
+        vis_dist = visual_distance(screenshot_hash, prev["screenshot_hash"])
+        combo = combined_score(dom_score, vis_dist, sim_cfg.visual_near_duplicate_threshold)
+
+        if is_clone(dom_score, vis_dist, sim_cfg):
+            return ("clone", dom_score, vis_dist)
+        if is_near_duplicate(dom_score, vis_dist, combo, sim_cfg):
+            if result != "near-duplicate" or dom_score > best_dom:
+                best_dom = dom_score
+                best_vis = vis_dist
+            result = "near-duplicate"
+        elif result == "unique":
+            if dom_score > best_dom:
+                best_dom = dom_score
+                best_vis = vis_dist
+
+    return (result, best_dom, best_vis)
 
 
 def analyze_run(db: StateEyeDB, run_id: int, sim_cfg: SimilarityConfig) -> AnalysisSummary:

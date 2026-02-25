@@ -10,6 +10,7 @@ from pathlib import Path
 from tkinter import (
 	Tk,
 	StringVar,
+	IntVar,
 	END,
 	Listbox,
 	Text,
@@ -19,14 +20,31 @@ from tkinter import (
 	Entry,
 	Button,
 	Radiobutton,
+	Canvas,
 	filedialog,
 	messagebox,
+	font as tkfont,
 )
 import subprocess
 import http.server
 import socketserver
 import functools
 import re
+
+# ── Color Palette ──────────────────────────────────────────────────────
+BG_DARK = "#1e1e2e"
+BG_CARD = "#2a2a3d"
+BG_INPUT = "#363650"
+FG_MAIN = "#e0e0f0"
+FG_DIM = "#8888aa"
+FG_HEADING = "#ffffff"
+ACCENT_BLUE = "#5b9bd5"
+ACCENT_GREEN = "#50c878"
+ACCENT_RED = "#e05555"
+ACCENT_ORANGE = "#f0a040"
+ACCENT_PURPLE = "#b07cd8"
+ACCENT_CYAN = "#40d0d0"
+BORDER_COLOR = "#3a3a55"
 
 
 class ElementExtractor(HTMLParser):
@@ -203,15 +221,112 @@ class DemoServer:
 		return InjectingHandler
 
 
+# ── Helper: rounded rectangle on Canvas ───────────────────────────────
+def _round_rect(canvas, x1, y1, x2, y2, radius=12, **kwargs):
+	points = [
+		x1 + radius, y1, x1 + radius, y1, x2 - radius, y1, x2 - radius, y1,
+		x2, y1, x2, y1 + radius, x2, y1 + radius, x2, y2 - radius,
+		x2, y2 - radius, x2, y2, x2 - radius, y2, x2 - radius, y2,
+		x1 + radius, y2, x1 + radius, y2, x1, y2, x1, y2 - radius,
+		x1, y2 - radius, x1, y1 + radius, x1, y1 + radius, x1, y1,
+	]
+	return canvas.create_polygon(points, smooth=True, **kwargs)
+
+
+# ── Styled widgets ────────────────────────────────────────────────────
+def _styled_frame(parent, **kw):
+	kw.setdefault("bg", BG_DARK)
+	return Frame(parent, **kw)
+
+
+def _card_frame(parent, **kw):
+	kw.setdefault("bg", BG_CARD)
+	kw.setdefault("highlightbackground", BORDER_COLOR)
+	kw.setdefault("highlightthickness", 1)
+	kw.setdefault("padx", 12)
+	kw.setdefault("pady", 10)
+	return Frame(parent, **kw)
+
+
+def _label(parent, text, color=FG_MAIN, size=10, bold=False, **kw):
+	weight = "bold" if bold else "normal"
+	kw.setdefault("bg", parent.cget("bg"))
+	return Label(parent, text=text, fg=color, font=("Segoe UI", size, weight), **kw)
+
+
+def _entry(parent, textvariable, width=40):
+	return Entry(
+		parent, textvariable=textvariable, width=width,
+		bg=BG_INPUT, fg=FG_MAIN, insertbackground=FG_MAIN,
+		relief="flat", font=("Consolas", 10),
+		highlightbackground=BORDER_COLOR, highlightthickness=1,
+	)
+
+
+def _btn(parent, text, command, color=ACCENT_BLUE, wide=False):
+	w = 18 if wide else 12
+	return Button(
+		parent, text=text, command=command,
+		bg=color, fg="#ffffff", activebackground=color,
+		activeforeground="#ffffff", relief="flat", cursor="hand2",
+		font=("Segoe UI", 10, "bold"), width=w, pady=4,
+	)
+
+
+def _radio(parent, text, variable, value):
+	return Radiobutton(
+		parent, text=text, variable=variable, value=value,
+		bg=parent.cget("bg"), fg=FG_MAIN, selectcolor=BG_INPUT,
+		activebackground=parent.cget("bg"), activeforeground=ACCENT_CYAN,
+		font=("Segoe UI", 10), indicatoron=True,
+	)
+
+
+# ── Status badge ──────────────────────────────────────────────────────
+class StatusBadge(Frame):
+	def __init__(self, parent, **kw):
+		super().__init__(parent, bg=parent.cget("bg"), **kw)
+		self.dot = Canvas(self, width=14, height=14, bg=parent.cget("bg"), highlightthickness=0)
+		self.dot.pack(side="left", padx=(0, 6))
+		self._oval = self.dot.create_oval(2, 2, 12, 12, fill=FG_DIM, outline="")
+		self.lbl = _label(self, "Idle", color=FG_DIM, size=10, bold=True)
+		self.lbl.pack(side="left")
+
+	def set(self, text, color):
+		self.dot.itemconfig(self._oval, fill=color)
+		self.lbl.config(text=text, fg=color)
+
+
+# ── Stats card ────────────────────────────────────────────────────────
+class StatCard(Frame):
+	def __init__(self, parent, title, value="0", color=ACCENT_BLUE, font_size=22, **kw):
+		super().__init__(parent, bg=BG_CARD, highlightbackground=color,
+						 highlightthickness=2, padx=14, pady=8, **kw)
+		_label(self, title, color=FG_DIM, size=9).pack(anchor="w")
+		self.val_lbl = _label(self, value, color=color, size=font_size, bold=True)
+		self.val_lbl.pack(anchor="w")
+
+	def set_value(self, value):
+		self.val_lbl.config(text=str(value))
+
+
+# ── Main GUI ──────────────────────────────────────────────────────────
 class StateEyeGUI:
 	def __init__(self, root):
 		self.root = root
-		self.root.title("StateEye Desktop")
+		self.root.title("StateEye")
+		self.root.configure(bg=BG_DARK)
+		self.root.minsize(900, 700)
+
+		# Try to make it reasonably large
+		self.root.geometry("1060x780")
+
 		self.mode = StringVar(value="auto")
 		self.target = StringVar()
 		self.runtime_mins = StringVar(value="1")
 		self.max_depth = StringVar(value="5")
 		self.max_states = StringVar(value="50")
+		self.credentials_path = StringVar()
 		self.log_text = None
 		self.untested_list = None
 		self.tested_list = None
@@ -222,72 +337,265 @@ class StateEyeGUI:
 		self.summary_text = None
 		self.last_exit_status = None
 		self.hard_timeout_grace_secs = 30
+
+		# Stats
+		self.states_found = 0
+		self.actions_done = 0
+		self.crawl_start_time = None
+		# Live classification tracking (from [classify] lines)
+		self._live_clones = 0
+		self._live_near_dup = 0
+		self._live_unique = 0
+		self._has_live_classify = False
+
 		self.build_ui()
 
+	# ── UI Construction ───────────────────────────────────────────────
 	def build_ui(self):
-		row = Frame(self.root)
-		row.pack(fill="x", padx=8, pady=6)
-		Label(row, text="URL or local HTML path:").pack(side="left")
-		Entry(row, textvariable=self.target, width=60).pack(side="left", padx=6)
-		Button(row, text="Browse", command=self.browse_file).pack(side="left")
+		# ── Title bar ─────────────────────────────────────────────────
+		title_bar = _styled_frame(self.root)
+		title_bar.pack(fill="x", padx=16, pady=(14, 4))
 
-		mode_row = Frame(self.root)
-		mode_row.pack(fill="x", padx=8, pady=6)
-		Label(mode_row, text="Mode:").pack(side="left")
-		Radiobutton(mode_row, text="Automated Testing", variable=self.mode, value="auto").pack(side="left")
-		Radiobutton(mode_row, text="Manual Assisted Testing", variable=self.mode, value="manual").pack(side="left")
+		eye_icon = _label(title_bar, "\u25c9", color=ACCENT_CYAN, size=20, bold=True)
+		eye_icon.pack(side="left", padx=(0, 8))
+		_label(title_bar, "StateEye", color=FG_HEADING, size=18, bold=True).pack(side="left")
+		_label(title_bar, "Fragment-Based Web Regression Testing", color=FG_DIM, size=10).pack(side="left", padx=(12, 0))
 
-		opt_row = Frame(self.root)
-		opt_row.pack(fill="x", padx=8, pady=6)
-		Label(opt_row, text="Runtime (mins)").pack(side="left")
-		Entry(opt_row, textvariable=self.runtime_mins, width=6).pack(side="left", padx=4)
-		Label(opt_row, text="Max depth").pack(side="left", padx=8)
-		Entry(opt_row, textvariable=self.max_depth, width=6).pack(side="left", padx=4)
-		Label(opt_row, text="Max states").pack(side="left", padx=8)
-		Entry(opt_row, textvariable=self.max_states, width=6).pack(side="left", padx=4)
+		self.status_badge = StatusBadge(title_bar)
+		self.status_badge.pack(side="right")
 
-		action_row = Frame(self.root)
-		action_row.pack(fill="x", padx=8, pady=6)
-		Button(action_row, text="Start", command=self.start).pack(side="left")
-		Button(action_row, text="Stop", command=self.stop).pack(side="left", padx=6)
-		Button(action_row, text="Generate Tests", command=self.generate_tests).pack(side="left")
+		# ── Separator ─────────────────────────────────────────────────
+		sep = Frame(self.root, bg=BORDER_COLOR, height=1)
+		sep.pack(fill="x", padx=16, pady=(6, 10))
 
-		log_row = Frame(self.root)
-		log_row.pack(fill="both", expand=True, padx=8, pady=6)
-		Label(log_row, text="Log").pack(anchor="w")
-		self.log_text = Text(log_row, height=10)
-		scroll = Scrollbar(log_row, command=self.log_text.yview)
+		# ── Target input card ─────────────────────────────────────────
+		target_card = _card_frame(self.root)
+		target_card.pack(fill="x", padx=16, pady=(0, 8))
+
+		_label(target_card, "TARGET", color=ACCENT_BLUE, size=9, bold=True).pack(anchor="w")
+		input_row = _styled_frame(target_card)
+		input_row.configure(bg=BG_CARD)
+		input_row.pack(fill="x", pady=(4, 0))
+		_label(input_row, "URL or HTML path:", color=FG_DIM, size=10).pack(side="left")
+		_entry(input_row, self.target, width=55).pack(side="left", padx=8)
+		_btn(input_row, "Browse", self.browse_file, color=BG_INPUT).pack(side="left")
+
+		# ── Config row ────────────────────────────────────────────────
+		config_card = _card_frame(self.root)
+		config_card.pack(fill="x", padx=16, pady=(0, 8))
+
+		top_cfg = _styled_frame(config_card)
+		top_cfg.configure(bg=BG_CARD)
+		top_cfg.pack(fill="x")
+
+		# Mode
+		mode_frame = _styled_frame(top_cfg)
+		mode_frame.configure(bg=BG_CARD)
+		mode_frame.pack(side="left")
+		_label(mode_frame, "MODE", color=ACCENT_PURPLE, size=9, bold=True).pack(anchor="w")
+		_radio(mode_frame, "Automated", self.mode, "auto").pack(side="left")
+		_radio(mode_frame, "Manual", self.mode, "manual").pack(side="left", padx=(8, 0))
+
+		# Params
+		param_frame = _styled_frame(top_cfg)
+		param_frame.configure(bg=BG_CARD)
+		param_frame.pack(side="right")
+
+		for lbl_text, var, clr in [
+			("Runtime (min)", self.runtime_mins, ACCENT_ORANGE),
+			("Max depth", self.max_depth, ACCENT_CYAN),
+			("Max states", self.max_states, ACCENT_GREEN),
+		]:
+			f = _styled_frame(param_frame)
+			f.configure(bg=BG_CARD)
+			f.pack(side="left", padx=(16, 0))
+			_label(f, lbl_text, color=clr, size=9, bold=True).pack(anchor="w")
+			_entry(f, var, width=6).pack()
+
+		# Credentials file
+		cred_frame = _styled_frame(config_card)
+		cred_frame.configure(bg=BG_CARD)
+		cred_frame.pack(fill="x", pady=(6, 0))
+		_label(cred_frame, "CREDENTIALS FILE", color=ACCENT_ORANGE, size=9, bold=True).pack(side="left")
+		_entry(cred_frame, self.credentials_path, width=36).pack(side="left", padx=8)
+		_btn(cred_frame, "Browse", self.browse_credentials, color=BG_INPUT).pack(side="left")
+		_label(cred_frame, "(optional - for login/signup)", color=FG_DIM, size=9).pack(side="left", padx=8)
+
+		# ── Action buttons ────────────────────────────────────────────
+		btn_row = _styled_frame(self.root)
+		btn_row.pack(fill="x", padx=16, pady=(0, 8))
+
+		_btn(btn_row, "\u25b6  Start", self.start, color=ACCENT_GREEN, wide=True).pack(side="left")
+		_btn(btn_row, "\u25a0  Stop", self.stop, color=ACCENT_RED).pack(side="left", padx=8)
+		_btn(btn_row, "Generate Tests", self.generate_tests, color=ACCENT_PURPLE, wide=True).pack(side="left")
+
+		# ── Stats row ─────────────────────────────────────────────────
+		stats_row = _styled_frame(self.root)
+		stats_row.pack(fill="x", padx=16, pady=(0, 8))
+
+		self.stat_states = StatCard(stats_row, "States Found", "0", ACCENT_BLUE)
+		self.stat_states.pack(side="left", fill="x", expand=True, padx=(0, 6))
+		self.stat_actions = StatCard(stats_row, "Actions Performed", "0", ACCENT_GREEN)
+		self.stat_actions.pack(side="left", fill="x", expand=True, padx=(0, 6))
+		self.stat_elapsed = StatCard(stats_row, "Elapsed", "0s", ACCENT_ORANGE)
+		self.stat_elapsed.pack(side="left", fill="x", expand=True, padx=(0, 6))
+		self.stat_status = StatCard(stats_row, "Classification", "--", ACCENT_PURPLE, font_size=12)
+		self.stat_status.pack(side="left", fill="x", expand=True)
+
+		# ── Main content area (log + side panels) ─────────────────────
+		content = _styled_frame(self.root)
+		content.pack(fill="both", expand=True, padx=16, pady=(0, 8))
+
+		# Left: live log
+		log_card = _card_frame(content)
+		log_card.pack(side="left", fill="both", expand=True, padx=(0, 8))
+
+		_label(log_card, "LIVE CRAWL OUTPUT", color=ACCENT_CYAN, size=9, bold=True).pack(anchor="w", pady=(0, 4))
+		log_inner = _styled_frame(log_card)
+		log_inner.configure(bg=BG_CARD)
+		log_inner.pack(fill="both", expand=True)
+
+		self.log_text = Text(
+			log_inner, height=14, wrap="word",
+			bg="#1a1a2a", fg=ACCENT_GREEN, insertbackground=ACCENT_GREEN,
+			font=("Consolas", 9), relief="flat", borderwidth=0,
+			highlightbackground=BORDER_COLOR, highlightthickness=1,
+		)
+		scroll = Scrollbar(log_inner, command=self.log_text.yview, bg=BG_CARD, troughcolor=BG_DARK)
 		self.log_text.configure(yscrollcommand=scroll.set)
 		self.log_text.pack(side="left", fill="both", expand=True)
 		scroll.pack(side="left", fill="y")
 
-		summary_row = Frame(self.root)
-		summary_row.pack(fill="both", expand=True, padx=8, pady=6)
-		Label(summary_row, text="Summary").pack(anchor="w")
-		self.summary_text = Text(summary_row, height=8)
-		self.summary_text.pack(fill="both", expand=True)
+		# Configure log text tags for colored output
+		self.log_text.tag_config("info", foreground=ACCENT_CYAN)
+		self.log_text.tag_config("success", foreground=ACCENT_GREEN)
+		self.log_text.tag_config("warn", foreground=ACCENT_ORANGE)
+		self.log_text.tag_config("error", foreground=ACCENT_RED)
+		self.log_text.tag_config("state", foreground=ACCENT_BLUE)
+		self.log_text.tag_config("dim", foreground=FG_DIM)
+		self.log_text.tag_config("classify", foreground=ACCENT_PURPLE)
 
-		list_row = Frame(self.root)
-		list_row.pack(fill="both", expand=True, padx=8, pady=6)
-		left = Frame(list_row)
-		right = Frame(list_row)
-		left.pack(side="left", fill="both", expand=True, padx=4)
-		right.pack(side="left", fill="both", expand=True, padx=4)
+		# Right: summary + element lists
+		right_panel = _styled_frame(content)
+		right_panel.pack(side="left", fill="both", expand=False)
 
-		Label(left, text="Untested elements").pack(anchor="w")
-		self.untested_list = Listbox(left, height=8)
+		# Summary
+		sum_card = _card_frame(right_panel)
+		sum_card.pack(fill="x", pady=(0, 8))
+		_label(sum_card, "SUMMARY", color=ACCENT_ORANGE, size=9, bold=True).pack(anchor="w", pady=(0, 4))
+		self.summary_text = Text(
+			sum_card, height=7, width=36, wrap="word",
+			bg="#1a1a2a", fg=FG_MAIN, font=("Consolas", 9),
+			relief="flat", borderwidth=0,
+			highlightbackground=BORDER_COLOR, highlightthickness=1,
+		)
+		self.summary_text.pack(fill="x")
+
+		# Untested
+		untested_card = _card_frame(right_panel)
+		untested_card.pack(fill="both", expand=True, pady=(0, 8))
+		_label(untested_card, "UNTESTED ELEMENTS", color=ACCENT_RED, size=9, bold=True).pack(anchor="w", pady=(0, 4))
+		self.untested_list = Listbox(
+			untested_card, height=5, bg="#1a1a2a", fg=ACCENT_ORANGE,
+			font=("Consolas", 9), relief="flat", borderwidth=0,
+			selectbackground=ACCENT_BLUE, selectforeground="#ffffff",
+			highlightbackground=BORDER_COLOR, highlightthickness=1,
+		)
 		self.untested_list.pack(fill="both", expand=True)
 		self.untested_list.bind("<Double-Button-1>", lambda _e: self.mark_tested())
-		Button(left, text="Mark Tested", command=self.mark_tested).pack(pady=4)
+		_btn(untested_card, "Mark Tested", self.mark_tested, color=ACCENT_GREEN).pack(pady=(6, 0))
 
-		Label(right, text="Tested elements").pack(anchor="w")
-		self.tested_list = Listbox(right, height=8)
+		# Tested
+		tested_card = _card_frame(right_panel)
+		tested_card.pack(fill="both", expand=True)
+		_label(tested_card, "TESTED ELEMENTS", color=ACCENT_GREEN, size=9, bold=True).pack(anchor="w", pady=(0, 4))
+		self.tested_list = Listbox(
+			tested_card, height=5, bg="#1a1a2a", fg=ACCENT_GREEN,
+			font=("Consolas", 9), relief="flat", borderwidth=0,
+			selectbackground=ACCENT_BLUE, selectforeground="#ffffff",
+			highlightbackground=BORDER_COLOR, highlightthickness=1,
+		)
 		self.tested_list.pack(fill="both", expand=True)
 
-	def log(self, message):
-		self.log_text.insert(END, message + "\n")
+	# ── Logging ───────────────────────────────────────────────────────
+	def log(self, message, tag=None):
+		timestamp = time.strftime("%H:%M:%S")
+		self.log_text.insert(END, f"[{timestamp}] ", "dim")
+		self.log_text.insert(END, message + "\n", tag)
 		self.log_text.see(END)
 
+	def _parse_and_log_line(self, line):
+		"""Parse structured crawl output lines by prefix and update stat cards."""
+		# [classify] lines: update classification stats in real-time
+		if line.startswith("[classify]"):
+			m = re.search(r'unique=(\d+)\s+clones=(\d+)\s+near-dup=(\d+)', line)
+			if m:
+				self._live_unique = int(m.group(1))
+				self._live_clones = int(m.group(2))
+				self._live_near_dup = int(m.group(3))
+				self._has_live_classify = True
+				self.stat_status.set_value(
+					f"Clones: {self._live_clones} | Near-Dup: {self._live_near_dup} | Unique: {self._live_unique}"
+				)
+			self.log(line, "classify")
+			return
+
+		# [state] lines: page captured with component count
+		# Format: [state] [0m 04s] Page #1: 6 components at depth 0: URL
+		if line.startswith("[state]"):
+			m_comp = re.search(r'(\d+)\s+components', line)
+			if m_comp:
+				self.states_found += int(m_comp.group(1))
+			else:
+				self.states_found += 1
+			self.stat_states.set_value(self.states_found)
+			self.log(line, "state")
+			return
+
+		# [click] lines: action performed during replay
+		if line.startswith("[click]"):
+			self.actions_done += 1
+			self.stat_actions.set_value(self.actions_done)
+			self.log(line, "success")
+			return
+
+		# [action] lines: actionable elements found/enqueued
+		if line.startswith("[action]"):
+			self.log(line, "success")
+			return
+
+		# [visit] lines: page navigation
+		if line.startswith("[visit]"):
+			self.log(line, "info")
+			return
+
+		# [warn] lines: loop prevention, timeouts, etc.
+		if line.startswith("[warn]"):
+			self.log(line, "warn")
+			return
+
+		# [crawl] lines: start/finish and config
+		# Finish format: [crawl] [...] Finished. 3 pages, 16 components | unique=10 ...
+		if line.startswith("[crawl]"):
+			if "Finished" in line:
+				m = re.search(r'unique=(\d+)\s+clones=(\d+)\s+near-dup=(\d+)', line)
+				if m:
+					u, c, nd = m.group(1), m.group(2), m.group(3)
+					self.stat_status.set_value(f"Clones: {c} | Near-Dup: {nd} | Unique: {u}")
+				m_comp = re.search(r'(\d+)\s+components', line)
+				if m_comp:
+					self.stat_states.set_value(int(m_comp.group(1)))
+			self.log(line, "info")
+			return
+
+		# Fallback for unstructured output
+		lower = line.lower()
+		if "error" in lower or "traceback" in lower or "failed" in lower:
+			self.log(line, "error")
+		else:
+			self.log(line)
+
+	# ── File browse ───────────────────────────────────────────────────
 	def browse_file(self):
 		path = filedialog.askopenfilename(
 			title="Select HTML file",
@@ -296,12 +604,21 @@ class StateEyeGUI:
 		if path:
 			self.target.set(path)
 
+	def browse_credentials(self):
+		path = filedialog.askopenfilename(
+			title="Select credentials file",
+			filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+		)
+		if path:
+			self.credentials_path.set(path)
+
+	# ── Start / Stop ─────────────────────────────────────────────────
 	def start(self):
 		target = self.target.get().strip()
 		if not target:
 			messagebox.showerror("StateEye", "Please enter a URL or HTML file path.")
 			return
-		self.log(f"Selected mode: {self.mode.get()}")
+		self.log(f"Mode: {self.mode.get()}", "info")
 		if self.mode.get() == "auto":
 			self.start_automated(target)
 		else:
@@ -310,49 +627,86 @@ class StateEyeGUI:
 	def stop(self):
 		if self.auto_proc and self.auto_proc.poll() is None:
 			self.auto_proc.terminate()
-			self.log("Stopped automated crawl.")
+			self.log("Crawl stopped by user.", "warn")
+			self.status_badge.set("Stopped", ACCENT_ORANGE)
 		if self.server:
 			self.server.stop()
 			self.server = None
 
+	# ── Automated crawl ──────────────────────────────────────────────
 	def start_automated(self, target):
-		self.log("Automated mode: starting crawl and test generation.")
+		self.status_badge.set("Crawling...", ACCENT_GREEN)
+		self.states_found = 0
+		self.actions_done = 0
+		self._live_clones = 0
+		self._live_near_dup = 0
+		self._live_unique = 0
+		self._has_live_classify = False
+		self.stat_states.set_value(0)
+		self.stat_actions.set_value(0)
+		self.stat_elapsed.set_value("0s")
+		self.stat_status.set_value("--")
+		self.crawl_start_time = time.time()
+		self._tick_elapsed()
+
+		self.log("Starting automated crawl...", "info")
 		run_label = time.strftime("%Y%m%d-%H%M%S")
 		out_dir = Path(__file__).resolve().parents[1] / "out" / f"gui_{run_label}"
 		out_dir.mkdir(parents=True, exist_ok=True)
 		self.run_dir = out_dir
 		mode = self.resolve_auto_mode()
-		self.log(f"Automated crawl mode: {mode}")
+		self.log(f"Crawl mode: {mode}", "info")
 
 		args = [
-			"python",
+			"python", "-u",
 			str(Path(__file__).resolve().parent / "run_demo_crawl.py"),
-			"--mode",
-			mode,
-			"--target",
-			target,
-			"--runtime-mins",
-			self.runtime_mins.get(),
-			"--max-depth",
-			self.max_depth.get(),
-			"--max-states",
-			self.max_states.get(),
-			"--output-dir",
-			str(out_dir),
+			"--mode", mode,
+			"--target", target,
+			"--runtime-mins", self.runtime_mins.get(),
+			"--max-depth", self.max_depth.get(),
+			"--max-states", self.max_states.get(),
+			"--output-dir", str(out_dir),
 		]
 		args.extend(["--host", "localhost"])
-		self.log("Running: " + " ".join(args))
-		self.auto_proc = subprocess.Popen(args)
-		timeout_secs = self.get_runtime_secs() + self.hard_timeout_grace_secs
-		threading.Thread(
-			target=self.enforce_hard_timeout, args=(self.auto_proc, timeout_secs), daemon=True
-		).start()
-		threading.Thread(
-			target=self.wait_for_auto_completion, args=(self.auto_proc, out_dir), daemon=True
-		).start()
+		cred = self.credentials_path.get().strip()
+		if cred:
+			args.extend(["--credentials", cred])
+			self.log(f"Using credentials: {cred}", "info")
+		self.log("Command: " + " ".join(args), "dim")
 
+		self.auto_proc = subprocess.Popen(
+			args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+			text=True, bufsize=1,
+		)
+		timeout_secs = self.get_runtime_secs() + self.hard_timeout_grace_secs
+
+		# Stream output in a background thread
+		threading.Thread(target=self._stream_output, args=(self.auto_proc,), daemon=True).start()
+		threading.Thread(target=self.enforce_hard_timeout, args=(self.auto_proc, timeout_secs), daemon=True).start()
+		threading.Thread(target=self.wait_for_auto_completion, args=(self.auto_proc, out_dir), daemon=True).start()
+
+	def _stream_output(self, proc):
+		"""Read subprocess stdout line by line and push to the log."""
+		try:
+			for line in proc.stdout:
+				line = line.rstrip("\n\r")
+				if line:
+					self.root.after(0, lambda l=line: self._parse_and_log_line(l))
+		except Exception:
+			pass
+
+	def _tick_elapsed(self):
+		"""Update the elapsed timer every second while crawling."""
+		if self.crawl_start_time and self.auto_proc and self.auto_proc.poll() is None:
+			elapsed = int(time.time() - self.crawl_start_time)
+			mins, secs = divmod(elapsed, 60)
+			self.stat_elapsed.set_value(f"{mins}m {secs}s" if mins else f"{secs}s")
+			self.root.after(1000, self._tick_elapsed)
+
+	# ── Manual mode ──────────────────────────────────────────────────
 	def start_manual(self, target):
-		self.log("Manual mode: parsing page and launching browser.")
+		self.status_badge.set("Manual Testing", ACCENT_PURPLE)
+		self.log("Manual mode: parsing page and launching browser.", "info")
 		self.manual_session = ManualSession()
 
 		url = target
@@ -373,22 +727,19 @@ class StateEyeGUI:
 		self.manual_session.edges = []
 		self.refresh_lists()
 		self.summary_text.delete("1.0", END)
-		self.summary_text.insert(
-			END,
-			"Manual mode: click in the browser or double-click in the list.\n",
-		)
+		self.summary_text.insert(END, "Manual mode active.\nClick elements in the browser.\n")
 		webbrowser.open(url)
-		self.log(f"Opened {url}")
+		self.log(f"Opened {url}", "info")
 
 	def extract_elements(self, target, url):
 		try:
 			if os.path.exists(target):
 				content = Path(target).read_text(encoding="utf-8", errors="ignore")
 			else:
-				self.log("Manual mode uses local HTML for element guidance.")
+				self.log("Manual mode uses local HTML for element guidance.", "dim")
 				content = ""
 		except Exception as exc:
-			self.log(f"Failed to parse HTML: {exc}")
+			self.log(f"Failed to parse HTML: {exc}", "error")
 			content = ""
 		parser = ElementExtractor()
 		parser.feed(content)
@@ -399,7 +750,7 @@ class StateEyeGUI:
 				seen.add(item)
 				deduped.append(item)
 		if not deduped:
-			self.log("No actionable elements detected.")
+			self.log("No actionable elements detected.", "warn")
 		return deduped
 
 	def refresh_lists(self):
@@ -450,6 +801,7 @@ class StateEyeGUI:
 			)
 		self.refresh_lists()
 
+	# ── Generate tests ───────────────────────────────────────────────
 	def generate_tests(self):
 		run_label = time.strftime("%Y%m%d-%H%M%S")
 		out_dir = Path(__file__).resolve().parents[1] / "out" / f"gui_manual_{run_label}"
@@ -462,7 +814,7 @@ class StateEyeGUI:
 			}
 			out_file = out_dir / "manual_test_plan.json"
 			out_file.write_text(json.dumps(data, indent=2), encoding="utf-8")
-			self.log(f"Manual test plan saved to {out_file}")
+			self.log(f"Manual test plan saved to {out_file}", "success")
 			self.summary_text.delete("1.0", END)
 			self.summary_text.insert(
 				END,
@@ -471,11 +823,14 @@ class StateEyeGUI:
 				f"Plan: {out_file}",
 			)
 		else:
-			self.log("Automated mode: tests are generated in the crawl output directory.")
+			self.log("Automated mode: tests are in the crawl output directory.", "info")
 		messagebox.showinfo("StateEye", f"Output saved under {out_dir}")
 
+	# ── Auto completion handling ─────────────────────────────────────
 	def wait_for_auto_completion(self, proc, out_dir):
 		exit_code = proc.wait()
+		# Don't clear crawl_start_time here — let on_auto_complete do it
+		# so the final elapsed update works correctly.
 		self.root.after(0, lambda: self.on_auto_complete(exit_code, out_dir))
 
 	def enforce_hard_timeout(self, proc, timeout_secs):
@@ -486,7 +841,8 @@ class StateEyeGUI:
 				self.root.after(
 					0,
 					lambda: self.log(
-						f"Hard timeout reached ({timeout_secs}s). Process terminated."
+						f"Hard timeout reached ({timeout_secs}s). Process terminated.",
+						"error",
 					),
 				)
 				return
@@ -499,13 +855,23 @@ class StateEyeGUI:
 			return 60
 
 	def resolve_auto_mode(self):
-		return "dom"
+		return "hybrid"
 
 	def on_auto_complete(self, exit_code, out_dir):
 		if exit_code == 0:
-			self.log("Automated crawl completed.")
+			self.log("Crawl completed successfully!", "success")
+			self.status_badge.set("Complete", ACCENT_GREEN)
 		else:
-			self.log(f"Automated crawl exited with code {exit_code}.")
+			self.log(f"Crawl exited with code {exit_code}.", "error")
+			self.status_badge.set("Error", ACCENT_RED)
+
+		# Update elapsed one last time, then clear the timer
+		if self.crawl_start_time:
+			elapsed = int(time.time() - self.crawl_start_time)
+			mins, secs = divmod(elapsed, 60)
+			self.stat_elapsed.set_value(f"{mins}m {secs}s" if mins else f"{secs}s")
+		self.crawl_start_time = None
+
 		summary = self.build_summary(out_dir)
 		self.summary_text.delete("1.0", END)
 		self.summary_text.insert(END, summary)
@@ -518,92 +884,91 @@ class StateEyeGUI:
 	def build_summary(self, out_dir):
 		out_dir = Path(out_dir)
 		result_path = next(out_dir.rglob("result.json"), None)
-		test_path = next(out_dir.rglob("GeneratedTests.java"), None)
+		test_path = next(out_dir.rglob("generated_tests.py"), None)
 		lines = []
-		lines.append(f"Output folder: {out_dir}")
+		lines.append(f"Output: {out_dir}")
 		if not out_dir.exists():
 			lines.append("Output folder: not found")
 		if result_path is None:
 			lines.append("result.json: not found")
-			candidates = list(out_dir.rglob("crawl*/result.json"))
+			# Only search within the current output directory, not parent dirs
+			candidates = list(out_dir.rglob("result.json"))
 			if candidates:
 				candidates.sort(key=lambda p: p.stat().st_mtime, reverse=True)
 				result_path = candidates[0]
-				lines.append(f"Using fallback result.json: {result_path}")
+				lines.append(f"Found: {result_path}")
 			else:
-				global_candidates = []
-				if out_dir.parent.exists():
-					global_candidates = list(out_dir.parent.rglob("result.json"))
-				if global_candidates:
-					global_candidates.sort(key=lambda p: p.stat().st_mtime, reverse=True)
-					result_path = global_candidates[0]
-					lines.append(f"Using latest result.json: {result_path}")
-				else:
-					lines.append("No crawl result was produced. Check console logs for errors.")
-					return "\n".join(lines)
+				lines.append("No crawl result produced.")
+				return "\n".join(lines)
 		try:
 			data = json.loads(result_path.read_text(encoding="utf-8", errors="ignore"))
 		except Exception as exc:
-			lines.append(f"result.json parse error: {exc}")
+			lines.append(f"Parse error: {exc}")
 			return "\n".join(lines)
 
 		states = data.get("states", {})
 		stats = data.get("statistics", {}).get("stateStats", {})
-		total_states = stats.get("totalNumberOfStates", len(states))
-		edges = data.get("edges", [])
+		total_pages = stats.get("totalNumberOfStates", len(states))
 		exit_status = data.get("exitStatus", "unknown")
 		self.last_exit_status = exit_status
-		lines.append(f"Mode: {self.resolve_auto_mode()}")
-		lines.append(f"Exit status: {exit_status}")
-		lines.append(f"Unique states: {total_states}")
-		lines.append(f"Edges: {len(edges)}")
-		fraggen_report = result_path.parent / "fraggen_classification.json"
-		if not fraggen_report.exists():
-			try:
-				script = Path(__file__).resolve().parent / "fraggen_analysis.py"
-				subprocess.run(
-					["python", str(script), "--crawl-dir", str(result_path.parent)],
-					check=True,
-					capture_output=True,
-					text=True,
-				)
-			except Exception as exc:
-				lines.append(f"Fraggen analysis failed: {exc}")
-		if fraggen_report.exists():
-			try:
-				report = json.loads(
-					fraggen_report.read_text(encoding="utf-8", errors="ignore")
-				)
-				summary = report.get("summary", {})
-				lines.append(f"Clones: {summary.get('clone', 0)}")
-				lines.append(f"Near-duplicates: {summary.get('near_duplicates', 0)}")
-				lines.append(f"Nd2-data: {summary.get('nd2', 0)}")
-				lines.append(f"Nd3-struct: {summary.get('nd3', 0)}")
-				lines.append(f"Distinct: {summary.get('distinct', 0)}")
-			except Exception as exc:
-				lines.append(f"Fraggen summary error: {exc}")
+		lines.append(f"Exit: {exit_status}")
+		lines.append(f"Pages: {total_pages}")
+
+		# Show component count from live data, fallback to page count
+		if self.states_found > 0:
+			lines.append(f"Components: {self.states_found}")
 		else:
-			near_dup_states = [
-				name for name, info in states.items() if info.get("hasNearDuplicate") is True
-			]
-			lines.append(f"Near-duplicates: {len(near_dup_states)}")
-			if near_dup_states:
-				lines.append("Near-duplicate state IDs: " + ", ".join(near_dup_states))
+			self.stat_states.set_value(total_pages)
+
+		# Use live classification from the crawler (consistent with stat card)
+		if self._has_live_classify:
+			lines.append(f"Clones: {self._live_clones}")
+			lines.append(f"Near-dups: {self._live_near_dup}")
+			lines.append(f"Unique: {self._live_unique}")
+		else:
+			# Fallback: run post-crawl analysis
+			fraggen_report = result_path.parent / "fraggen_classification.json"
+			if not fraggen_report.exists():
+				try:
+					script = Path(__file__).resolve().parent / "fraggen_analysis.py"
+					subprocess.run(
+						["python", str(script), "--crawl-dir", str(result_path.parent)],
+						check=True,
+						capture_output=True,
+						text=True,
+					)
+				except Exception as exc:
+					lines.append(f"Analysis failed: {exc}")
+			if fraggen_report.exists():
+				try:
+					report = json.loads(
+						fraggen_report.read_text(encoding="utf-8", errors="ignore")
+					)
+					frag_summary = report.get("summary", {})
+					clones = frag_summary.get("clone", 0)
+					nds = frag_summary.get("near_duplicates", 0)
+					distinct = frag_summary.get("distinct", 0)
+					lines.append(f"Clones: {clones}")
+					lines.append(f"Near-dups: {nds}")
+					lines.append(f"Unique: {distinct}")
+					self.stat_status.set_value(f"Clones: {clones} | Near-Dup: {nds} | Unique: {distinct}")
+				except Exception as exc:
+					lines.append(f"Summary error: {exc}")
 
 		if test_path is None:
-			lines.append("Generated tests: not found")
+			lines.append("Tests: not found")
 			return "\n".join(lines)
 
 		methods = []
 		for line in test_path.read_text(encoding="utf-8", errors="ignore").splitlines():
-			match = re.search(r"public void (\w+)\(", line)
-			if match and match.group(1).startswith("method_"):
+			match = re.search(r"def (test_\w+)\(", line)
+			if match:
 				methods.append(match.group(1))
 		if methods:
-			lines.append("Test cases:")
-			lines.extend([f"- {name}" for name in methods])
+			lines.append("Tests:")
+			lines.extend([f"  - {name}" for name in methods])
 		else:
-			lines.append("Test cases: none detected")
+			lines.append("Tests: none detected")
 		return "\n".join(lines)
 
 

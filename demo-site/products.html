@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>TechShop - Products</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#333}
+    nav{background:#1a1a2e;padding:1rem 2rem;display:flex;align-items:center;gap:2rem}
+    nav .brand{font-size:1.4rem;font-weight:bold;color:#e94560;text-decoration:none;margin-right:auto}
+    nav a{color:#a8b2d1;text-decoration:none;font-weight:500;font-size:.95rem}
+    nav a:hover{color:#e94560}
+    main{max-width:960px;margin:2rem auto;padding:0 1.5rem}
+    h1{color:#1a1a2e;font-size:2rem;margin-bottom:.5rem}
+    .sub{color:#666;font-size:1.1rem;margin-bottom:2rem}
+    .btn{display:inline-block;padding:.7rem 1.5rem;background:#e94560;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;border:none;cursor:pointer;font-size:.95rem}
+    .btn:hover{background:#c73650}
+    .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1rem}
+    .pcard{background:#fff;border-radius:12px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.08);text-align:center}
+    .pcard .icon{font-size:3.5rem;margin-bottom:1rem}
+    .pcard h3{color:#1a1a2e;margin-bottom:.5rem;font-size:1.2rem}
+    .pcard .price{color:#e94560;font-size:1.4rem;font-weight:bold;margin:.5rem 0}
+    .pcard p{color:#666;line-height:1.5;margin-bottom:1rem}
+    footer{text-align:center;padding:2rem;color:#999;font-size:.85rem;border-top:1px solid #ddd;margin-top:2rem}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="brand">TechShop</a>
+    <a href="products.html">Products</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="events.html">Events</a>
+    <a href="support.html">Support</a>
+  </nav>
+  <main>
+    <h1>Our Products</h1>
+    <p class="sub">Browse our collection of premium tech products</p>
+    <div class="pgrid">
+      <div class="pcard">
+        <div class="icon">&#128187;</div>
+        <h3>Laptop Pro 15</h3>
+        <div class="price">$1,299</div>
+        <p>High-performance laptop for professionals with stunning Retina display and all-day battery life.</p>
+        <a href="product-laptop.html" class="btn">View Details</a>
+      </div>
+      <div class="pcard">
+        <div class="icon">&#128241;</div>
+        <h3>SmartPhone X</h3>
+        <div class="price">$899</div>
+        <p>Next-generation smartphone with AI-powered camera and blazing-fast 5G connectivity.</p>
+        <a href="product-phone.html" class="btn">View Details</a>
+      </div>
+      <div class="pcard">
+        <div class="icon">&#128195;</div>
+        <h3>Tablet Ultra</h3>
+        <div class="price">$649</div>
+        <p>Versatile tablet for work and entertainment with pencil support and split-screen multitasking.</p>
+        <a href="product-tablet.html" class="btn">View Details</a>
+      </div>
+    </div>
+  </main>
+  <footer>&copy; 2024 TechShop. All rights reserved.</footer>
+</body>
+</html>

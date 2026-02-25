@@ -1,5 +1,9 @@
 """
 Fragment extraction helpers.
+
+Extracts major UI components (nav, sections, forms, etc.) from a page,
+crops their screenshots, captures their DOM content, and computes hashes
+for fragment-level classification.
 """
 
 from __future__ import annotations
@@ -11,13 +15,14 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from playwright.sync_api import Page
 
-from .similarity import perceptual_hash
+from .similarity import dom_hash as compute_dom_hash, perceptual_hash
 from .storage import FragmentRecord
 
 
+# Target major structural components — these are the "states" (UI components).
 FRAGMENT_SELECTOR = (
-    "header, nav, main, section, article, form, aside, footer, button, a, "
-    "input, textarea, select, option, table, tr, td, th, li, ul, ol, div[role='button']"
+    "header, nav, main, section, article, form, aside, footer, "
+    "[role='navigation'], [role='main'], [role='banner'], [role='contentinfo']"
 )
 
 
@@ -58,8 +63,8 @@ def _xpath_for_handle(handle) -> str:
 def extract_fragments(
     page: Page,
     screenshot_path: Path,
-    min_area: int = 4000,
-    limit: int = 32,
+    min_area: int = 8000,
+    limit: int = 50,
     state_id: int = -1,
 ) -> List[FragmentRecord]:
     handles = page.query_selector_all(FRAGMENT_SELECTOR)
@@ -83,8 +88,15 @@ def extract_fragments(
 
             xpath = _xpath_for_handle(handle)
             tag = handle.evaluate("(el) => el.tagName.toLowerCase()")
-            snippet_html = handle.inner_html() or ""
-            snippet = _safe_text(snippet_html)
+
+            # Get outerHTML for DOM-level comparison
+            try:
+                outer_html = handle.evaluate("(el) => el.outerHTML") or ""
+            except Exception:
+                outer_html = ""
+
+            snippet = _safe_text(outer_html)
+            frag_dom_hash = compute_dom_hash(outer_html) if outer_html else ""
 
             frag_img_path = screenshot_path.parent / f"{base}_frag_{idx}.png"
             left = int(box["x"])
@@ -112,10 +124,11 @@ def extract_fragments(
                         "height": box["height"],
                     },
                     hash=frag_hash,
+                    dom_content=outer_html,
+                    dom_hash=frag_dom_hash,
                 )
             )
             if len(fragments) >= limit:
                 break
 
     return fragments
-

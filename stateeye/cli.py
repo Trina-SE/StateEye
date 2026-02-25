@@ -31,6 +31,10 @@ def _add_crawl_options(parser: argparse.ArgumentParser) -> None:
         action="store_true",
         help="Disable automatic form filling heuristics.",
     )
+    parser.add_argument(
+        "--credentials",
+        help="Path to a credentials.txt file for login form filling.",
+    )
 
 
 def handle_crawl(args: argparse.Namespace) -> None:
@@ -45,6 +49,7 @@ def handle_crawl(args: argparse.Namespace) -> None:
         run_name=args.run_name,
         pre_actions=pre_actions,
         auto_fill_forms=not args.disable_autofill,
+        credentials_file=args.credentials,
     )
     sim_cfg = SimilarityConfig()
     crawler = StateEyeCrawler(cfg, sim_cfg)
