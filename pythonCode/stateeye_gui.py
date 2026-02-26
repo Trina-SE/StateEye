@@ -594,8 +594,6 @@ class StateEyeGUI:
 		self.stat_pages.pack(side="left", fill="x", expand=True, padx=(0, 6))
 		self.stat_fragments = StatCard(stats_row, "Fragments", "0", ACCENT_BLUE)
 		self.stat_fragments.pack(side="left", fill="x", expand=True, padx=(0, 6))
-		self.stat_elapsed = StatCard(stats_row, "Elapsed", "0s", ACCENT_ORANGE)
-		self.stat_elapsed.pack(side="left", fill="x", expand=True, padx=(0, 6))
 		self.stat_status = StatCard(stats_row, "Classification", "--", ACCENT_PURPLE, font_size=12)
 		self.stat_status.pack(side="left", fill="x", expand=True)
 
@@ -810,10 +808,8 @@ class StateEyeGUI:
 		self._has_live_classify = False
 		self.stat_pages.set_value(0)
 		self.stat_fragments.set_value(0)
-		self.stat_elapsed.set_value("0s")
 		self.stat_status.set_value("--")
 		self.crawl_start_time = time.time()
-		self._tick_elapsed()
 
 		self.log("Starting automated crawl...", "info")
 		run_label = time.strftime("%Y%m%d-%H%M%S")
@@ -861,13 +857,6 @@ class StateEyeGUI:
 		except Exception:
 			pass
 
-	def _tick_elapsed(self):
-		"""Update the elapsed timer every second while crawling."""
-		if self.crawl_start_time and self.auto_proc and self.auto_proc.poll() is None:
-			elapsed = int(time.time() - self.crawl_start_time)
-			mins, secs = divmod(elapsed, 60)
-			self.stat_elapsed.set_value(f"{mins}m {secs}s" if mins else f"{secs}s")
-			self.root.after(1000, self._tick_elapsed)
 
 	# ── Manual mode ──────────────────────────────────────────────────
 	def start_manual(self, target):
@@ -1274,11 +1263,6 @@ class StateEyeGUI:
 			self.log(f"Crawl exited with code {exit_code}.", "error")
 			self.status_badge.set("Error", ACCENT_RED)
 
-		# Update elapsed one last time, then clear the timer
-		if self.crawl_start_time:
-			elapsed = int(time.time() - self.crawl_start_time)
-			mins, secs = divmod(elapsed, 60)
-			self.stat_elapsed.set_value(f"{mins}m {secs}s" if mins else f"{secs}s")
 		self.crawl_start_time = None
 
 		# Run state-level classification
