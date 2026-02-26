@@ -36,8 +36,8 @@ def _str(val) -> str:
 def _classify_states(states, dom_contents):
     """Classify each state relative to previous states.
 
-    Clone:      same DOM hash + same screenshot hash
-    Nd2-data:   same DOM hash (diff screenshot) OR structural similarity >= 0.9
+    Clone:      identical skeleton + identical screenshot hash
+    Nd2-data:   identical skeleton (diff screenshot) OR structural similarity >= 0.9
     Nd3-struct: structural similarity >= 0.5
     Distinct:   no match
     """
@@ -49,7 +49,11 @@ def _classify_states(states, dom_contents):
         best_cls = None
         for j in range(0, i):
             other = states[j]
-            if state["dom_hash"] and state["dom_hash"] == other["dom_hash"]:
+            struct_a = dom_contents.get(state["id"], "")
+            struct_b = dom_contents.get(other["id"], "")
+
+            if struct_a and struct_b and struct_a == struct_b:
+                # Identical skeleton (tag structure matches exactly)
                 if state["screenshot_hash"] and state["screenshot_hash"] == other["screenshot_hash"]:
                     best_cls = "clone"
                     break
@@ -57,8 +61,6 @@ def _classify_states(states, dom_contents):
                     best_cls = "nd2-data"
                     continue
 
-            struct_a = dom_contents.get(state["id"], "")
-            struct_b = dom_contents.get(other["id"], "")
             if struct_a and struct_b:
                 sim = SequenceMatcher(None, struct_a, struct_b).ratio()
                 if sim >= ND2_THRESHOLD and best_cls not in ("clone",):
@@ -91,7 +93,8 @@ def generate_tests(db: StateEyeDB, run_id: int, dst: Path) -> Path:
         if dom_file and dom_file.exists():
             try:
                 raw = dom_file.read_text(encoding="utf-8", errors="replace")
-                structural = re.sub(r">([^<]+)<", "><", raw)
+                structural = re.sub(r">([^<]+)<", "><", raw)   # strip text
+                structural = re.sub(r"<(\w+)[^>]*>", r"<\1>", structural)  # strip attributes
                 structural = re.sub(r"\s+", " ", structural).strip()
                 dom_contents[s["id"]] = structural
             except Exception:
@@ -138,6 +141,7 @@ def generate_tests(db: StateEyeDB, run_id: int, dst: Path) -> Path:
             "title": _str(s["title"]),
             "depth": int(s["depth"]) if s["depth"] else 0,
             "baseline_screenshot": _str(s["screenshot_path"]),
+            "baseline_dom": _str(s["dom_path"]),
             "dom_hash": dom_hash,
             "classification": classification,
             "skip": skip,
@@ -151,12 +155,20 @@ Run with:  python {Path(dst).name}
 
 Each state (page) gets its own test.
 Clone and Nd2-data states are skipped — only the representative is tested.
+
+Detection strategy:
+  - DOM STRUCTURE check (primary): compares HTML tag skeleton (tags only,
+    text stripped).  Catches element additions/removals (e.g. nav deleted).
+  - VISUAL check (secondary): perceptual-hash screenshot comparison.
+  - Text-only changes (same skeleton) are allowed and will PASS.
 """
 
+import re
 import sys
 import os
 import json
 from pathlib import Path
+from difflib import SequenceMatcher
 
 # Fix encoding for Windows console
 if sys.stdout.encoding != "utf-8":
@@ -172,10 +184,32 @@ import imagehash
 
 BASE_URL = {json.dumps(base_url)}
 HEADLESS = True
-VISUAL_THRESHOLD = 18
+VISUAL_THRESHOLD = 14
+STRUCTURE_THRESHOLD = 0.95   # skeleton similarity below this = structural regression
 
 TEST_STATES = {json.dumps(test_states, indent=2).replace(': true', ': True').replace(': false', ': False').replace(': null', ': None')}
 
+
+# ── DOM structure helpers ────────────────────────────────────────
+
+def extract_skeleton(html: str) -> str:
+    """Strip text content and attributes, keep only tag names and nesting."""
+    skeleton = re.sub(r">([^<]+)<", "><", html)       # strip text
+    skeleton = re.sub(r"<(\\w+)[^>]*>", r"<\\1>", skeleton)  # strip attributes
+    skeleton = re.sub(r"\\s+", " ", skeleton).strip()
+    return skeleton
+
+
+def structure_similarity(baseline_html: str, current_html: str) -> float:
+    """Compare DOM skeletons (tags only). Returns 0.0 .. 1.0."""
+    skel_a = extract_skeleton(baseline_html)
+    skel_b = extract_skeleton(current_html)
+    if not skel_a or not skel_b:
+        return 0.0
+    return SequenceMatcher(None, skel_a, skel_b).ratio()
+
+
+# ── Visual helpers ───────────────────────────────────────────────
 
 def phash_distance(img_path_a: str, img_path_b: str) -> int:
     try:
@@ -195,6 +229,8 @@ def grayscale_phash_distance(img_path_a: str, img_path_b: str) -> int:
         print(f"    [warn] Could not compare grayscale images: {{e}}")
         return 999
 
+
+# ── Test runner ──────────────────────────────────────────────────
 
 def run_tests():
     results = []
@@ -219,7 +255,8 @@ def run_tests():
             test_name = f"test_state_{{idx+1}}"
             url = test["url"]
             title = test["title"]
-            baseline = test["baseline_screenshot"]
+            baseline_screenshot = test["baseline_screenshot"]
+            baseline_dom = test.get("baseline_dom", "")
             classification = test["classification"]
             is_skip = test["skip"]
             errors = []
@@ -253,27 +290,32 @@ def run_tests():
                 print()
                 continue
 
-            # Step 2: Full-page screenshot comparison
-            if baseline and os.path.exists(baseline):
+            # Step 2: DOM structure check (primary — catches element adds/removes)
+            dom_sim = None
+            if baseline_dom and os.path.exists(baseline_dom):
+                try:
+                    baseline_html = Path(baseline_dom).read_text(encoding="utf-8", errors="replace")
+                    current_html = page.content()
+                    dom_sim = structure_similarity(baseline_html, current_html)
+                    if dom_sim < STRUCTURE_THRESHOLD:
+                        errors.append(f"Structural regression detected")
+                except Exception:
+                    pass
+
+            # Step 3: Visual screenshot check (secondary)
+            if baseline_screenshot and os.path.exists(baseline_screenshot):
                 new_screenshot = str(artifacts / f"{{test_name}}.png")
                 try:
                     page.screenshot(path=new_screenshot, full_page=True)
-                except Exception as e:
-                    errors.append(f"Screenshot failed: {{e}}")
+                except Exception:
                     new_screenshot = None
 
                 if new_screenshot and os.path.exists(new_screenshot):
-                    distance = phash_distance(baseline, new_screenshot)
-                    print(f"       Visual distance: {{distance}}")
+                    distance = phash_distance(baseline_screenshot, new_screenshot)
                     if distance > VISUAL_THRESHOLD:
-                        gray_dist = grayscale_phash_distance(baseline, new_screenshot)
-                        print(f"       Grayscale distance: {{gray_dist}}")
-                        if gray_dist <= VISUAL_THRESHOLD:
-                            print(f"       Color-only change detected (structure intact) — PASS")
-                        else:
-                            errors.append(f"Visual regression: distance={{distance}}")
-            else:
-                print(f"       Visual: baseline not found, skipping")
+                        gray_dist = grayscale_phash_distance(baseline_screenshot, new_screenshot)
+                        if gray_dist > VISUAL_THRESHOLD:
+                            errors.append(f"Visual regression")
 
             # Verdict
             if errors:

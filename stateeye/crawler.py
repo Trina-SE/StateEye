@@ -41,6 +41,9 @@ class StateEyeCrawler:
         self._graph_edges: List[dict] = []        # click transitions
         parsed = urlparse(self.cfg.url)
         self._base_domain = parsed.netloc or ""
+        # Also store root domain for subdomain matching (e.g. www.w3schools.com -> w3schools.com)
+        parts = self._base_domain.split(".")
+        self._root_domain = ".".join(parts[-2:]) if len(parts) >= 2 else self._base_domain
         for d in [self.run_dir, self.screenshots_dir, self.doms_dir, self.fragments_dir]:
             d.mkdir(parents=True, exist_ok=True)
 
@@ -54,7 +57,7 @@ class StateEyeCrawler:
     def _wait_for_page_ready(self, page, timeout_ms: int | None = None) -> None:
         timeout = timeout_ms or self.cfg.action_timeout_ms
         try:
-            page.wait_for_load_state("networkidle", timeout=min(timeout, 5000))
+            page.wait_for_load_state("networkidle", timeout=min(timeout, 3000))
         except PlaywrightTimeoutError:
             pass
 
@@ -83,14 +86,14 @@ class StateEyeCrawler:
         """Scroll top to bottom to trigger lazy-loaded content."""
         try:
             total = page.evaluate("() => document.body.scrollHeight")
-            step = self.cfg.viewport_height // 2
+            step = self.cfg.viewport_height  # full viewport per step (faster)
             pos = 0
             while pos < total:
                 page.evaluate(f"window.scrollTo(0, {pos})")
-                page.wait_for_timeout(300)
+                page.wait_for_timeout(150)
                 pos += step
             page.evaluate("window.scrollTo(0, 0)")
-            page.wait_for_timeout(200)
+            page.wait_for_timeout(100)
         except Exception:
             pass
 
@@ -119,7 +122,8 @@ class StateEyeCrawler:
             print(f"[crawl] [{self._elapsed()}] Max depth={self.cfg.max_depth}, max states={self.cfg.max_states}", flush=True)
 
             # ── Phase 1: Navigate & login ONCE ──
-            self._safe_goto(page, self.cfg.url)
+            original_url = self.cfg.url
+            self._safe_goto(page, original_url)
             self._apply_pre_actions(page)
 
             if self.cfg.auto_fill_forms:
@@ -128,6 +132,22 @@ class StateEyeCrawler:
                     print(f"[crawl] [{self._elapsed()}] Filled {filled_count} form fields, submitting login...", flush=True)
                     self._try_submit_login(page)
                     self._wait_for_page_ready(page)
+                elif self._get_credentials():
+                    # No form on landing page — find a login/signup link
+                    print(f"[crawl] [{self._elapsed()}] No form on landing page, searching for login link...", flush=True)
+                    if self._navigate_to_login(page):
+                        filled_count = self._auto_fill_forms(page)
+                        if filled_count > 0:
+                            print(f"[crawl] [{self._elapsed()}] Filled {filled_count} fields on login page, submitting...", flush=True)
+                            self._try_submit_login(page)
+                            self._wait_for_page_ready(page)
+                            # Return to original URL to crawl in authenticated state
+                            print(f"[crawl] [{self._elapsed()}] Login done at {page.url}, returning to {original_url}", flush=True)
+                            self._safe_goto(page, original_url)
+                        else:
+                            print(f"[warn] [{self._elapsed()}] Login page found but no fillable fields", flush=True)
+                    else:
+                        print(f"[warn] [{self._elapsed()}] No login link found on landing page", flush=True)
 
             self._home_url = page.url
             self._known_urls.add(self._home_url.rstrip("/"))
@@ -375,99 +395,83 @@ class StateEyeCrawler:
     # ── Click-based exploration (like a real tester) ────────────────
 
     def _explore_page_by_clicking(self, page, current_url: str) -> Tuple[List[str], int]:
-        """Click visible links and buttons like a real tester.
+        """Discover links from the page and optionally click buttons.
 
-        - Only clicks links to URLs we've never seen before (_known_urls)
-        - Skips buttons inside <form> (no random form submissions)
-        - After each click that navigates, goes back to continue
+        Phase 1: Extract all <a href> URLs directly from the DOM (instant,
+        no clicking needed).  This is orders of magnitude faster than
+        click-navigate-back for each link.
+
+        Phase 2: Click a small number of non-form buttons to discover
+        dynamic content / JS-driven navigation.
 
         Returns (discovered_urls, total_clicks).
         """
         discovered: List[str] = []
         actions_count = 0
 
-        # ── Phase 1: Collect unvisited link info ──
-        links_to_click: List[dict] = []
-        seen_here: set = set()
+        # ── Phase 1: Harvest URLs from href attributes (fast, no clicks) ──
         try:
-            anchors = page.query_selector_all("a[href]")
-            for a in anchors:
-                try:
-                    if not a.is_visible():
-                        continue
-                    href = a.get_attribute("href") or ""
-                    if not href:
-                        continue
-                    parsed = urlparse(href)
-                    if parsed.netloc and parsed.netloc != self._base_domain:
-                        continue
-                    if parsed.scheme and parsed.scheme not in ("http", "https", "file", ""):
-                        continue
-                    resolved = urljoin(page.url, href).rstrip("/")
-                    # Skip if we already know about this URL (visited OR queued)
-                    if resolved in self._known_urls or resolved in seen_here:
-                        continue
-                    seen_here.add(resolved)
-                    text = ""
-                    try:
-                        text = (a.inner_text() or "").strip()[:40]
-                    except Exception:
-                        pass
-                    links_to_click.append({"href": href, "text": text or href, "resolved": resolved})
-                except Exception:
-                    continue
+            # Use a single JS call to collect all hrefs — avoids per-element round-trips
+            raw_links = page.evaluate("""() => {
+                const results = [];
+                for (const a of document.querySelectorAll('a[href]')) {
+                    const rect = a.getBoundingClientRect();
+                    // Include links even if off-screen (nav menus, footers, etc.)
+                    const href = a.href;  // fully resolved by browser
+                    const rawHref = a.getAttribute('href') || '';
+                    const text = (a.innerText || '').trim().substring(0, 40);
+                    if (href) results.push({href: href, rawHref: rawHref, text: text});
+                }
+                return results;
+            }""")
         except Exception:
-            pass
+            raw_links = []
 
-        # ── Phase 2: Click each new link ──
-        for info in links_to_click:
-            if info["resolved"] in self._known_urls:
-                continue  # may have been added by a prior click in this loop
+        seen_here: set = set()
+        for link in raw_links:
+            href = link.get("href", "")
+            raw_href = link.get("rawHref", "")
+            text = link.get("text", "") or raw_href
+            if not href:
+                continue
+            parsed = urlparse(href)
+            # Skip external domains (allow same root domain incl. subdomains)
+            if parsed.netloc and not parsed.netloc.endswith(self._root_domain):
+                continue
+            # Skip non-http schemes (mailto:, javascript:, tel:, etc.)
+            if parsed.scheme and parsed.scheme not in ("http", "https", "file", ""):
+                continue
+            # Strip fragment for dedup but keep full URL for queue
+            resolved_no_frag = href.split("#")[0].rstrip("/")
+            if not resolved_no_frag:
+                continue
+            if resolved_no_frag in self._known_urls or resolved_no_frag in seen_here:
+                continue
+            seen_here.add(resolved_no_frag)
+            discovered.append(href.split("#")[0])  # queue without fragment
+            # Record graph edge
+            self._graph_edges.append({
+                "source_url": current_url.rstrip("/"),
+                "target_url": resolved_no_frag,
+                "text": text,
+                "element": f"A[href={raw_href}][text={text}]",
+                "eventType": "link",
+            })
+
+        if discovered:
+            print(
+                f"[harvest] [{self._elapsed()}] Extracted {len(discovered)} new URLs from page links",
+                flush=True,
+            )
+
+        # ── Phase 2: Click a limited number of non-form buttons ──
+        clicked_btn_keys: set = set()
+        max_button_clicks = 10  # cap to avoid wasting time
+        for _safety in range(max_button_clicks):
             if not self._is_page_alive(page):
                 break
-            try:
-                handle = self._find_link_by_href(page, info["href"])
-                if not handle:
-                    continue
-
-                handle.scroll_into_view_if_needed(timeout=2000)
-                handle.click(timeout=self.cfg.action_timeout_ms)
-                self._wait_for_page_ready(page)
-                actions_count += 1
-
-                after_url = page.url
-                navigated = after_url.rstrip("/") != current_url.rstrip("/")
-
-                print(
-                    f"[click] [{self._elapsed()}] <{info['text']}> "
-                    f"{'-> ' + after_url if navigated else '(same page)'}",
-                    flush=True,
-                )
-
-                if navigated:
-                    after_norm = after_url.rstrip("/")
-                    if after_norm not in self._known_urls:
-                        discovered.append(after_url)
-                    self._graph_edges.append({
-                        "source_url": current_url.rstrip("/"),
-                        "target_url": after_norm,
-                        "text": info["text"],
-                        "element": f"A[href={info['href']}][text={info['text']}]",
-                        "eventType": "click",
-                    })
-                    # Go back to continue exploring this page
-                    self._safe_goto(page, current_url)
-            except Exception:
-                try:
-                    self._safe_goto(page, current_url)
-                except Exception:
-                    pass
-                continue
-
-        # ── Phase 3: Click non-form buttons ──
-        clicked_btn_keys: set = set()
-        for _safety in range(20):
-            if not self._is_page_alive(page):
+            # Time check — don't burn the whole budget on buttons
+            if self.cfg.max_runtime_s > 0 and (time.time() - self._start_time) >= self.cfg.max_runtime_s:
                 break
             try:
                 buttons = page.query_selector_all(
@@ -586,6 +590,8 @@ class StateEyeCrawler:
                 "form button, "
                 "button:has-text('Log in'), button:has-text('Login'), "
                 "button:has-text('Sign in'), button:has-text('Submit'), "
+                "button:has-text('Sign up'), button:has-text('Register'), "
+                "button:has-text('Create account'), "
                 "button:has-text('Enter'), button:has-text('Go')"
             )
             if submit:
@@ -598,6 +604,57 @@ class StateEyeCrawler:
                 print(f"[crawl] [{self._elapsed()}] Login via Enter key -> {page.url}", flush=True)
         except Exception as exc:
             print(f"[warn] [{self._elapsed()}] Could not submit login: {exc}", flush=True)
+
+    # ── Navigate to login page ───────────────────────────────────────
+
+    def _navigate_to_login(self, page) -> bool:
+        """Find and click a login/signup link or button on the current page.
+
+        Searches for common login-related text and href patterns.  Returns
+        True if a navigation to a login page was triggered.
+        """
+        # Text-based selectors (most reliable across sites)
+        text_selectors = [
+            "a:has-text('Log in')", "a:has-text('Login')",
+            "a:has-text('Log In')", "a:has-text('LOG IN')",
+            "a:has-text('Sign in')", "a:has-text('Sign In')",
+            "a:has-text('Signin')", "a:has-text('SIGN IN')",
+            "button:has-text('Log in')", "button:has-text('Login')",
+            "button:has-text('Log In')", "button:has-text('LOG IN')",
+            "button:has-text('Sign in')", "button:has-text('Sign In')",
+            "a:has-text('Sign up')", "a:has-text('Sign Up')",
+            "a:has-text('Signup')", "a:has-text('SIGN UP')",
+            "a:has-text('Register')", "a:has-text('Create account')",
+            "button:has-text('Sign up')", "button:has-text('Sign Up')",
+            "button:has-text('Register')", "button:has-text('Get started')",
+        ]
+        # Href-pattern selectors (fallback)
+        href_selectors = [
+            "a[href*='login']", "a[href*='signin']", "a[href*='sign-in']",
+            "a[href*='log-in']", "a[href*='auth']",
+            "a[href*='signup']", "a[href*='sign-up']", "a[href*='register']",
+            "a[href*='account']",
+        ]
+
+        for selector in text_selectors + href_selectors:
+            try:
+                el = page.query_selector(selector)
+                if el and el.is_visible():
+                    label = ""
+                    try:
+                        label = (el.inner_text() or "").strip()[:40]
+                    except Exception:
+                        label = selector
+                    el.click(timeout=self.cfg.action_timeout_ms)
+                    self._wait_for_page_ready(page)
+                    print(
+                        f"[crawl] [{self._elapsed()}] Clicked '{label}' -> {page.url}",
+                        flush=True,
+                    )
+                    return True
+            except Exception:
+                continue
+        return False
 
     # ── Credential-aware form filling ─────────────────────────────────
 

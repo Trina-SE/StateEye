@@ -1213,8 +1213,9 @@ class StateEyeGUI:
 			if dom_file and dom_file.exists():
 				try:
 					raw = dom_file.read_text(encoding="utf-8", errors="replace")
-					# Strip tags to get structural skeleton (remove text data)
+					# Strip text and attributes to get pure tag skeleton
 					structural = re.sub(r">([^<]+)<", "><", raw)
+					structural = re.sub(r"<(\w+)[^>]*>", r"<\1>", structural)
 					structural = re.sub(r"\s+", " ", structural).strip()
 					dom_contents[s["id"]] = structural
 				except Exception:
@@ -1237,8 +1238,11 @@ class StateEyeGUI:
 			best_sim = 0.0
 			for j in range(0, i):
 				other = states[j]
-				# Exact DOM hash + screenshot hash → Clone
-				if state["dom_hash"] and state["dom_hash"] == other["dom_hash"]:
+				struct_a = dom_contents.get(state["id"], "")
+				struct_b = dom_contents.get(other["id"], "")
+
+				# Identical skeleton + same screenshot → Clone
+				if struct_a and struct_b and struct_a == struct_b:
 					if state["screenshot_hash"] and state["screenshot_hash"] == other["screenshot_hash"]:
 						best_cls = "clone"
 						break
@@ -1247,8 +1251,6 @@ class StateEyeGUI:
 						continue
 
 				# Compare DOM structure (tags only, text stripped)
-				struct_a = dom_contents.get(state["id"], "")
-				struct_b = dom_contents.get(other["id"], "")
 				if struct_a and struct_b:
 					sim = SequenceMatcher(None, struct_a, struct_b).ratio()
 					if sim >= ND2_THRESHOLD and best_cls not in ("clone",):

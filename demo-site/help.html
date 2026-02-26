@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>TechShop - Support</title>
+  <title>TechShop - Help Center</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#333}
@@ -11,25 +11,23 @@
     nav a{color:#a8b2d1;text-decoration:none;font-weight:500;font-size:.95rem}
     nav a:hover{color:#e94560}
     main{max-width:960px;margin:2rem auto;padding:0 1.5rem}
-    .page-title{color:#1a1a2e;font-size:2rem;margin-bottom:1.5rem}
-    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
-    .card{background:#fff;border-radius:12px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.08);margin-bottom:1.5rem}
-    .card h2{color:#1a1a2e;margin-bottom:1rem;font-size:1.4rem}
-    .card p{color:#555;line-height:1.7;margin-bottom:1rem}
-    .form-group{margin-bottom:1.2rem}
-    .form-group label{display:block;color:#555;font-weight:600;margin-bottom:.4rem;font-size:.9rem}
-    .form-group input,.form-group textarea{width:100%;padding:.7rem;border:1px solid #ddd;border-radius:6px;font-size:.95rem;font-family:inherit}
-    .form-group textarea{height:120px;resize:vertical}
-    .form-group input:focus,.form-group textarea:focus{outline:none;border-color:#e94560}
+    h1{color:#1a1a2e;font-size:2rem;margin-bottom:.5rem}
+    .sub{color:#666;font-size:1.1rem;margin-bottom:2rem}
     .btn{display:inline-block;padding:.7rem 1.5rem;background:#e94560;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;border:none;cursor:pointer;font-size:.95rem}
     .btn:hover{background:#c73650}
-    .info-item{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem}
-    .info-icon{font-size:1.5rem;min-width:2rem;text-align:center}
-    .info-text h3{color:#1a1a2e;margin-bottom:.3rem;font-size:1rem}
-    .info-text p{color:#555;font-size:.9rem;margin:0}
-    .hours{background:#f8f9fa;border-radius:8px;padding:1rem;margin-top:1rem}
-    .hours h3{color:#1a1a2e;margin-bottom:.5rem;font-size:1rem}
-    .hours p{color:#555;font-size:.9rem;margin:.2rem 0}
+    .dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:1rem}
+    .dcard{background:#fff;border-radius:12px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .dcard h3{color:#1a1a2e;margin-bottom:.5rem;font-size:1.2rem}
+    .dcard .original{color:#999;text-decoration:line-through;font-size:.95rem}
+    .dcard .sale{color:#e94560;font-size:1.4rem;font-weight:bold;margin:.3rem 0}
+    .dcard .badge{display:inline-block;background:#e94560;color:#fff;padding:.2rem .6rem;border-radius:4px;font-size:.8rem;font-weight:600;margin-bottom:.8rem}
+    .dcard p{color:#666;line-height:1.5;margin-bottom:1rem}
+    .dcard .note{font-size:.85rem;color:#888;font-style:italic;margin-bottom:.8rem}
+    .banner{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:2rem;border-radius:12px;text-align:center;margin-bottom:2rem}
+    .banner h2{font-size:1.6rem;margin-bottom:.5rem}
+    .banner p{color:#a8b2d1;font-size:1rem}
+    .help-bar{background:#fff;border-radius:10px;padding:1.2rem 2rem;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;gap:1.5rem;align-items:center;margin-top:2rem}
+    .help-bar p{color:#555;margin:0;font-size:.95rem}
     footer{text-align:center;padding:2rem;color:#999;font-size:.85rem;border-top:1px solid #ddd;margin-top:2rem}
   </style>
 </head>
@@ -43,62 +41,41 @@
     <a href="support.html">Support</a>
   </nav>
   <main>
-    <h1 class="page-title">Contact Us</h1>
-    <div class="contact-grid">
-      <div class="card">
-        <h2>Send a Message</h2>
-        <form>
-          <div class="form-group">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" placeholder="John Doe">
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="john@example.com">
-          </div>
-          <div class="form-group">
-            <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" placeholder="How can we help?">
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Tell us more..."></textarea>
-          </div>
-          <button type="button" class="btn">Send Message</button>
-        </form>
+    <div class="banner">
+      <h2>Help Center</h2>
+      <p>Quick guides and troubleshooting for your purchases</p>
+    </div>
+    <h1>Popular Help Topics</h1>
+    <p class="sub">Step-by-step guides for common issues</p>
+    <div class="dgrid">
+      <div class="dcard">
+        <span class="badge">GUIDE</span>
+        <h3>Setting Up Your Laptop</h3>
+        <div class="original">Estimated time: 15 minutes</div>
+        <p>Unbox, charge, and configure your new Laptop Pro 15. Includes Wi-Fi setup, account creation, and software updates.</p>
+        <p class="note">Works for all Laptop Pro models purchased after 2023.</p>
+        <a href="product-laptop.html" class="btn">View Guide</a>
       </div>
-      <div>
-        <div class="card">
-          <h2>Contact Information</h2>
-          <div class="info-item">
-            <div class="info-icon">&#128205;</div>
-            <div class="info-text">
-              <h3>Address</h3>
-              <p>123 Tech Avenue, Silicon Valley, CA 94025</p>
-            </div>
-          </div>
-          <div class="info-item">
-            <div class="info-icon">&#128222;</div>
-            <div class="info-text">
-              <h3>Phone</h3>
-              <p>+1 (555) 123-4567</p>
-            </div>
-          </div>
-          <div class="info-item">
-            <div class="info-icon">&#9993;</div>
-            <div class="info-text">
-              <h3>Email</h3>
-              <p>hello@techshop.com</p>
-            </div>
-          </div>
-          <div class="hours">
-            <h3>Business Hours</h3>
-            <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
-            <p>Saturday: 10:00 AM - 4:00 PM</p>
-            <p>Sunday: Closed</p>
-          </div>
-        </div>
+      <div class="dcard">
+        <span class="badge">GUIDE</span>
+        <h3>Phone Data Transfer</h3>
+        <div class="original">Estimated time: 20 minutes</div>
+        <p>Transfer contacts, photos, and apps from your old phone to the new SmartPhone X using our free migration tool.</p>
+        <p class="note">Supports transfers from both Android and iOS devices.</p>
+        <a href="product-phone.html" class="btn">View Guide</a>
       </div>
+      <div class="dcard">
+        <span class="badge">TROUBLESHOOT</span>
+        <h3>Tablet Won't Charge</h3>
+        <div class="original">Common fix: 5 minutes</div>
+        <p>Check the cable, clean the port, and try a hard reset. Most charging issues are resolved with these three simple steps.</p>
+        <p class="note">If the issue persists, contact support for warranty repair.</p>
+        <a href="support.html" class="btn">Get Help</a>
+      </div>
+    </div>
+    <div class="help-bar">
+      <p>Can't find what you're looking for?</p>
+      <a href="contact.html" class="btn">Contact Support</a>
     </div>
   </main>
   <footer>&copy; 2024 TechShop. All rights reserved.</footer>
